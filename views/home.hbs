@@ -1,0 +1,47 @@
+<!-- Start Slider Section -->
+<div id="slider">
+    <div class="flexslider slider-wrapper">
+        <ul class="slides">
+            <li>
+                <!--<div class="slider-backgroung-image">-->
+                <!--<div class="layer-stretch">-->
+                <div class="slider-info">
+                    <h1 class="cd-headline letters type">
+                        <span>Welcome to Firefighter VR Companion WebApp</span>
+                        <span class="cd-words-wrapper waiting text-primary">
+                             <b class="is-visible">{{session.user.full_name}}</b>
+                        </span>
+                    </h1>
+                    {{#ifUserIsAdmin session.user.admin_role 1}}
+                        <h3>
+                           <span>
+                               You can use the Admin Dashboard to register new users, edit existing ones, or delete them.
+                           </span>
+                        </h3>
+                    {{/ifUserIsAdmin}}
+
+                    {{#ifUserIsManager session.user.manager_role 1}}
+                        <h3>
+                                <span>
+                                    You can use the Manage Courses Tab to:
+                                </span>
+                        </h3>
+                        <ul class="list-unstyled">
+                            <li>Add New Courses (for example: Firefighter I)</li>
+                            <li>Add New Skills (for example: FF-1)</li>
+                            <li>Add New Evaluation Criteria and link them to skills</li>
+                        </ul>
+                        <h3>
+                            <span><br>
+                                Use the Assign Schedule tab to assign instructors and students to specific courses;
+                            </span>
+                        </h3>
+                    {{/ifUserIsManager}}
+                </div>
+
+                <!--</div>-->
+                <!--</div>-->
+            </li>
+        </ul>
+    </div>
+</div><!-- End Slider Section -->

@@ -1,0 +1,90 @@
+<div class="page-ttl">
+    <div class="layer-stretch">
+        <div class="page-ttl-container">
+            <h1>{{{title}}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {{#if success}}
+                <div class="alert alert-icon alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert--icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                    <div class="alert-text">
+                        {{success}}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            {{/if}}
+
+            {{#if error}}
+                <div class="alert alert-icon alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert--icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-text">
+                        {{error}}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-12">
+            <a class="btn btn-primary btn-pill m-1" id="assignCourseButton" onclick="assignCourse()"><i
+                    class="fa fa-plus-circle mr-2"></i>Assign Instructor and Students to Course</a>
+        </div>
+    </div>
+    <br>
+</div>
+
+<div id="assign-course-schedule"></div>
+
+<div class="container">
+    <br>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table" id="table">
+                        <thead class="light-background">
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Course Name</th>
+                            <th>Semester</th>
+                            <th>Year</th>
+                            <th>Trainer Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each courses}}
+                            <tr class="coursesCategory">
+                                <td>{{course_id}}</td>
+                                <td>{{course_name}}</td>
+                                <td>{{semester}}</td>
+                                <td>{{year}}</td>
+                                <td>{{first_name}} {{last_name}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="customJavascript/courseSchedule.js"></script>

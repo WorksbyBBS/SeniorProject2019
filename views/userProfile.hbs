@@ -1,0 +1,52 @@
+<div class="profilePage">
+    <div class="page-ttl">
+        <div class="layer-stretch">
+            <div class="page-ttl-container">
+                <h1>{{{title}}}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="panel-title">
+                    <i class="fa fa-info panel-head-icon text-primary"></i>
+                    <span class="panel-title-text">My Details</span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="user-details text-center pt-3">
+                    <h1>{{session.user.full_name}}</h1>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="category-grid">
+                                <i class="fa fa-user"></i>
+                                <p class="title">{{session.user.username}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="category-grid">
+                                <i class="fa fa-envelope"></i>
+                                <p class="title">{{session.user.email}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="category-grid">
+                                <i class="fa fa-map-marker-alt"></i>
+                                <p class="title">{{session.user.address}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="category-grid">
+                                <i class="fa fa-phone"></i>
+                                <p class="title">{{session.user.phone}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

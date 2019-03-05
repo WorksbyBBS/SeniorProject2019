@@ -1,0 +1,146 @@
+<div class="page-ttl">
+    <div class="layer-stretch">
+        <div class="page-ttl-container">
+            <h1>{{{title}}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="panel">
+        <div class="panel-body">
+
+            {{#if success}}
+                <div class="alert alert-icon alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert--icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                    <div class="alert-text">
+                        {{success}}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            {{/if}}
+
+            {{#if error}}
+                <div class="alert alert-icon alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert--icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-text">
+                        {{error}}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            {{/if}}
+
+            <form class="form-vertical" method="post" action="/registerUser">
+
+                <div class="form-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">First Name</label>
+                                <input type="text" id="first_name" name="first_name" class="form-control"
+                                       placeholder="First Name" required value="{{prevUser.firstname}}">
+                                <span class="form-text">Please enter the first name</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" class="form-control"
+                                       placeholder="Last Name" value="{{prevUser.lastname}}" required>
+                                <span class="form-text">Please enter the last name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Username</label>
+                                <input type="text" id="username" name="username" class="form-control"
+                                       placeholder="Username" value="{{prevUser.username}}" required>
+                                <span class="form-text">Please enter the username (must be unique)</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Password</label>
+                                <input type="password" id="password" name="password" class="form-control"
+                                       placeholder="Password" required>
+                                <span class="form-text">Please enter the password that will be used by the user</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control"
+                                       placeholder="Email Address" value="{{prevUser.email}}" required>
+                                <span class="form-text">Email must be unique</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="col-form-label d-block">Select User Roles</label>
+                            <div class="custom-control custom-checkbox custom-checkbox-1 d-inline-block mb-3">
+                                <input type="checkbox" class="custom-control-input" id="admin_role" name="admin_role">
+                                <label class="custom-control-label" for="admin_role">Admin Role</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-checkbox-1 d-inline-block mb-3">
+                                <input type="checkbox" class="custom-control-input manager_role" id="manager_role"
+                                       name="manager_role">
+                                <label class="custom-control-label" for="manager_role">Manager Role</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-checkbox-1 d-inline-block mb-3">
+                                <input type="checkbox" class="custom-control-input trainer_role" id="trainer_role"
+                                       name="trainer_role">
+                                <label class="custom-control-label" for="trainer_role">Trainer Role</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-checkbox-1 d-inline-block mb-3">
+                                <input type="checkbox" class="custom-control-input" id="trainee_role"
+                                       name="trainee_role">
+                                <label class="custom-control-label" for="trainee_role">Trainee Role</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-seperator-dashed"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Phone Number</label>
+                                <input type="text" id="phone" name="phone" class="form-control"
+                                       placeholder="Phone Number" value="{{prevUser.phone}}" required>
+                                <span class="form-text">Please enter the phone number</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Address</label>
+                                <input type="text" id="address" name="address" class="form-control"
+                                       placeholder="Address" value="{{prevUser.address}}" required>
+                                <span class="form-text">Please enter the address information</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="add-user-submit">
+                            <button type="submit" id="submitBtn" class="btn btn-primary btn-pill" name="submitBtn"
+                                    value="submit">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

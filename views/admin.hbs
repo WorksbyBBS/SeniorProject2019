@@ -1,0 +1,175 @@
+<div class="page-ttl">
+    <div class="layer-stretch">
+        <div class="page-ttl-container">
+            <h1>{{{title}}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+            <a href="/registerUser" class="btn btn-primary btn-pill m-1" id="addUserButton"><i
+                    class="fa fa-plus-circle mr-2"></i>Add User</a><br><br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+
+            <div class="dashboard-stat color-success">
+                <div class="content"><h4 id="adminsCount">{{adminsCount}}
+                </h4> <span>Admin(s)</span>
+                </div>
+                <div class="icon"><i class="fa fa-user"></i></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-stat color-warning">
+                <div class="content"><h4 id="managersCount">{{managersCount}}
+                </h4> <span>Managers(s)</span>
+                </div>
+                <div class="icon"><i class="fa fa-calendar-alt"></i></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-stat color-primary">
+                <div class="content"><h4 id="trainersCount">{{trainersCount}}
+                </h4> <span>Trainer(s)</span></div>
+                <div class="icon"><i class="fa fa-id-badge"></i></div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="dashboard-stat color-danger">
+                <div class="content"><h4 id="traineesCount">{{traineesCount}}
+                </h4> <span>Trainee(s)</span></div>
+                <div class="icon"><i class="fa fa-book"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default mt-4">
+        <div class="panel-head">
+            <div class="panel-title">View Users</div>
+        </div>
+        <div class="panel-body">
+            <div class="theme-accordion-container">
+                <div class="theme-accordion">
+                    <div class="theme-accordion-hdr">
+                        <h4 class="text-success"><i class="fa fa-user bg-success"></i> Admins</h4>
+                        <div class="theme-accordion-control"><i class="fa fa-plus text-success"></i></div>
+                    </div>
+                    <div class="theme-accordion-bdy" style="display: none;">
+                        <div class="row">
+                            {{#admins}}
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="team-block">
+                                        <div class="team-container">
+                                            <div class="team-details">
+                                                <h3>{{first_name}} {{last_name}}</h3>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-user"></i> {{username}}</a></li>
+                                                    <li><a href="#"><i class="fa fa-envelope"></i> {{email}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/admins}}
+                        </div>
+                    </div>
+                </div>
+                <div class="theme-accordion">
+                    <div class="theme-accordion-hdr">
+                        <h4 class="text-warning"><i class="fa fa-calendar-alt bg-warning"></i> Managers</h4>
+                        <div class="theme-accordion-control"><i class="fa fa-plus text-warning"></i></div>
+                    </div>
+                    <div class="theme-accordion-bdy" style="display: none;">
+                        <div class="row">
+                            {{#managers}}
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="team-block">
+                                        <div class="team-container">
+                                            <div class="team-details">
+                                                <h3>{{first_name}} {{last_name}}</h3>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-user"></i> {{username}}</a></li>
+                                                    <li><a href="#"><i class="fa fa-envelope"></i> {{email}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/managers}}
+                        </div>
+                    </div>
+                </div>
+                <div class="theme-accordion">
+                    <div class="theme-accordion-hdr">
+                        <h4 class="text-primary"><i class="fa fa-id-badge"></i> Trainers</h4>
+                        <div class="theme-accordion-control"><i class="fa fa-plus text-primary"></i></div>
+                    </div>
+                    <div class="theme-accordion-bdy" style="display: none;">
+                        <div class="row">
+                            {{#trainers}}
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="team-block">
+                                        <div class="team-container">
+                                            <div class="team-details">
+                                                <h3>{{first_name}} {{last_name}}</h3>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-user"></i> {{username}}</a></li>
+                                                    <li><a href="#"><i class="fa fa-envelope"></i> {{email}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/trainers}}
+                        </div>
+                    </div>
+                </div>
+                <div class="theme-accordion">
+                    <div class="theme-accordion-hdr">
+                        <h4 class="text-danger"><i class="fa fa-book bg-danger"></i> Trainees</h4>
+                        <div class="theme-accordion-control"><i class="fa fa-plus text-danger"></i></div>
+                    </div>
+                    <div class="theme-accordion-bdy" style="display: none;">
+                        <div class="row">
+                            {{#trainees}}
+                                <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="team-block">
+                                        <div class="team-container">
+                                            <div class="team-details">
+                                                <h3>{{first_name}} {{last_name}}</h3>
+                                                <ul>
+                                                    <li><a href="#"><i class="fa fa-user"></i> {{username}}</a></li>
+                                                    <li><a href="#"><i class="fa fa-envelope"></i> {{email}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/trainees}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="addUser" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>
