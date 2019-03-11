@@ -36,7 +36,7 @@ class UnityController {
     async getCourseSkills(req,res){
         let id = req.params.id;
         // let id = req.body.userId;
-        console.log(id);
+        //console.log(id);
         let skills = await this.courseRepository.getSkillBasedOnCourseIDUnity(id).catch(e => {
             res.send(e);
         });
@@ -46,6 +46,21 @@ class UnityController {
         };
         res.json(jsonObj);
         // res.json(courses);
+    }
+
+    async getCriteriaBasedOnCourseAndSkillIDs(req, res) {
+        let courseid = req.params.courseid;
+        let skillid = req.params.skillid;
+
+        console.log('courseid: ' + courseid + ' -- skillid: ' + skillid);
+        let criteria = await this.courseRepository.getCriteriaBasedOnCourseAndSkillIDs(courseid, skillid).catch(e => {
+            res.send(e);
+        });
+
+        let jsonObj = {
+            Items: criteria
+        };
+        res.json(jsonObj);
     }
 }
 

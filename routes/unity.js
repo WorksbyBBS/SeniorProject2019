@@ -9,7 +9,11 @@ router.get('/:id/courses',(req,res)=>{
 
 router.get('/:id/skills',(req,res)=>{
     unityController.getCourseSkills(req,res);
-})
+});
+
+router.get('/:courseid/:skillid/criteria', (req, res) => {
+    unityController.getCriteriaBasedOnCourseAndSkillIDs(req, res);
+});
 
 
 

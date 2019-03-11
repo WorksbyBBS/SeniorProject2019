@@ -351,6 +351,16 @@ class CourseRepository {
         return await Skills.findAll({where: {course_id: id}});
     }
 
+    async getCriteriaBasedOnCourseAndSkillIDs(courseid, skillid) {
+        let query = 'select sc.criteria_id, sc.criteria_name from sp2019_db.Skill_Criteria sc\n' +
+            'inner join sp2019_db.Skills s \n' +
+            'where sc.skill_id = s.skill_id and s.skill_id = ' + skillid + ' and s.course_id = ' + courseid + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(criteria => {
+            return criteria;
+        });
+    }
+
 }
 
 module.exports = new CourseRepository();
