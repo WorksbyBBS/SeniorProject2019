@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b894c7fc-4fe1-4bdd-a986-3b8321cddb13" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/UnityController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/UnityController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/CourseRepository.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/CourseRepository.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/unity.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/unity.js" afterDir="false" />
-    </list>
+    <list default="true" id="b894c7fc-4fe1-4bdd-a986-3b8321cddb13" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -31,7 +26,7 @@
         <entry file="file://$PROJECT_DIR$/routes/unity.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="280">
-              <caret line="14" column="64" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="64" />
+              <caret line="14" column="65" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="65" />
             </state>
           </provider>
         </entry>
@@ -76,7 +71,7 @@
         <entry file="file://$PROJECT_DIR$/controllers/UnityController.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="262">
-              <caret line="55" column="104" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="104" />
+              <caret line="55" column="105" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="105" />
             </state>
           </provider>
         </entry>
@@ -346,7 +341,7 @@
       <workItem from="1551654107772" duration="6819000" />
       <workItem from="1551770630633" duration="1246000" />
       <workItem from="1552165241327" duration="131000" />
-      <workItem from="1552291515568" duration="1045000" />
+      <workItem from="1552291515568" duration="1285000" />
     </task>
     <task id="LOCAL-00001" summary="removed comment">
       <created>1552165319131</created>
@@ -355,14 +350,22 @@
       <option name="project" value="LOCAL" />
       <updated>1552165319132</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="get criteria unity">
+      <created>1552297759933</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1552297759933</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="164714000" />
+    <option name="totallyTimeSpent" value="164954000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="200" y="23" width="1480" height="930" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1459904" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -389,7 +392,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="removed comment" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed comment" />
+    <MESSAGE value="get criteria unity" />
+    <option name="LAST_COMMIT_MESSAGE" value="get criteria unity" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -651,14 +655,14 @@
     <entry file="file://$PROJECT_DIR$/routes/unity.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
-          <caret line="14" column="64" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="64" />
+          <caret line="14" column="65" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/UnityController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
-          <caret line="55" column="104" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="104" />
+          <caret line="55" column="105" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="105" />
         </state>
       </provider>
     </entry>
