@@ -252,14 +252,6 @@ async function getScoreBasedOnSessionID() {
         }
     });
 
-
-    // $('#chartArea').hide();
-    // if(scores.length>0){
-    //     $('#chartArea').show();
-    //     displaySessionSummary(essentialCriteriaScores,session);
-    //     displayChart(essentialCriteriaScores)
-    // }
-
 }
 
 
