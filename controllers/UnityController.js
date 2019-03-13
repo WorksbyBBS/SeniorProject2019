@@ -18,6 +18,15 @@ class UnityController {
             })
     }
 
+    async addUserSession(req, res) {
+        let jsonObj = res.body.jsonObj;
+
+        this.courseRepository.addUserSession(jsonObj).catch(e => {
+            res.send(e);
+        });
+
+    }
+
     async getUserCourses(req,res){
         let id = req.params.id;
         // let id = req.body.userId;
