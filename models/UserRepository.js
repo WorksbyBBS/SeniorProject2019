@@ -84,21 +84,34 @@ class UserRepository {
             let foundRole = await Roles.findOne({where: {user_id: user.user_id}});
 
             if (foundRole.manager_role) {
+                await Managers.findOne({where: {user_id: user.user_id}}).then(manager => {
+                    newUserObj['manager_id'] = manager.manager_id;
+                });
                 newUserObj.manager_role = 1;
             }
 
             if (foundRole.trainer_role) {
+                await Trainers.findOne({where: {user_id: user.user_id}}).then(trainer => {
+                    newUserObj['trainer_id'] = trainer.trainer_id;
+                });
                 newUserObj.trainer_role = 1;
             }
 
             if (foundRole.trainee_role) {
+                await Trainees.findOne({where: {user_id: user.user_id}}).then(trainee => {
+                    newUserObj['trainee_id'] = trainee.trainee_id;
+                });
                 newUserObj.trainee_role = 1;
             }
             if (foundRole.admin_role) {
+                await Admins.findOne({where: {user_id: user.user_id}}).then(admin => {
+                    newUserObj['admin_id'] = admin.admin_id;
+                });
                 newUserObj.admin_role = 1;
             }
 
             newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
+            // console.log(newUserObj);
             return newUserObj;
         } else {
             throw 'Username and/or password invalid'

@@ -3,6 +3,8 @@ const Courses = db.courses;
 const Skills = db.skills;
 const Criteria = db.skill_criteria;
 const Course_Trainee_Trainer = db.course_trainee_trainer;
+const Sessions = db.sessions;
+const Scores = db.criteria_scores;
 
 class CourseRepository {
 
@@ -73,7 +75,7 @@ class CourseRepository {
 
     async addCourse(courseObj) {
 
-        return  await Courses.create({
+        return await Courses.create({
             course_name: courseObj.course_name,
             semester: courseObj.semester,
             year: courseObj.year
@@ -92,7 +94,7 @@ class CourseRepository {
             ctArray.push(ct)
         }
         return ctArray;
-        
+
     }
 
     async addSkill(skillObj) {
@@ -109,237 +111,292 @@ class CourseRepository {
 
                 return await Criteria.create({
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 });
             }
             case '2': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     }]);
             }
             case '3': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }]);
             }
             case '4': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     }]);
             }
             case '5': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     }]);
             }
             case '6': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria6
+                        criteria_name: criteriaObj.criteria6,
+                        criteria_type: criteriaObj.criteria6Type
                     }]);
             }
             case '7': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria6
+                        criteria_name: criteriaObj.criteria6,
+                        criteria_type: criteriaObj.criteria6Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria7
+                        criteria_name: criteriaObj.criteria7,
+                        criteria_type: criteriaObj.criteria7Type
                     }]);
             }
             case '8': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria6
+                        criteria_name: criteriaObj.criteria6,
+                        criteria_type: criteriaObj.criteria6Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria7
+                        criteria_name: criteriaObj.criteria7,
+                        criteria_type: criteriaObj.criteria7Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria8
+                        criteria_name: criteriaObj.criteria8,
+                        criteria_type: criteriaObj.criteria8Type
                     }]);
             }
             case '9': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria6
+                        criteria_name: criteriaObj.criteria6,
+                        criteria_type: criteriaObj.criteria6Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria7
+                        criteria_name: criteriaObj.criteria7,
+                        criteria_type: criteriaObj.criteria7Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria8
+                        criteria_name: criteriaObj.criteria8,
+                        criteria_type: criteriaObj.criteria8Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria9
+                        criteria_name: criteriaObj.criteria9,
+                        criteria_type: criteriaObj.criteria9Type
                     }]);
             }
             case '10': {
                 return await Criteria.bulkCreate([{
                     skill_id: criteriaObj.skill_id,
-                    criteria_name: criteriaObj.criteria1
+                    criteria_name: criteriaObj.criteria1,
+                    criteria_type: criteriaObj.criteria1Type
                 },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria2
+                        criteria_name: criteriaObj.criteria2,
+                        criteria_type: criteriaObj.criteria2Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria3
+                        criteria_name: criteriaObj.criteria3,
+                        criteria_type: criteriaObj.criteria3Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria4
+                        criteria_name: criteriaObj.criteria4,
+                        criteria_type: criteriaObj.criteria4Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria5
+                        criteria_name: criteriaObj.criteria5,
+                        criteria_type: criteriaObj.criteria5Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria6
+                        criteria_name: criteriaObj.criteria6,
+                        criteria_type: criteriaObj.criteria6Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria7
+                        criteria_name: criteriaObj.criteria7,
+                        criteria_type: criteriaObj.criteria7Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria8
+                        criteria_name: criteriaObj.criteria8,
+                        criteria_type: criteriaObj.criteria8Type
                     },
                     {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria9
+                        criteria_name: criteriaObj.criteria9,
+                        criteria_type: criteriaObj.criteria9Type
                     }, {
                         skill_id: criteriaObj.skill_id,
-                        criteria_name: criteriaObj.criteria10
+                        criteria_name: criteriaObj.criteria10,
+                        criteria_type: criteriaObj.criteria10Type
                     }]);
             }
         }
     }
 
     async getUserCourses(userId) {
-        return await Course_Trainee_Trainer.findAll({where:{trainee_id:userId}}).then(async courses =>{
+        return await Course_Trainee_Trainer.findAll({where: {trainee_id: userId}}).then(async courses => {
             let coursesInfo = [];
             console.log(JSON.stringify(courses));
-            for(let i=0;i<courses.length;i++){
-                let courseFound = await Courses.findOne({where:{course_id:courses[i].course_id}});
+            for (let i = 0; i < courses.length; i++) {
+                let courseFound = await Courses.findOne({where: {course_id: courses[i].course_id}});
                 coursesInfo.push(courseFound);
             }
 
@@ -347,7 +404,7 @@ class CourseRepository {
         });
     }
 
-    async getSkillBasedOnCourseIDUnity(id){
+    async getSkillBasedOnCourseIDUnity(id) {
         return await Skills.findAll({where: {course_id: id}});
     }
 
@@ -358,6 +415,47 @@ class CourseRepository {
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(criteria => {
             return criteria;
+        });
+    }
+
+    async getSkillsBasedOnCourseIDInSession(courseid) {
+        let query = 'select distinct skills.* from sp2019_db.Skills skills \n' +
+            'inner join sp2019_db.Sessions sessions\n' +
+            'on sessions.skill_id = skills.skill_id\n' +
+            'where skills.course_id = ' + courseid + ';'
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(skills => {
+            return skills;
+        });
+    }
+
+    async getSessionsBasedOnSkillId(skillid) {
+        return await Sessions.findAll({where: {skill_id: skillid}});
+    }
+
+    async getScoreBasedOnSessionId(sessionid) {
+        let query = 'select cs.*,skill_c.criteria_name from sp2019_db.Criteria_Scores cs\n' +
+            'inner join sp2019_db.Skill_Criteria skill_c\n' +
+            'on skill_c.criteria_id = cs.criteria_id\n' +
+            'where cs.session_id=' + sessionid + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(score => {
+            return score;
+        });
+    }
+
+    async getSessionBasedOnId(sessionid) {
+        return await Sessions.findOne({where: {session_id: sessionid}});
+    }
+
+    async getCoursesWhichHaveSessions(trainee_id) {
+        let query = 'select distinct c.* from sp2019_db.Courses c\n' +
+            'inner join sp2019_db.Sessions s\n' +
+            'on s.course_id = c.course_id\n' +
+            'where trainee_id = ' + trainee_id + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(courses => {
+            return courses;
         });
     }
 

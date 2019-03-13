@@ -22,12 +22,11 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'course_id'
             }
         },
-        type: {type: Sequelize.INTEGER, allowNull: false},
-        created_at: {type: Sequelize.DATE, allowNull: false},
+        type: {type: Sequelize.STRING, allowNull: false},
         duration: {type: Sequelize.TIME, allowNull: false},
         trainer_comment: {type: Sequelize.STRING},
         final_score: {type: Sequelize.DOUBLE, allowNull: false},
-        skill: {
+        skill_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
                 model: 'Skills',

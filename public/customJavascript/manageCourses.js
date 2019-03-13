@@ -113,173 +113,379 @@ const skillsFormTemplate = `
  </div>
 </div>`
 
-const criteriaFormTemplate = `
-<div class="container"> 
-<div class="panel">
-<div class="panel-head">
-<h4>Add New Criteria</h4>
-</div>
+const criteriaFormTemplate = `<div class="container">
+    <div class="panel">
+        <div class="panel-head">
+            <h4>Add New Criteria</h4>
+        </div>
         <div class="panel-body">
-            
-            <form class="form-vertical" method="post" action="/addCriteria" id="criteriaForm" onsubmit="return validateOnSubmit()">
+
+            <form class="form-vertical" method="post" action="/addCriteria" id="criteriaForm"
+                  onsubmit="return validateOnSubmit()">
                 <div class="form-body">
                     <div class="row">
                         <div class="col-md-12">
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label class="col-form-label">Course</label>
-                                   <select name="criteria_courses" class="form-control" id="criteria_courses" onchange="onCriteriaCourseSelection()">
-                                       <option disabled selected value></option>
-                                       {{#courses}}
-                                        <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
-                                        {{/courses}}
-                                    </select>
+                                <select name="criteria_courses" class="form-control" id="criteria_courses"
+                                        onchange="onCriteriaCourseSelection()">
+                                    <option disabled selected value></option>
+                                    {{#courses}}
+                                    <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
+                                    {{/courses}}
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="skills_selection" style="display: none;">
-                    <div class="row">
-                        <div class="col-md-12">
-                             <div class="form-group">
-                                <label class="col-form-label">Skill</label>
-                                   <select name="criteria_skills" class="form-control" id="criteria_skills">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Skill</label>
+                                    <select name="criteria_skills" class="form-control" id="criteria_skills">
                                     </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                   <div class="row range">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">How many criteria would you like to enter at once?</label> <span class="criteriaAmountRangeValue" id="criteriaAmountRangeValue">1</span>
-                                 <input type="range" name="criteriaAmountRange" min="1" max="10" value="1" step="1" class="criteriaAmountRange" id="criteriaAmountRange" onchange="onRangeChange(this)">
+
+                        <div class="row range">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">How many criteria would you like to enter at
+                                        once?</label> <span class="criteriaAmountRangeValue"
+                                                            id="criteriaAmountRangeValue">1</span>
+                                    <input type="range" name="criteriaAmountRange" min="1" max="10" value="1" step="1"
+                                           class="criteriaAmountRange" id="criteriaAmountRange"
+                                           onchange="onRangeChange(this)">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 1</label>
-                                <input type="text" id="criteria1" name="criteria1" class="form-control"
-                                       placeholder="Name" required>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Evaluation Criteria 1</label>
+                                    <input type="text" id="criteria1" name="criteria1" class="form-control"
+                                           placeholder="Name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label>
+                                            <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria1" class="custom-control-input"
+                                                       name="criteriaType1" value="Essential" checked>
+                                                <label for="essentialCriteria1" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria1" name="criteriaType1"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria1" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row criteria2" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 2</label>
-                                <input type="text" id="criteria2" name="criteria2" class="form-control"
-                                       placeholder="Name">
-                                <div class="invalid-feedback">Please enter criteria.
+                        <div class="row criteria2" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 2</label>
+                                        <input type="text" id="criteria2" name="criteria2" class="form-control"
+                                               placeholder="Name">
+                                        <div class="invalid-feedback">Please enter criteria.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria2" class="custom-control-input"
+                                                       name="criteriaType2" value="Essential" checked>
+                                                <label for="essentialCriteria1" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria2" name="criteriaType2"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria2" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria3" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 3</label>
+                                        <input type="text" id="criteria3" name="criteria3" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria3" class="custom-control-input"
+                                                       name="criteriaType3" value="Essential" checked>
+                                                <label for="essentialCriteria3" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria3" name="criteriaType3"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria3" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria4" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 4</label>
+                                        <input type="text" id="criteria4" name="criteria4" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria4" class="custom-control-input"
+                                                       name="criteriaType4" value="Essential" checked>
+                                                <label for="essentialCriteria4" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria4" name="criteriaType4"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria4" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria5" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 5</label>
+                                        <input type="text" id="criteria5" name="criteria5" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria5" class="custom-control-input"
+                                                       name="criteriaType5" value="Essential" checked>
+                                                <label for="essentialCriteria5" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria5" name="criteriaType5"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria5" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria6" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 6</label>
+                                        <input type="text" id="criteria6" name="criteria6" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria6" class="custom-control-input"
+                                                       name="criteriaType6" value="Essential" checked>
+                                                <label for="essentialCriteria6" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria6" name="criteriaType6"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria6" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria7" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 7</label>
+                                        <input type="text" id="criteria7" name="criteria7" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria7" class="custom-control-input"
+                                                       name="criteriaType7" value="Essential" checked>
+                                                <label for="essentialCriteria7" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria7" name="criteriaType7"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria7" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria8" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 8</label>
+                                        <input type="text" id="criteria8" name="criteria8" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria8" class="custom-control-input"
+                                                       name="criteriaType8" value="Essential" checked>
+                                                <label for="essentialCriteria8" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria8" name="criteriaType8"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria8" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria9" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 9</label>
+                                        <input type="text" id="criteria9" name="criteria9" class="form-control"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria9" class="custom-control-input"
+                                                       name="criteriaType9" value="Essential" checked>
+                                                <label for="essentialCriteria9" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria9" name="criteriaType9"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria9" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="row criteria10" style="display:none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Evaluation Criteria 10</label>
+                                        <input type="text" id="criteria10" name="criteria10"
+                                               class="form-control criteria10"
+                                               placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Type of Criteria:</label><br>
+                                        <div class="text-center">
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="essentialCriteria10" class="custom-control-input"
+                                                       name="criteriaType10" value="Essential" checked>
+                                                <label for="essentialCriteria10" class="custom-control-label">Essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        
+                                            <div class="custom-control custom-radio custom-radio-1">
+                                                <input type="radio" id="extraCriteria10" name="criteriaType10"
+                                                       value="Extra" class="custom-control-input">
+                                                <label for="extraCriteria10" class="custom-control-label">Additional/Non-essential
+                                                    for Pass/Fail</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                            <div class="text-center">
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <button type="submit" id="submitBtnCriteria" class="btn btn-primary btn-pill"
+                                                name="submitBtnCriteria"
+                                                value="submit">Submit
+                                        </button>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button id="cancelBtnCriteria1" class="btn btn-danger btn-pill"
+                                                name="cancelBtnCriteria1" onclick="cancelCriteriaForm()">Cancel
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        <div class="formCancelButtonArea">
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    <button id="cancelBtnCriteria2" class="btn btn-danger btn-pill"
+                                            name="cancelBtnCriteria2" onclick="cancelCriteriaForm()">Cancel
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row criteria3" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 3</label>
-                                <input type="text" id="criteria3" name="criteria3" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria4" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 4</label>
-                                <input type="text" id="criteria4" name="criteria4" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria5" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 5</label>
-                                <input type="text" id="criteria5" name="criteria5" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria6" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 6</label>
-                                <input type="text" id="criteria6" name="criteria6" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria7" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 7</label>
-                                <input type="text" id="criteria7" name="criteria7" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria8" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 8</label>
-                                <input type="text" id="criteria8" name="criteria8" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria9" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 9</label>
-                                <input type="text" id="criteria9" name="criteria9" class="form-control"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row criteria10" style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Evaluation Criteria 10</label>
-                                <input type="text" id="criteria10" name="criteria10" class="form-control criteria10"
-                                       placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                    <div class="row">
-                        <div class="col-md-6">
-                           
-                                <button type="submit" id="submitBtnCriteria" class="btn btn-primary btn-pill" name="submitBtnCriteria"
-                                    value="submit">Submit
-                                </button>
-                            
-                        </div>
-                        <div class="col-md-6">
-                                <button id="cancelBtnCriteria1" class="btn btn-danger btn-pill" name="cancelBtnCriteria1" onclick="cancelCriteriaForm()">Cancel
-                                </button>
-                           
-                        </div>
-                    </div>
-                       
-                    </div>
-                    
-                    
-                   </div>
-                   <div class="formCancelButtonArea">
-                    <div class="row text-center">
-                        <div class="col-md-12">
-                                <button id="cancelBtnCriteria2" class="btn btn-danger btn-pill" name="cancelBtnCriteria2" onclick="cancelCriteriaForm()">Cancel
-                                </button>
-                           
-                        </div>
-                    </div>
-                   </div>
-                </div>
             </form>
         </div>
- </div>
+    </div>
 </div>`
 
 function addCourse() {

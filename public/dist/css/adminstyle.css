@@ -17400,3 +17400,7 @@ input[type=range]:focus::-ms-fill-upper {
 .trainees_form_group{
     height:70%;
 }
+
+.custom-control {
+    display: inline-block;
+}

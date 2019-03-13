@@ -49,6 +49,9 @@ router.get('/assign-schedule',isLoggedIn, function(req, res, next) {
   homeController.assignSchedule(req,res);
 });
 
+router.get('/trainee-report', isLoggedIn, function (req, res, next) {
+    homeController.TraineeReport(req, res)
+});
 /* POST LINKS */
 router.post('/login', (req, res) => homeController.login(req,res));
 router.post('/registerUser',isLoggedIn, (req, res) => homeController.registerUser(req,res));

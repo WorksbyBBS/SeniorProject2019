@@ -1,4 +1,3 @@
-
 class HomeController {
     constructor() {
         this.userRepository = require('../models/UserRepository');
@@ -41,6 +40,7 @@ class HomeController {
 
         this.userRepository.login(username, password).then(user => {
             req.session.user = user;
+            // console.log(req.session.user);
             return res.redirect('/')
         })
             .catch(e => {
@@ -76,6 +76,75 @@ class HomeController {
         });
         delete req.session.success;
         delete req.session.error;
+    }
+
+    async getSkillsBasedOnCourseIDInSession(req, res) {
+        let courseid = req.params.course_id;
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                let skills = await this.courseRepository.getSkillsBasedOnCourseIDInSession(courseid).catch(e => {
+                    res.send(e);
+                });
+                res.json(skills);
+            } else {
+                res.send('Not Authorized to see trainer list')
+            }
+        } else {
+            res.send('No User Logged In')
+        }
+    }
+
+    async getSessionsBasedOnSkillId(req, res) {
+        let skillid = req.params.skill_id;
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                let sessions = await this.courseRepository.getSessionsBasedOnSkillId(skillid).catch(e => {
+                    res.send(e);
+                });
+                res.json(sessions);
+            } else {
+                res.send('Not Authorized to see trainer list')
+            }
+        } else {
+            res.send('No User Logged In')
+        }
+    }
+
+    async getScoreBasedOnSessionId(req, res) {
+        let sessionid = req.params.session_id;
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                let score = await this.courseRepository.getScoreBasedOnSessionId(sessionid).catch(e => {
+                    res.send(e);
+                });
+                res.json(score);
+            } else {
+                res.send('Not Authorized to see trainer list')
+            }
+        } else {
+            res.send('No User Logged In')
+        }
+    }
+
+    async getSessionBasedOnId(req, res) {
+        let sessionid = req.params.session_id;
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                let score = await this.courseRepository.getSessionBasedOnId(sessionid).catch(e => {
+                    res.send(e);
+                });
+                res.json(score);
+            } else {
+                res.send('Not Authorized to see trainer list')
+            }
+        } else {
+            res.send('No User Logged In')
+        }
+    }
+
+    async TraineeReport(req, res) {
+        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user.trainee_id);
+        res.render('traineeReport', {title: 'Trainee Report', courses: courses});
     }
 
     async registerUser(req, res) {
@@ -145,11 +214,11 @@ class HomeController {
         //let trainer_id = parseInt(req.body.trainers);
         let ctt_trainer_id = parseInt(req.body.ctt_trainer_id);
 
-        console.log("---------------------------"+ctt_trainer_id);
+        console.log("---------------------------" + ctt_trainer_id);
         let selectedTraineesArray = req.body.selectedTraineesArray;
         let selectedTraineesIDs = selectedTraineesArray.split(',');
 
-        let successCourseTrainer = await this.courseRepository.assignCourseTrainerTrainee(course_id, ctt_trainer_id,selectedTraineesIDs)
+        let successCourseTrainer = await this.courseRepository.assignCourseTrainerTrainee(course_id, ctt_trainer_id, selectedTraineesIDs)
             .catch(e => {
                 req.session.error = 'Error in assigning the course to the instructor and student(s)';
                 res.redirect('/assign-schedule');
@@ -161,31 +230,12 @@ class HomeController {
         }
     }
 
-    async getAllCTT(req,res){
+    async getAllCTT(req, res) {
         let ctt = await this.courseRepository.getAllCTT(req.session.user).catch(e => {
             res.send(e);
         });
         res.json(ctt);
     }
-
-    // async AssignCourseTrainee(req, res) {
-    //     let selectedTraineesArray = req.body.selectedTraineesArray;
-    //     let course_id = parseInt(req.body.schedule_trainee_courses);
-    //
-    //     let selectedTraineesIDs = selectedTraineesArray.split(',');
-    //     console.log(selectedTraineesIDs);
-    //
-    //     let successCourseTrainee = await this.courseRepository.assignCourseTrainee(course_id, selectedTraineesIDs)
-    //         .catch(e => {
-    //             req.session.error = 'Error in assigning the student(s) to the course';
-    //             res.redirect('/assign-schedule');
-    //         });
-    //
-    //     if (successCourseTrainee) {
-    //         req.session.success = 'Successfully assigned the student(s) to the course!';
-    //         res.redirect('/assign-schedule');
-    //     }
-    // }
 
     async addCourse(req, res) {
 
@@ -238,80 +288,128 @@ class HomeController {
             course_id: parseInt(req.body.criteria_courses),
             skill_id: parseInt(req.body.criteria_skills),
             criteria1: req.body.criteria1,
+            criteria1Type: req.body.criteriaType1,
             rangeValue: rangeValue
         };
+
+        console.log(criteriaObj);
 
         switch (rangeValue) {
             case '2': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 break;
             }
             case '3': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 break;
             }
             case '4': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 break;
             }
             case '5': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 break;
             }
             case '6': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 break;
             }
             case '7': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7Type'] = req.body.criteriaType7;
                 break;
             }
             case '8': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7Type'] = req.body.criteriaType7;
                 criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8Type'] = req.body.criteriaType8;
                 break;
             }
             case '9': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7Type'] = req.body.criteriaType7;
                 criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8Type'] = req.body.criteriaType8;
                 criteriaObj['criteria9'] = req.body.criteria9;
+                criteriaObj['criteria9Type'] = req.body.criteriaType9;
                 break;
             }
             case '10': {
                 criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7Type'] = req.body.criteriaType7;
                 criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8Type'] = req.body.criteriaType8;
                 criteriaObj['criteria9'] = req.body.criteria9;
+                criteriaObj['criteria9Type'] = req.body.criteriaType9;
                 criteriaObj['criteria10'] = req.body.criteria10;
+                criteriaObj['criteria10Type'] = req.body.criteriaType10;
                 break;
             }
 

@@ -1,0 +1,52 @@
+<div class="page-ttl">
+    <div class="layer-stretch">
+        <div class="page-ttl-container">
+            <h1>{{{title}}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="col-form-label" for="course_drop">Course</label>
+                    <select name="course_drop" class="form-control" id="course_drop"
+                            onchange="getSkillOnCourseSelection()">
+                        <option disabled selected value></option>
+                        {{#courses}}
+                            <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
+                        {{/courses}}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Skill</label>
+                        <select name="skills_drop" class="form-control" id="skills_drop"
+                                onchange="getSessionsOnSkillSelection()">
+                            <option disabled selected value></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Session</label>
+                        <select name="sessions_drop" class="form-control" id="sessions_drop"
+                                onchange="getScoreBasedOnSessionID()">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="chartArea"></div>
+<div id="score-table"></div>
+<div id="extra-score-table"></div>
+
+
+<script src="customJavascript/traineeReport.js"></script>

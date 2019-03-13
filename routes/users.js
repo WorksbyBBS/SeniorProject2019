@@ -28,4 +28,20 @@ router.get('/api/course/:course_id/skills',function (req,res,next) {
  homeController.getSkillsBasedOnCourseID(req,res);
 });
 
+router.get('/api/course/:course_id/skills/sessions', function (req, res, next) {
+ homeController.getSkillsBasedOnCourseIDInSession(req, res);
+});
+
+router.get('/api/:skill_id/sessions', function (req, res, next) {
+ homeController.getSessionsBasedOnSkillId(req, res);
+});
+
+router.get('/api/:session_id/score', function (req, res, next) {
+ homeController.getScoreBasedOnSessionId(req, res);
+});
+
+router.get('/api/sessions/:session_id', function (req, res, next) {
+ homeController.getSessionBasedOnId(req, res);
+});
+
 module.exports = router;
