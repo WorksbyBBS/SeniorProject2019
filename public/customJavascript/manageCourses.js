@@ -206,7 +206,7 @@ const criteriaFormTemplate = `<div class="container">
                                             <div class="custom-control custom-radio custom-radio-1">
                                                 <input type="radio" id="essentialCriteria2" class="custom-control-input"
                                                        name="criteriaType2" value="Essential" checked>
-                                                <label for="essentialCriteria1" class="custom-control-label">Essential
+                                                <label for="essentialCriteria2" class="custom-control-label">Essential
                                                     for Pass/Fail</label>
                                             </div>
                                         

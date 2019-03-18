@@ -9,10 +9,6 @@ const session = require('express-session');
 const Sequelize = require('sequelize');
 const mysql2 = require('mysql2');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const unityRouter = require('./routes/unity');
-
 const homeController = require('./controllers/HomeController');
 
 const app = express();
@@ -74,8 +70,13 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
 //body parser
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const unityRouter = require('./routes/unity');
 
 //express-session
 expressSession = session({

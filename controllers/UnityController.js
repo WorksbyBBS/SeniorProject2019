@@ -9,6 +9,8 @@ class UnityController {
         let username = req.body.username;
         let password = req.body.password;
 
+        console.log(username + password);
+
         this.userRepository.loginUnity(username, password).then(user => {
             res.send(user);
         })
@@ -19,11 +21,22 @@ class UnityController {
     }
 
     async addUserSession(req, res) {
-        let jsonObj = res.body.jsonObj;
 
-        this.courseRepository.addUserSession(jsonObj).catch(e => {
-            res.send(e);
-        });
+        console.log("INSIDE POST SESSION");
+
+        let criteriaJsonData = req.body.criteriaJson;
+        let criteriaJsonParsed = JSON.parse(criteriaJsonData);
+        let criteriaJson = criteriaJsonParsed.Items;
+        let userId = req.body.userId;
+
+        console.log("---UNITY---CRITERIA---" + JSON.stringify(criteriaJson));
+        //console.log("---UNITY---USERID---"+userId);
+
+        // this.courseRepository.addUserSession(criteria_json,user_id).catch(e => {
+        //     res.send(e);
+        // });
+        //
+        // res.send("DONE")
 
     }
 

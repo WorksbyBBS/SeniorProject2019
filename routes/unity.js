@@ -15,7 +15,7 @@ router.get('/:courseid/:skillid/criteria', (req, res) => {
     unityController.getCriteriaBasedOnCourseAndSkillIDs(req, res);
 });
 
-router.post('/userSession', (req, res) => {
+router.post('/session', (req, res) => {
     unityController.addUserSession(req, res);
 });
 
