@@ -22,7 +22,7 @@ class UnityController {
 
     async addUserSession(req, res) {
 
-        console.log("INSIDE POST SESSION");
+        console.log("INSIDE POST SESSION  ");
 
         let criteriaJsonData = req.body.criteriaJson;
         let criteriaJsonParsed = JSON.parse(criteriaJsonData);
