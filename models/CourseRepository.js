@@ -2,42 +2,31 @@ const db = require('../config/db.config.js');
 const Courses = db.courses;
 const Skills = db.skills;
 const Criteria = db.skill_criteria;
-const Course_Trainee_Trainer = db.course_trainee_trainer;
+const Course_Trainee = db.course_trainee;
+const Course_Trainer = db.course_trainer;
 const Sessions = db.sessions;
 const Scores = db.criteria_scores;
 
 class CourseRepository {
 
-    async getAllCourses(user) {
+    async getAllCourses() {
         //manager can see courses
-        if (user) {
+        return await Courses.findAll({});
 
-            if (user.manager_role === 1) {
-                return await Courses.findAll({});
-            } else {
-                throw "Not Authorized to Access Courses"
-            }
-        } else {
-            throw "No User Logged In"
-        }
     }
 
-    async getAllCTT(user) {
+    async getAllCTrainers() {
         //manager can see courses
-        if (user) {
+        return await Course_Trainer.findAll({});
 
-            if (user.manager_role === 1) {
-                return await Course_Trainee_Trainer.findAll({});
-            } else {
-                throw "Not Authorized to Access Courses"
-            }
-        } else {
-            throw "No User Logged In"
-        }
+    }
+
+    async getAllCTrainees() {
+        return await Course_Trainee.findAll({});
+
     }
 
     async getSkillsBasedOnCourseID(user, id) {
-        //manager can see courses
         if (user) {
             if (user.manager_role === 1 || user.trainee_role === 1 || user.trainer_role === 1) {
                 return await Skills.findAll({where: {course_id: id}});
@@ -49,23 +38,24 @@ class CourseRepository {
         }
     }
 
-    async getCourseInfoAndTrainer(user, trainer_id) {
+    async getCourseInfoAndTrainer(user) {
 
         if (user) {
             if (user.manager_role === 1 || user.trainee_role === 1 || user.trainer_role === 1) {
-                let query = 'select distinct courses.course_id, courses.course_name, courses.year, courses.semester,ctt.trainer_id, users.first_name,users.last_name from sp2019_db.Users users\n' +
-                    'inner join sp2019_db.Course_Trainee_Trainers ctt\n' +
+                let query = 'select distinct courses.course_id, courses.course_name, courses.year, courses.semester,ctrainer.trainer_id, users.first_name,users.last_name \n' +
+                    'from sp2019_db.Users users\n' +
+                    'inner join sp2019_db.Course_Trainers as ctrainer\n' +
                     'inner join sp2019_db.Trainers trainers\n' +
                     'inner join sp2019_db.Courses courses\n' +
-                    'on courses.course_id=ctt.course_id \n' +
-                    'and ctt.trainer_id = trainers.trainer_id\n' +
+                    'on courses.course_id=ctrainer.course_id\n' +
+                    'and ctrainer.trainer_id = trainers.trainer_id\n' +
                     'and trainers.user_id = users.user_id;';
 
                 return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(result => {
                     return result;
                 });
             } else {
-                throw "Not Authorized to Access Skills"
+                throw "Not Authorized to Access This information"
             }
         } else {
             throw "No User Logged In"
@@ -82,13 +72,22 @@ class CourseRepository {
         });
     }
 
-    async assignCourseTrainerTrainee(course_id, trainer_id, selectedTraineesIDs) {
+    async assignCourseTrainer(course_id, trainer_id) {
+
+        let ct = await Course_Trainer.create({
+            course_id: course_id,
+            trainer_id: trainer_id
+        });
+        return ct;
+    }
+
+
+    async assignCourseTrainee(course_id, selectedTraineesIDs) {
         let i = 0;
         let ctArray = [];
         for (i; i < selectedTraineesIDs.length; i++) {
-            let ct = await Course_Trainee_Trainer.create({
+            let ct = await Course_Trainee.create({
                 course_id: course_id,
-                trainer_id: trainer_id,
                 trainee_id: selectedTraineesIDs[i]
             });
             ctArray.push(ct)
@@ -429,8 +428,62 @@ class CourseRepository {
         });
     }
 
-    async getSessionsBasedOnSkillId(skillid) {
-        return await Sessions.findAll({where: {skill_id: skillid}});
+    async getSessionsBasedOnSkillId(skillid, trainee_id) {
+        let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
+            'FROM sp2019_db.Sessions s\n' +
+            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
+            'WHERE s.skill_id=' + skillid + ' and s.trainee_id=' + trainee_id + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
+            return sessions;
+        });
+    }
+
+    async getSessionBasedOnFilters(trainerId, courseId, skillId, traineeId) {
+        let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
+            'FROM sp2019_db.Sessions s\n' +
+            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
+            'WHERE s.trainer_id=' + trainerId;
+
+        if (courseId === 'All') {
+            console.log('++++ INSIDE COURSDID ALL+++++');
+            if (traineeId !== 'All') {
+                console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + traineeId);
+                query = query + ' and s.trainee_id=' + traineeId + ';';
+                console.log(query);
+            }
+        } else {
+            console.log('++++ INSIDE COURSDID ' + courseId + '++++++++++');
+            query = query + ' and s.course_id=' + courseId;
+            if (skillId === 'All') {
+                if (traineeId !== 'All') {
+                    query = query + ' and s.trainee_id=' + traineeId + ';';
+                }
+            } else {
+                query = query + ' and s.skill_id=' + skillId;
+
+                if (traineeId !== 'All') {
+                    query = query + ' and s.trainee_id=' + traineeId + ';';
+                }
+            }
+        }
+
+        console.log(query);
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
+            return sessions;
+        });
+
     }
 
     async getScoreBasedOnSessionId(sessionid) {
@@ -445,14 +498,42 @@ class CourseRepository {
     }
 
     async getSessionBasedOnId(sessionid) {
-        return await Sessions.findOne({where: {session_id: sessionid}});
+        let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
+            'FROM sp2019_db.Sessions s\n' +
+            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
+            'WHERE s.session_id=' + sessionid + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
+            return sessions;
+        });
     }
 
-    async getCoursesWhichHaveSessions(trainee_id) {
-        let query = 'select distinct c.* from sp2019_db.Courses c\n' +
-            'inner join sp2019_db.Sessions s\n' +
-            'on s.course_id = c.course_id\n' +
-            'where trainee_id = ' + trainee_id + ';';
+    async getCoursesWhichHaveSessions(user) {
+        let query = '';
+        if (user.trainee_role === 1) {
+            console.log("+++" + user.trainee_role + "++++" + user.trainee_id + "+++");
+            query = 'select distinct c.* from sp2019_db.Courses c\n' +
+                'inner join sp2019_db.Sessions s\n' +
+                'on s.course_id = c.course_id\n' +
+                'inner join sp2019_db.Course_Trainees ctt\n' +
+                'on ctt.course_id=c.course_id\n' +
+                'where s.trainee_id = ' + user.trainee_id + ';';
+        } else if (user.trainer_role === 1) {
+            //console.log("+++" + user.trainer_role + "++++" + user.trainer_id + "+++");
+
+            query = 'select distinct c.* from sp2019_db.Courses c\n' +
+                'inner join sp2019_db.Sessions s\n' +
+                'on s.course_id = c.course_id\n' +
+                'inner join sp2019_db.Course_Trainers ctt\n' +
+                'on ctt.course_id=c.course_id\n' +
+                'where s.trainer_id = ' + user.trainer_id + ';';
+        }
+
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(courses => {
             return courses;

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Site Title -->
-    <title>{{title}}</title>
+
     <!-- Material Design Lite Stylesheet CSS -->
     <link rel="stylesheet" href="/../assets/plugin/material/material.min.css"/>
     <!-- Material Design Select Field Stylesheet CSS -->
@@ -41,55 +40,6 @@
                             <img src="/images/logo.png" alt="">
                         </a>
                     </div><!-- End Header Logo Section -->
-                    <div class="tbl-cell hdr-menu">
-                        <!-- Start Menu Section -->
-                        <ul class="menu">
-                            {{#if session}}
-                                <li class="menu-megamenu-li">
-                                    <a href="/profile" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                            class="fa fa-user-circle"></i> My Profile</a>
-                                </li>
-
-                                {{#ifUserIsAdmin session.user.admin_role 1}}
-                                    <li class="menu-megamenu-li">
-                                        <a href="/dashboard" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-columns"></i> Admin Dashboard</a>
-                                    </li>
-                                {{/ifUserIsAdmin}}
-
-                                {{#ifUserIsManager session.user.manager_role 1}}
-                                    <li class="menu-megamenu-li">
-                                        <a href="/courses" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> Manage Courses</a>
-                                    </li>
-                                    <li class="menu-megamenu-li">
-                                        <a href="/assign-schedule" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-calendar-alt"></i> Assign Schedule</a>
-                                    </li>
-                                {{/ifUserIsManager}}
-                                {{#ifUserIsTrainee session.user.trainee_role 1}}
-                                    <li class="menu-megamenu-li">
-                                        <a href="/trainee-report" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> View Reports</a>
-                                    </li>
-                                {{/ifUserIsTrainee}}
-                                {{#ifUserIsTrainer session.user.trainer_role 1}}
-                                    <li class="menu-megamenu-li">
-                                        <a href="/trainer-report" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> View Student Reports</a>
-                                    </li>
-                                {{/ifUserIsTrainer}}
-
-                                <li class="menu-megamenu-li">
-                                    <a href="/logout" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                            class="fa fa-sign-out-alt"></i> Logout</a>
-                                </li>
-                            {{/if}}
-
-                            <li class="mobile-menu-close"><i class="fa fa-times"></i></li>
-                        </ul><!-- End Menu Section -->
-                        <div id="menu-bar"><a><i class="fa fa-bars"></i></a></div>
-                    </div>
                 </div>
             </div>
         </div>

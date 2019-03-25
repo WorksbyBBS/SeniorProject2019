@@ -1,4 +1,4 @@
-const scoreTableTemplate = `<div class="container">
+const scoreTableTemplate = `<div class="container-fluid">
     <div class="panel">
         <div class="panel-head">
                 <div class="row">
@@ -25,13 +25,18 @@ const scoreTableTemplate = `<div class="container">
                         <span><h4><b>Session Type:</b> {{session.type}}</h4></span>
                     </div>
                 </div>
-                {{#if session.trainer_comment}}
+                
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-4">
+                        <span><h4><b>Trainer Name:</b> {{session.trainer_firstname}} {{session.trainer_lastname}}</h4></span>
+                    </div>
+                {{#if session.trainer_comment}}
+                    <div class="col-md-8">
                         <span><h4><b>Trainer Comment:</b> {{session.trainer_comment}}</h4></span>
                     </div>
+                 {{/if}}
                 </div>
-                {{/if}}
+                
         </div>
         <div class="panel-body">
             <div class="row">
@@ -57,25 +62,13 @@ const scoreTableTemplate = `<div class="container">
                         </tr>
 
                         {{/each}}
+                         <tr>
+                                <td class="light-background"><h2><b>Final Score</b></h2></td>
+                                <td class="light-background" colspan="3"><span class="finalScore"><h3><b>{{finalScore}}</b></h3></span></td>
+                                
+                            </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-        <div class="form-seperator"></div>
-        <div class="panel-head">
-            <!--<h4>-->
-                <!--{{#if session.trainer_comment}}-->
-                <!--<div class="row">-->
-                    <!--<div class="col-md-12">-->
-                        <!--<span><h4><b>Trainer Comment:</b> {{session.trainer_comment}}</h4></span>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--{{/if}}-->
-            <!--</h4>-->
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h4><b>Final Score:</b> {{finalScore}}</h4>
                 </div>
             </div>
         </div>
@@ -85,7 +78,7 @@ const scoreTableTemplate = `<div class="container">
 
 
 const extraScoreTableTemplate = `
-<div class="container">
+<div class="container-fluid">
 <div class="panel">
 <div class="panel-head">
 <h4>Extra Criteria Details</h4>
@@ -100,7 +93,7 @@ const extraScoreTableTemplate = `
                             <th>Criteria</th>
                             <th>Value</th>
                             <th>Trainer Comment</th>
-                            <th>Your Comment</th>
+                            <!--<th>Your Comment</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -110,7 +103,7 @@ const extraScoreTableTemplate = `
                                 <td>{{criteria_name}}</td>
                                 <td><span id="score_span">{{score_value}}</span></td>
                                 <td>{{trainer_comment}}</td>
-                                <td>{{trainee_comment}}</td>
+                                <!--<td>{{trainee_comment}}</td>-->
                             </tr>
                         
                         {{/each}}
@@ -125,24 +118,17 @@ const extraScoreTableTemplate = `
 `;
 
 
-const sessionSummaryTemplate = `
-<div class='container'>
-<div class="panel">
-<div class="panel-head">
-<h4>Session Summary</h4>
-</div>
-<div class="panel-body">
+window.onload = function (e) {
+    $('#table tbody tr td span').each(function () {
+        let text = $(this).text();
+        if (text === 'Pass') {
+            $(this).addClass('badge badge-success badge-md badge-pill  btn-block');
+        } else if (text === 'Fail') {
+            $(this).addClass('badge badge-danger badge-md badge-pill  btn-block');
+        }
+    });
+}
 
-<div class="row">
-<div class="col-md-12 text-center">
-<h3><b>Final Score:</b> {{finalScore}}</h3>
-</div>
-</div>
-    <canvas id="singleSessionPieChart"></canvas>
-</div>
-</div>
-</div>
-`;
 
 async function getSkillOnCourseSelection() {
     let course_dropdown = document.getElementById('course_drop');
@@ -189,7 +175,8 @@ async function getScoreBasedOnSessionID() {
 
     //get session info based on session ID
     let dataSession = await fetch(`users/api/sessions/${session_id}`, {credentials: 'include'});
-    let session = await dataSession.json();
+    let sessionArray = await dataSession.json();
+    let session = sessionArray[0];
 
     let dataScore = await fetch(`users/api/${session_id}/score`, {credentials: 'include'});
     let scores = await dataScore.json();
@@ -197,10 +184,10 @@ async function getScoreBasedOnSessionID() {
     let essentialCriteriaScores = [];
     let extraCriteriaScores = [];
     for (let i = 0; i < scores.length; i++) {
-        if (scores[i].score_value === 0) {
+        if (scores[i].score_value === -1) {
             scores[i].score_value = "Pass";
             essentialCriteriaScores.push(scores[i]);
-        } else if (scores[i].score_value === -1) {
+        } else if (scores[i].score_value === -2) {
             scores[i].score_value = "Fail"
             essentialCriteriaScores.push(scores[i]);
         } else {
@@ -208,12 +195,8 @@ async function getScoreBasedOnSessionID() {
         }
     }
 
-    let finalScore = "";
-    if (session.final_score === -1)
-        finalScore = "Fail";
-    else if (session.final_score === 0)
-        finalScore = "Pass";
 
+    console.log(session);
     let splitDate = session.createdAt.split('T');
     let sessionDate = splitDate[0];
     console.log(sessionDate);
@@ -226,6 +209,13 @@ async function getScoreBasedOnSessionID() {
     let course_name = $("#course_drop option:selected").text();
     let skill_name = $("#skills_drop option:selected").text();
     //console.log(course_name);
+
+    let finalScore = "";
+    if (session.final_score === -2) {
+        finalScore = "Fail";
+    } else if (session.final_score === -1) {
+        finalScore = "Pass";
+    }
 
     let compliedTemplate = Handlebars.compile(scoreTableTemplate);
     let generatedHTMLContent = compliedTemplate({
@@ -246,82 +236,10 @@ async function getScoreBasedOnSessionID() {
     $('#table tbody tr td span').each(function () {
         let text = $(this).text();
         if (text === 'Pass') {
-            $(this).addClass('badge badge-success badge-md badge-pill');
+            $(this).addClass('badge badge-success badge-md badge-pill  btn-block');
         } else if (text === 'Fail') {
-            $(this).addClass('badge badge-danger badge-md badge-pill');
+            $(this).addClass('badge badge-danger badge-md badge-pill  btn-block');
         }
     });
 
-}
-
-
-// function displaySessionSummary(scoresArray,session){
-//     let finalScore = "";
-//
-//     if(session.final_score===-1)
-//         finalScore = "Fail";
-//     else if(session.final_score===0)
-//         finalScore = "Pass";
-//
-//     let splitDate = session.createdAt.split('T');
-//     let sessionDate = splitDate[0];
-//     console.log(sessionDate);
-//
-//     let splitTime = splitDate[1].split('.');
-//     let sessionTime = splitTime[0];
-//     console.log(sessionTime);
-//
-//     let compliedTemplate = Handlebars.compile(sessionSummaryTemplate);
-//     let generatedHTMLContent = compliedTemplate({finalScore,sessionDate,sessionTime,session});
-//     $('#chartArea').html(generatedHTMLContent);
-// }
-
-function displayChart(scoresArray) {
-
-    let passingCount = 0;
-    let failCount = 0;
-    scoresArray.forEach(scoreObj => {
-        if (scoreObj.score_value === "Pass")
-            passingCount++;
-        else if (scoreObj.score_value === "Fail")
-            failCount++
-    });
-
-    var ctx = document.getElementById("singleSessionPieChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ["Pass", "Fail"],
-            datasets: [{
-                label: '# of Scores',
-                data: [passingCount, failCount],
-                backgroundColor: [
-                    'rgba(40,167,69, 0.5)',
-                    'rgba(220,53,69,0.5)'
-                ],
-                hoverBorderColor: [
-                    'rgba(40,167,69, 0.8)',
-                    'rgba(220,53,69,0.8)'
-                ],
-                borderWidth: 0,
-                hoverBorderWidth: 0.4
-            }]
-        },
-        options: {
-            animateRotate: true,
-
-            plugins: {
-                datalabels: {
-                    display: function (context) {
-                        return context.dataset.data[context.dataIndex] > 1;
-                    }
-                },
-                dataset: {
-                    display: function (context) {
-                        return context.dataset.data[context.dataIndex] > 1;
-                    }
-                }
-            }
-        }
-    });
 }

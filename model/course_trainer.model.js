@@ -1,16 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-    const Course_Trainee_Trainer = sequelize.define('Course_Trainee_Trainer', {
-        trainee_id: {
-            type: Sequelize.INTEGER,
-            default:-1,
-            references: {
-                model: 'Trainees',
-                key: 'trainee_id'
-            }
-        },
+    const Course_Trainer = sequelize.define('Course_Trainer', {
         trainer_id: {
             type: Sequelize.INTEGER,
-            default:-1,
+            primaryKey: true,
+            default: -1,
             references: {
                 model: 'Trainers',
                 key: 'trainer_id'
@@ -18,7 +11,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         course_id: {
             type: Sequelize.INTEGER,
-            default:-1,
+            primaryKey: true,
+            default: -1,
             references: {
                 model: 'Courses',
                 key: 'course_id'
@@ -26,5 +20,5 @@ module.exports = (sequelize, Sequelize) => {
         },
     });
 
-    return Course_Trainee_Trainer;
+    return Course_Trainer;
 }

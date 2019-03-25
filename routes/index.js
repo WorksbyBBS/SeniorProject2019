@@ -52,6 +52,15 @@ router.get('/assign-schedule',isLoggedIn, function(req, res, next) {
 router.get('/trainee-report', isLoggedIn, function (req, res, next) {
     homeController.TraineeReport(req, res)
 });
+
+router.get('/trainee-report/session/:sessionIdForm', isLoggedIn, function (req, res, next) {
+    console.log(res.locals.session);
+    homeController.TrainerToTrainee(req, res)
+});
+
+router.get('/trainer-report', isLoggedIn, function (req, res, next) {
+    homeController.TrainerReport(req, res)
+});
 /* POST LINKS */
 router.post('/login', (req, res) => homeController.login(req,res));
 router.post('/registerUser',isLoggedIn, (req, res) => homeController.registerUser(req,res));
@@ -59,6 +68,10 @@ router.post('/addCourse',isLoggedIn, (req, res) => homeController.addCourse(req,
 router.post('/addSkill',isLoggedIn, (req, res) => homeController.addSkill(req,res));
 router.post('/addCriteria',isLoggedIn, (req, res) => homeController.addCriteria(req,res));
 router.post('/assign-course',isLoggedIn, (req, res) => homeController.AssignCourse(req,res));
+router.post('/assign-course-trainee', isLoggedIn, (req, res) => homeController.AssignCourseTrainee(req, res));
+
+//router.post('/trainee-session-report', isLoggedIn, (req, res) => homeController.TrainerToTrainee(req, res));
+//router.get('/trainee-session-report', isLoggedIn, (req, res) => res.render('trainerTraineeReport'));
 //router.post('/assign-course-trainee',isLoggedIn, (req, res) => homeController.AssignCourseTrainee(req,res));
 //router.post('/addCourse',isLoggedIn, (req, res) => homeController.registerUser(req,res));
 // router.get('/', (req, res) => res.redirect('/home'));

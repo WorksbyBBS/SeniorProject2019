@@ -270,6 +270,19 @@ class UserRepository {
         });
     }
 
+    async getTraineeUsersWhoHaveSessions(trainer_id) {
+        let query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
+            'from sp2019_db.Trainees as t\n' +
+            'inner join sp2019_db.Sessions as s\n' +
+            'on s.trainee_id=t.trainee_id\n' +
+            'inner join sp2019_db.Users as u\n' +
+            'on t.user_id=u.user_id where s.trainer_id=' + trainer_id + ';';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainees => {
+            return trainees;
+        });
+    }
+
 }
 
 String.prototype.capitalizeFirstLetter = function () {

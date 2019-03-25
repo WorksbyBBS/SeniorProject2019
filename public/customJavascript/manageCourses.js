@@ -1,5 +1,5 @@
 const coursesFormTemplate = `
-<div class="container"> 
+<div class="container-fluid"> 
 <div class="panel">
 <div class="panel-head">
 <h4>Add New Course</h4>
@@ -60,7 +60,7 @@ const coursesFormTemplate = `
 </div>`
 
 const skillsFormTemplate = `
-<div class="container"> 
+<div class="container-fluid"> 
 <div class="panel">
 <div class="panel-head">
 <h4>Add New Skill</h4>
@@ -113,7 +113,7 @@ const skillsFormTemplate = `
  </div>
 </div>`
 
-const criteriaFormTemplate = `<div class="container">
+const criteriaFormTemplate = `<div class="container-fluid">
     <div class="panel">
         <div class="panel-head">
             <h4>Add New Criteria</h4>
@@ -137,6 +137,18 @@ const criteriaFormTemplate = `<div class="container">
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="formCancelButtonArea">
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    <button id="cancelBtnCriteria2" class="btn btn-danger btn-pill"
+                                            name="cancelBtnCriteria2" onclick="cancelCriteriaForm()">Cancel
+                                    </button>
+
+                                </div>
+                            </div>
+                     </div>
+                    
                     <div class="skills_selection" style="display: none;">
                         <div class="row">
                             <div class="col-md-12">
@@ -472,16 +484,7 @@ const criteriaFormTemplate = `<div class="container">
                                 </div>
 
                             </div>
-                        <div class="formCancelButtonArea">
-                            <div class="row text-center">
-                                <div class="col-md-12">
-                                    <button id="cancelBtnCriteria2" class="btn btn-danger btn-pill"
-                                            name="cancelBtnCriteria2" onclick="cancelCriteriaForm()">Cancel
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
             </form>
         </div>

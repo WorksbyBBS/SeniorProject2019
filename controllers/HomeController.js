@@ -44,7 +44,7 @@ class HomeController {
             return res.redirect('/')
         })
             .catch(e => {
-                console.log(e)
+                //console.log(e)
                 res.render('login', {title: 'Login', error: e})
             })
     }
@@ -87,10 +87,24 @@ class HomeController {
                 });
                 res.json(skills);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of skills',
+                    layout: 'errorLayout.hbs'
+                });
+
+                //res.send('Not Authorized to see trainer list')
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
+
+            //res.send('No User Logged In')
         }
     }
 
@@ -98,15 +112,58 @@ class HomeController {
         let skillid = req.params.skill_id;
         if (req.session.user) {
             if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
-                let sessions = await this.courseRepository.getSessionsBasedOnSkillId(skillid).catch(e => {
+                let sessions = await this.courseRepository.getSessionsBasedOnSkillId(skillid, req.session.user.trainee_id).catch(e => {
                     res.send(e);
                 });
                 res.json(sessions);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of sessions',
+                    layout: 'errorLayout.hbs'
+                });
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
+        }
+    }
+
+    async getSessionBasedOnFilters(req, res) {
+        let courseId = req.params.course_id;
+        let skillId = req.params.skill_id;
+        let traineeId = req.params.trainee_id;
+
+        console.log(courseId);
+        console.log(skillId);
+        console.log(traineeId);
+
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId).catch(e => {
+                    res.send(e);
+                });
+                res.json(sessions);
+            } else {
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of sessions',
+                    layout: 'errorLayout.hbs'
+                });
+            }
+        } else {
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
         }
     }
 
@@ -119,10 +176,20 @@ class HomeController {
                 });
                 res.json(score);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of scores',
+                    layout: 'errorLayout.hbs'
+                });
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
         }
     }
 
@@ -135,16 +202,107 @@ class HomeController {
                 });
                 res.json(score);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see this session',
+                    layout: 'errorLayout.hbs'
+                });
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
         }
     }
 
     async TraineeReport(req, res) {
-        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user.trainee_id);
-        res.render('traineeReport', {title: 'Trainee Report', courses: courses});
+        console.log(req.session.user);
+        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
+        res.render('traineeReport', {title: 'Session Report', courses: courses});
+    }
+
+    async TrainerToTrainee(req, res) {
+
+        let session_id = req.params.sessionIdForm;
+
+        let usersession = await this.courseRepository.getSessionBasedOnId(session_id);
+        console.log(usersession);
+        if (usersession.length > 0) {
+            let training_session_trainer_id = usersession[0].trainer_id
+            //console.log("------------"+ typeof training_session_trainer_id );
+            let current_trainer_id = req.session.user.trainer_id;
+            //console.log("---++++---+--"+ typeof current_trainer_id);
+            if (training_session_trainer_id === current_trainer_id) {
+
+                let date = usersession[0].createdAt + '';
+                let splitDate = date.split(/[- :]/);
+                usersession[0]["sessionTime"] = splitDate[4] + ":" + splitDate[5] + ":" + splitDate[6];
+                usersession[0]["sessionDate"] = splitDate[0] + ", " + splitDate[1] + "-" + splitDate[2] + "-" + splitDate[3];
+
+                let scores = await this.courseRepository.getScoreBasedOnSessionId(session_id);
+
+                let essentialCriteriaScores = [];
+                let extraCriteriaScores = [];
+                for (let i = 0; i < scores.length; i++) {
+                    if (scores[i].score_value === -1) {
+                        scores[i].score_value = "Pass";
+                        essentialCriteriaScores.push(scores[i]);
+                    } else if (scores[i].score_value === -2) {
+                        scores[i].score_value = "Fail"
+                        essentialCriteriaScores.push(scores[i]);
+                    } else {
+                        extraCriteriaScores.push(scores[i]);
+                    }
+                }
+
+                let finalScore = 'Pass';
+                for (let i = 0; i < essentialCriteriaScores.length; i++) {
+                    if (essentialCriteriaScores[i].score_value === 'Fail') {
+                        finalScore = "Fail";
+                        break;
+                    }
+                }
+
+                res.render('traineeReport', {
+                    title: 'Session Report',
+                    usersession: usersession,
+                    scores: essentialCriteriaScores,
+                    extraCriteriaScores: extraCriteriaScores,
+                    finalScore: finalScore
+                });
+
+            } else {
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see this session. You are not the instructor for this course',
+                    layout: 'errorLayout.hbs'
+                });
+                //res.send("Not authorized to see this session. You are not the instructor");
+            }
+        } else {
+            res.render('error', {
+                errorCode: '404',
+                error: "Session Not found",
+                extraMessage: 'Please check the session ID again',
+                layout: 'errorLayout.hbs'
+            });
+            // res.send("No session with this id has been found");
+        }
+
+
+    }
+
+    async TrainerReport(req, res) {
+        //console.log(req.session.user);
+        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
+        let trainees = await this.userRepository.getTraineeUsersWhoHaveSessions(req.session.user.trainer_id);
+
+        res.render('trainerReport', {title: 'Student Sessions Report', courses: courses, trainees: trainees});
     }
 
     async registerUser(req, res) {
@@ -173,39 +331,81 @@ class HomeController {
     }
 
     async getAllCourses(req, res) {
-        let courses = await this.courseRepository.getAllCourses(req.session.user).catch(e => {
-            res.send(e);
-        });
-        res.json(courses);
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1) {
+                let courses = await this.courseRepository.getAllCourses().catch(e => {
+                    res.send(e);
+                });
+                res.json(courses);
+            } else {
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of courses',
+                    layout: 'errorLayout.hbs'
+                });
+
+                //res.send('Not Authorized to see trainer list')
+            }
+        } else {
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
+
+            //res.send('No User Logged In')
+        }
     }
 
     async getAllTrainers(req, res) {
         if (req.session.user) {
-            if (req.session.user.manager_role === 1) {
+            if (req.session.user.manager_role === 1 || req.session.user.admin_role === 1) {
                 let trainers = await this.userRepository.getAllTrainersForSchedule().catch(e => {
                     res.send(e);
                 });
                 res.json(trainers);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of trainers',
+                    layout: 'errorLayout.hbs'
+                });
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
         }
     }
 
     async getAllTrainees(req, res) {
         if (req.session.user) {
-            if (req.session.user.manager_role === 1) {
+            if (req.session.user.manager_role === 1 || req.session.user.admin_role === 1) {
                 let trainers = await this.userRepository.getAllTraineesForSchedule().catch(e => {
                     res.send(e);
                 });
                 res.json(trainers);
             } else {
-                res.send('Not Authorized to see trainer list')
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of trainees',
+                    layout: 'errorLayout.hbs'
+                });
             }
         } else {
-            res.send('No User Logged In')
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
         }
     }
 
@@ -215,26 +415,89 @@ class HomeController {
         let ctt_trainer_id = parseInt(req.body.ctt_trainer_id);
 
         console.log("---------------------------" + ctt_trainer_id);
-        let selectedTraineesArray = req.body.selectedTraineesArray;
-        let selectedTraineesIDs = selectedTraineesArray.split(',');
 
-        let successCourseTrainer = await this.courseRepository.assignCourseTrainerTrainee(course_id, ctt_trainer_id, selectedTraineesIDs)
+
+        let successCourseTrainer = await this.courseRepository.assignCourseTrainer(course_id, ctt_trainer_id)
             .catch(e => {
-                req.session.error = 'Error in assigning the course to the instructor and student(s)';
+                req.session.error = 'Error in assigning the course to the instructor';
                 res.redirect('/assign-schedule');
             });
 
         if (successCourseTrainer) {
-            req.session.success = 'Successfully assigned the course to the instructor and student(s)!';
+            req.session.success = 'Successfully assigned the course to the instructor!';
             res.redirect('/assign-schedule');
         }
     }
 
-    async getAllCTT(req, res) {
-        let ctt = await this.courseRepository.getAllCTT(req.session.user).catch(e => {
-            res.send(e);
-        });
-        res.json(ctt);
+    async AssignCourseTrainee(req, res) {
+        let course_id = parseInt(req.body.schedule_courses);
+
+        let selectedTraineesArray = req.body.selectedTraineesArray;
+        let selectedTraineesIDs = selectedTraineesArray.split(',');
+
+        let successCourseTrainer = await this.courseRepository.assignCourseTrainee(course_id, selectedTraineesIDs)
+            .catch(e => {
+                req.session.error = 'Error in assigning the course to the student(s)';
+                res.redirect('/assign-schedule');
+            });
+
+        if (successCourseTrainer) {
+            req.session.success = 'Successfully assigned the course to the student(s)!';
+            res.redirect('/assign-schedule');
+        }
+    }
+
+    async getAllCTrainers(req, res) {
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.admin_role === 1) {
+                let ctt = await this.courseRepository.getAllCTrainers(req.session.user).catch(e => {
+                    res.send(e);
+                });
+                res.json(ctt);
+            } else {
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of trainers',
+                    layout: 'errorLayout.hbs'
+                });
+            }
+        } else {
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
+        }
+
+    }
+
+    async getAllCTrainees(req, res) {
+
+        if (req.session.user) {
+            if (req.session.user.manager_role === 1 || req.session.user.admin_role === 1) {
+                let ctt = await this.courseRepository.getAllCTrainees(req.session.user).catch(e => {
+                    res.send(e);
+                });
+                res.json(ctt);
+            } else {
+                res.render('error', {
+                    errorCode: '403',
+                    error: "Forbidden Access",
+                    extraMessage: 'Not authorized to see the list of trainees',
+                    layout: 'errorLayout.hbs'
+                });
+            }
+        } else {
+            res.render('error', {
+                errorCode: '404',
+                error: "Not Found",
+                extraMessage: 'No user logged in',
+                layout: 'errorLayout.hbs'
+            });
+        }
+
     }
 
     async addCourse(req, res) {
@@ -292,7 +555,7 @@ class HomeController {
             rangeValue: rangeValue
         };
 
-        console.log(criteriaObj);
+        //console.log(criteriaObj);
 
         switch (rangeValue) {
             case '2': {

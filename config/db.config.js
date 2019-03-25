@@ -29,7 +29,8 @@ db.managers = require('../model/manager.model.js')(sequelize, Sequelize);
 db.roles = require('../model/role.model.js')(sequelize, Sequelize);
 
 db.courses = require('../model/course.model.js')(sequelize, Sequelize);
-db.course_trainee_trainer = require('../model/course_trainee_trainer.model.js')(sequelize, Sequelize);
+db.course_trainee = require('../model/course_trainee.model.js')(sequelize, Sequelize);
+db.course_trainer = require('../model/course_trainer.model.js')(sequelize, Sequelize);
 
 db.skills = require('../model/skill.model.js')(sequelize, Sequelize);
 db.skill_criteria = require('../model/skill_criteria.model.js')(sequelize, Sequelize);

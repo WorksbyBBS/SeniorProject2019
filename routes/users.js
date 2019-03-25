@@ -3,16 +3,17 @@ var router = express.Router();
 var homeController = require('../controllers/HomeController')
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
 router.get('/api/courses',function (req,res,next) {
  homeController.getAllCourses(req,res);
 });
 
-router.get('/api/ctt',function (req,res,next) {
- homeController.getAllCTT(req,res);
+router.get('/api/ctrainers', function (req, res, next) {
+    homeController.getAllCTrainers(req, res);
+});
+
+router.get('/api/ctrainees', function (req, res, next) {
+    homeController.getAllCTrainees(req, res);
 });
 
 
@@ -42,6 +43,10 @@ router.get('/api/:session_id/score', function (req, res, next) {
 
 router.get('/api/sessions/:session_id', function (req, res, next) {
  homeController.getSessionBasedOnId(req, res);
+});
+
+router.get('/api/sessions/:course_id/:skill_id/:trainee_id', function (req, res, next) {
+    homeController.getSessionBasedOnFilters(req, res);
 });
 
 module.exports = router;

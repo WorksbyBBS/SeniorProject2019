@@ -1,8 +1,8 @@
 const assignCourseFormTemplate = `
-<div class="container"> 
+<div class="container-fluid"> 
 <div class="panel">
 <div class="panel-head">
-<h4>Assign Instructor and Students to a Course</h4>
+<h4>Assign Instructor a Course</h4>
 </div>
         <div class="panel-body">
             <form class="form-vertical" method="post" action="/assign-course" id="assignCoursesForm" onsubmit="return validateOnSubmit()">
@@ -51,6 +51,59 @@ const assignCourseFormTemplate = `
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="text-center">
+                    <div class="row">
+                        <div class="col-md-6">
+                           
+                                <button type="submit" id="submitBtnCourse" class="btn btn-primary btn-pill" name="submitBtnCourse"
+                                    value="submit">Submit
+                                </button>
+                            
+                        </div>
+                        <div class="col-md-6">
+                                <button id="cancelBtnCourse" class="btn btn-danger btn-pill" name="cancelBtnCourse" onclick="cancelAssignCourse()">Cancel
+                                </button>
+                           
+                        </div>
+                    </div>
+                       
+                    </div>
+                </div>
+            </form>
+        </div>
+ </div>
+</div>`;
+
+const assignCourseTraineeFormTemplate = `
+<div class="container-fluid"> 
+<div class="panel">
+<div class="panel-head">
+<h4>Assign Trainee a Course</h4>
+</div>
+        <div class="panel-body">
+            <form class="form-vertical" method="post" action="/assign-course-trainee" id="assignCoursesTraineeForm" onsubmit="return validateOnSubmitTrainee()">
+                <div class="form-body">
+                     <div class="row">
+                        <div class="col-md-12">
+                             <div class="form-group">
+                                <label class="col-form-label">Course</label>
+                                   <select name="schedule_courses" class="form-control" id="schedule_courses" onchange="checkIfTrainer()">
+                                   <option disabled selected value></option>
+                                        {{#courses}}
+                                        <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
+                                        {{/courses}}
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row text-center">
+                    <div class="col-md-12">
+                    <span class="text-danger" id="invalid-course" style="display: none">Please choose a course first!</span>   
+                    </div>
+                    </div>
+                    
                     <div class="row text-center">
                     <div class="col-md-12">
                     <span class="text-danger" id="invalid-student" style="display: none">Cannot Add one or more selected students because they are already enrolled. Please check class enrollment again before adding</span>
@@ -104,7 +157,7 @@ const assignCourseFormTemplate = `
                             
                         </div>
                         <div class="col-md-6">
-                                <button id="cancelBtnCourse" class="btn btn-danger btn-pill" name="cancelBtnCourse" onclick="cancelAssignCourse()">Cancel
+                                <button id="cancelBtnCourse" class="btn btn-danger btn-pill" name="cancelBtnCourse" onclick="cancelAssignCourseTrainee()">Cancel
                                 </button>
                            
                         </div>
@@ -118,7 +171,7 @@ const assignCourseFormTemplate = `
 </div>`;
 
 async function assignCourse() {
-    // $('#assign-trainee-course-schedule').html('');
+    $('#assign-course-trainee-schedule').html('');
     let dataCourses = await fetch('users/api/courses', {credentials: 'include'});
     let courses = await dataCourses.json();
 
@@ -133,8 +186,8 @@ async function assignCourse() {
     $('#assign-course-schedule').html(generatedHTMLContent);
 }
 
-async function assignTraineeCourse() {
-    $('#assign-instructor-course-schedule').html('');
+async function assignCourseTrainee() {
+    $('#assign-course-schedule').html('');
 
     let dataCourses = await fetch('users/api/courses', {credentials: 'include'});
     let courses = await dataCourses.json();
@@ -142,13 +195,18 @@ async function assignTraineeCourse() {
     let dataTrainees = await fetch('users/api/trainees', {credentials: 'include'});
     let trainees = await dataTrainees.json();
 
-    let compliedTemplate = Handlebars.compile(assignTraineeCourseFormTemplate);
+    let compliedTemplate = Handlebars.compile(assignCourseTraineeFormTemplate);
     let generatedHTMLContent = compliedTemplate({courses, trainees});
-    $('#assign-trainee-course-schedule').html(generatedHTMLContent);
+    $('#assign-course-trainee-schedule').html(generatedHTMLContent);
 }
 
 function cancelAssignCourse() {
     $('#assign-course-schedule').html('');
+    document.getElementById('assignCoursesForm').reset();
+}
+
+function cancelAssignCourseTrainee() {
+    $('#assign-course-trainee-schedule').html('');
     document.getElementById('assignCoursesForm').reset();
 }
 
@@ -160,7 +218,7 @@ async function moveTraineeToSelected() {
         $('#invalid-course').show();
     } else {
         $('#invalid-course').hide();
-        let dataCTT = await fetch('users/api/ctt', {credentials: 'include'});
+        let dataCTT = await fetch('users/api/ctrainees', {credentials: 'include'});
         let ctt = await dataCTT.json();
         let selectedTrainees = [];
         $('#all_trainees option:selected').each(function () {
@@ -189,26 +247,12 @@ function cancelTraineeFromSelected() {
 
 function validateOnSubmit() {
 
-    let selectedTrainees = [];
-    $('#selected_trainees option').each(function () {
-        selectedTrainees.push($(this).val());
-    });
-
-    $('#selectedTraineesArray').val(selectedTrainees);
-
     let courseValue = $('#schedule_courses option:selected').val();
     let trainerValue = $('#trainers option:selected').val();
     //console.log(courseValue);
 
-    let submitStudentOkay=false;
-    let submitCourseOkay=false;
-    let submitTrainerOkay=false;
-    if (selectedTrainees.length === 0) {
-        $('#invalid-student-empty').show();
-        submitStudentOkay = false;
-    } else {
-        submitStudentOkay = true;
-    }
+    let submitCourseOkay = false;
+    let submitTrainerOkay = false;
 
     if (courseValue === '') {
         $('#invalid-course').show();
@@ -224,9 +268,47 @@ function validateOnSubmit() {
         submitTrainerOkay = true;
     }
 
-    if(submitCourseOkay && submitStudentOkay && submitTrainerOkay) {
-        $('#invalid-student-empty').hide();
+    if (submitCourseOkay && submitTrainerOkay) {
         $('#invalid-trainer').hide();
+        $('#invalid-course').hide();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validateOnSubmitTrainee() {
+
+    let selectedTrainees = [];
+    $('#selected_trainees option').each(function () {
+        selectedTrainees.push($(this).val());
+    });
+
+    $('#selectedTraineesArray').val(selectedTrainees);
+
+    let courseValue = $('#schedule_courses option:selected').val();
+
+    //console.log(courseValue);
+
+    let submitStudentOkay=false;
+    let submitCourseOkay=false;
+    if (selectedTrainees.length === 0) {
+        $('#invalid-student-empty').show();
+        submitStudentOkay = false;
+    } else {
+        submitStudentOkay = true;
+    }
+
+    if (courseValue === '') {
+        $('#invalid-course').show();
+        submitCourseOkay = false;
+    } else {
+        submitCourseOkay = true;
+    }
+
+
+    if (submitCourseOkay && submitStudentOkay) {
+        $('#invalid-student-empty').hide();
         $('#invalid-course').hide();
         return true;
     } else {
@@ -237,8 +319,8 @@ function validateOnSubmit() {
 async function checkIfTrainer() {
     let value = $('#schedule_courses option:selected').val();
     $('#invalid-course').hide();
-    $('#invalid-student').hide();
-    let dataCTT = await fetch('users/api/ctt', {credentials: 'include'});
+
+    let dataCTT = await fetch('users/api/ctrainers', {credentials: 'include'});
     let ctt = await dataCTT.json();
 
     const found = ctt.some(item => item.course_id === parseInt(value));

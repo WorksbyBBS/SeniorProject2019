@@ -46,6 +46,14 @@ app.engine('hbs', handlebars({
                 return options.inverse(this);
             }
         },
+        ifUserIsTrainer: function (userS, userT, options) {
+            if (userS === userT) {
+                console.log(userS + "===" + userT)
+                return options.fn(this);
+            } else {
+                return options.inverse(this);
+            }
+        },
         ifScoreIsPass: function (val1, val2, options) {
             if (val1 === val2) {
                 console.log(val1 + "===" + val2)

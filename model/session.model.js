@@ -4,21 +4,21 @@ module.exports = (sequelize, Sequelize) => {
         trainer_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Course_Trainee_Trainers',
+                model: 'Course_Trainers',
                 key: 'trainer_id'
             }
         },
         trainee_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Course_Trainee_Trainers',
+                model: 'Course_Trainees',
                 key: 'trainee_id'
             }
         },
         course_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Course_Trainee_Trainers',
+                model: 'Courses',
                 key: 'course_id'
             }
         },
