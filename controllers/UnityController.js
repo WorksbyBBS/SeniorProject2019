@@ -28,7 +28,16 @@ class UnityController {
         let criteriaJsonParsed = JSON.parse(criteriaJsonData);
         let criteriaJson = criteriaJsonParsed.Items;
         let userId = req.body.userId;
+        let courseId = req.body.courseId;
+        let skillId = req.body.skillId;
+        let duration = req.body.duration;
+        let type = req.body.type;
 
+        console.log(userId);
+        console.log(courseId);
+        console.log(skillId);
+        console.log(duration);
+        console.log(type);
         console.log("---UNITY---CRITERIA---" + JSON.stringify(criteriaJson));
         //console.log("---UNITY---USERID---"+userId);
 
