@@ -391,7 +391,7 @@ class CourseRepository {
     }
 
     async getUserCourses(userId) {
-        return await Course_Trainee_Trainer.findAll({where: {trainee_id: userId}}).then(async courses => {
+        return await Course_Trainee.findAll({where: {trainee_id: userId}}).then(async courses => {
             let coursesInfo = [];
             console.log(JSON.stringify(courses));
             for (let i = 0; i < courses.length; i++) {

@@ -550,7 +550,7 @@ class HomeController {
         let criteriaObj = {
             course_id: parseInt(req.body.criteria_courses),
             skill_id: parseInt(req.body.criteria_skills),
-            criteria1: req.body.criteria1,
+            criteria1: (req.body.criteria1).trim(),
             criteria1Type: req.body.criteriaType1,
             rangeValue: rangeValue
         };
@@ -559,119 +559,119 @@ class HomeController {
 
         switch (rangeValue) {
             case '2': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
                 break;
             }
             case '3': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
                 break;
             }
             case '4': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
                 break;
             }
             case '5': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
                 break;
             }
             case '6': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
-                criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6'] = (req.body.criteria6).trim();
                 criteriaObj['criteria6Type'] = req.body.criteriaType6;
                 break;
             }
             case '7': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
-                criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6'] = (req.body.criteria6).trim();
                 criteriaObj['criteria6Type'] = req.body.criteriaType6;
-                criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7'] = (req.body.criteria7).trim();
                 criteriaObj['criteria7Type'] = req.body.criteriaType7;
                 break;
             }
             case '8': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
-                criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6'] = (req.body.criteria6).trim();
                 criteriaObj['criteria6Type'] = req.body.criteriaType6;
-                criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7'] = (req.body.criteria7).trim();
                 criteriaObj['criteria7Type'] = req.body.criteriaType7;
-                criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8'] = (req.body.criteria8).trim();
                 criteriaObj['criteria8Type'] = req.body.criteriaType8;
                 break;
             }
             case '9': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
-                criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6'] = (req.body.criteria6).trim();
                 criteriaObj['criteria6Type'] = req.body.criteriaType6;
-                criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7'] = (req.body.criteria7).trim();
                 criteriaObj['criteria7Type'] = req.body.criteriaType7;
-                criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8'] = (req.body.criteria8).trim();
                 criteriaObj['criteria8Type'] = req.body.criteriaType8;
-                criteriaObj['criteria9'] = req.body.criteria9;
+                criteriaObj['criteria9'] = (req.body.criteria9).trim();
                 criteriaObj['criteria9Type'] = req.body.criteriaType9;
                 break;
             }
             case '10': {
-                criteriaObj['criteria2'] = req.body.criteria2;
+                criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
-                criteriaObj['criteria3'] = req.body.criteria3;
+                criteriaObj['criteria3'] = (req.body.criteria3).trim();
                 criteriaObj['criteria3Type'] = req.body.criteriaType3;
-                criteriaObj['criteria4'] = req.body.criteria4;
+                criteriaObj['criteria4'] = (req.body.criteria4).trim();
                 criteriaObj['criteria4Type'] = req.body.criteriaType4;
-                criteriaObj['criteria5'] = req.body.criteria5;
+                criteriaObj['criteria5'] = (req.body.criteria5).trim();
                 criteriaObj['criteria5Type'] = req.body.criteriaType5;
-                criteriaObj['criteria6'] = req.body.criteria6;
+                criteriaObj['criteria6'] = (req.body.criteria6).trim();
                 criteriaObj['criteria6Type'] = req.body.criteriaType6;
-                criteriaObj['criteria7'] = req.body.criteria7;
+                criteriaObj['criteria7'] = (req.body.criteria7).trim();
                 criteriaObj['criteria7Type'] = req.body.criteriaType7;
-                criteriaObj['criteria8'] = req.body.criteria8;
+                criteriaObj['criteria8'] = (req.body.criteria8).trim();
                 criteriaObj['criteria8Type'] = req.body.criteriaType8;
-                criteriaObj['criteria9'] = req.body.criteria9;
+                criteriaObj['criteria9'] = (req.body.criteria9).trim();
                 criteriaObj['criteria9Type'] = req.body.criteriaType9;
-                criteriaObj['criteria10'] = req.body.criteria10;
+                criteriaObj['criteria10'] = (req.body.criteria10).trim();
                 criteriaObj['criteria10Type'] = req.body.criteriaType10;
                 break;
             }

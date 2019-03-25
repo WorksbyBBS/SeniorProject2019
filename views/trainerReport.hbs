@@ -60,11 +60,44 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
     <!--<div class="panel" id="chartPanel" style="display: none; width: 1000px">-->
     <div class="panel" id="chartPanel" style="display: none;">
+        <div class="panel-head">
+            <div class="form-group">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <label class="col-form-label">Group columns by:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-control custom-radio custom-radio-1">
+                            <input type="radio" id="groupByCourse" class="custom-control-input"
+                                   name="groupBy" value="groupByCourse" checked onclick="drawChart(this.value)">
+                            <label for="groupByCourse" class="custom-control-label">Course Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-control custom-radio custom-radio-1">
+                            <input type="radio" id="groupBySkills" class="custom-control-input"
+                                   name="groupBy" value="groupBySkill" onclick="drawChart(this.value)">
+                            <label for="groupBySkills" class="custom-control-label">Skill Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="custom-control custom-radio custom-radio-1">
+                            <input type="radio" id="groupByTrainee" class="custom-control-input"
+                                   name="groupBy" value="groupByTrainee" onclick="drawChart(this.value)">
+                            <label for="groupByTrainee" class="custom-control-label">Trainee Name</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="panel-body">
-            <canvas id="chartArea"></canvas>
+            <div class="container">
+                <canvas id="chartArea" style="width:100px"></canvas>
+            </div>
+
         </div>
     </div>
 </div>

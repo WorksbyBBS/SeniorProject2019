@@ -126,7 +126,8 @@ async function getSessionsOnSelection() {
         }
     });
 
-    drawChart(sessions);
+    $('#groupByCourse').prop("checked", true);
+    drawChart("groupByCourse");
 
 }
 
@@ -139,7 +140,7 @@ async function redirectToDetailedSession(row) {
     window.open(url, '_blank',);
 }
 
-function drawChart(sessions) {
+async function drawChart(filter) {
 
     let course_dropdown = document.getElementById('course_drop_trainer');
     let course_id = course_dropdown.options[course_dropdown.selectedIndex].value;
@@ -150,51 +151,32 @@ function drawChart(sessions) {
 
     let trainee_dropdown = document.getElementById('trainee_drop_trainer');
     let trainee_id = trainee_dropdown.options[trainee_dropdown.selectedIndex].value;
+    //console.log(course_id);
+
+    let dataSessions = await fetch(`users/api/sessions/${course_id}/${skill_id}/${trainee_id}`, {credentials: 'include'});
+    let sessions = await dataSessions.json();
+
+    for (let i = 0; i < sessions.length; i++) {
+        let splitDate = sessions[i].createdAt.split('T');
+        sessions[i]["sessionDate"] = splitDate[0];
+        let splitTime = splitDate[1].split('.');
+        sessions[i]["sessionTime"] = splitTime[0];
+
+        if (sessions[i].final_score === -1) {
+            sessions[i].final_score = "Pass"
+        } else if (sessions[i].final_score === -2) {
+            sessions[i].final_score = "Fail"
+        }
+    }
+
+    console.log("--FILTER--- " + filter);
 
     let mainLabels = [];
-    //let dataSetsSession = [];
     let countPass = [];
     let countFail = [];
-    if (course_id === 'All') {
-        //generalLabels = sessions.map(d=>d.course_name);
-        // console.log('++++ INSIDE COURSDID ALL+++++');
-        if (trainee_id !== 'All') {
-            console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + trainee_id);
 
-            sessions.forEach(function (session) {
-                let sessionTraineeID = session.trainee_id + '';
-                if (sessionTraineeID === trainee_id) {
-                    // console.log(typeof sessionTraineeID);
-                    // console.log(typeof trainee_id);
-                    console.log(mainLabels);
-                    console.log(mainLabels.length);
-                    console.log(session.trainee_id + '========' + trainee_id);
-                    if (mainLabels.length > 0) {
-                        console.log("MAINLABELS>0=====" + mainLabels.length);
-                        let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
-                        if (mainLabels.includes(name)) {
-                        } else {
-                            mainLabels.push(name);
-                        }
-                    } else {
-                        console.log("MAINLABELS=0!" + mainLabels.length);
-                        let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
-                        mainLabels.push(name);
-                    }
-
-                } else {
-                    console.log(typeof sessionTraineeID);
-                    console.log(typeof trainee_id);
-                    console.log(session.trainee_id + '!=' + trainee_id);
-                }
-            })
-
-            // query = query + ' and s.trainee_id=' + trainee_id + ';';
-            // console.log(query);
-        } else {
-            mainLabels = [...new Set(sessions.map(item => item.course_name + ' (' + item.semester + ' ' + item.year + ')'))];
-
-        }
+    if (filter === 'groupByCourse') {
+        mainLabels = [...new Set(sessions.map(item => item.course_name + ' (' + item.semester + ' ' + item.year + ')'))];
 
         for (let i = 0; i < mainLabels.length; i++) {
             let itemPassCount = 0;
@@ -212,26 +194,123 @@ function drawChart(sessions) {
             countFail.push(itemFailCount);
         }
 
-    } else {
-        console.log('++++ INSIDE COURSDID ' + course_id + '++++++++++');
-        if (skill_id === 'All') {
-            if (trainee_id !== 'All') {
-                // query = query + ' and s.trainee_id=' + trainee_id + ';';
-            }
-        } else {
-            // query = query + ' and s.skill_id=' + skill_id;
+    } else if (filter === 'groupBySkill') {
 
-            if (trainee_id !== 'All') {
+        mainLabels = [...new Set(sessions.map(item => item.skill_name))];
 
+        for (let i = 0; i < mainLabels.length; i++) {
+            let itemPassCount = 0;
+            let itemFailCount = 0;
+            for (let j = 0; j < sessions.length; j++) {
+                //let name = sessions[j].course_name + ' (' + sessions[j].semester + ' ' + sessions[j].year + ')';
+                if (mainLabels[i] === sessions[j].skill_name && sessions[j].final_score === 'Pass') {
+                    itemPassCount++;
+                } else if (mainLabels[i] === sessions[j].skill_name && sessions[j].final_score === 'Fail') {
+                    itemFailCount++;
+                }
             }
+
+            countPass.push(itemPassCount);
+            countFail.push(itemFailCount);
+        }
+
+    } else if (filter === 'groupByTrainee') {
+        mainLabels = [...new Set(sessions.map(item => item.trainee_firstname + ' ' + item.trainee_lastname))];
+
+        for (let i = 0; i < mainLabels.length; i++) {
+            let itemPassCount = 0;
+            let itemFailCount = 0;
+            for (let j = 0; j < sessions.length; j++) {
+                let name = sessions[j].trainee_firstname + ' ' + sessions[j].trainee_lastname;
+                console.log(mainLabels[i]);
+                console.log(name);
+                if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
+                    itemPassCount++;
+                } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
+                    itemFailCount++;
+                }
+            }
+
+            countPass.push(itemPassCount);
+            countFail.push(itemFailCount);
         }
     }
 
-    console.log(sessions);
-    //console.log(generalLabels);
+    console.log("MAIN GENERAL LABELS\n");
     console.log(mainLabels);
-    console.log(countPass);
-    console.log(countFail);
+    //let dataSetsSession = [];
+
+
+    // if (course_id === 'All') {
+    //     //generalLabels = sessions.map(d=>d.course_name);
+    //     // console.log('++++ INSIDE COURSDID ALL+++++');
+    //     if (trainee_id !== 'All') {
+    //         console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + trainee_id);
+    //
+    //         sessions.forEach(function (session) {
+    //             let sessionTraineeID = session.trainee_id + '';
+    //             if (sessionTraineeID === trainee_id) {
+    //                 // console.log(mainLabels);
+    //                 // console.log(mainLabels.length);
+    //                 // console.log(session.trainee_id + '========' + trainee_id);
+    //                 if (mainLabels.length > 0) {
+    //                     // console.log("MAINLABELS>0=====" + mainLabels.length);
+    //                     let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
+    //                     if (mainLabels.includes(name)) {
+    //                     } else {
+    //                         mainLabels.push(name);
+    //                     }
+    //                 } else {
+    //                     // console.log("MAINLABELS=0!" + mainLabels.length);
+    //                     let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
+    //                     mainLabels.push(name);
+    //                 }
+    //
+    //             } else {
+    //                 // console.log(typeof sessionTraineeID);
+    //                 // console.log(typeof trainee_id);
+    //                 // console.log(session.trainee_id + '!=' + trainee_id);
+    //             }
+    //         })
+    //
+    //         // query = query + ' and s.trainee_id=' + trainee_id + ';';
+    //         // console.log(query);
+    //     } else {
+    //         mainLabels = [...new Set(sessions.map(item => item.course_name + ' (' + item.semester + ' ' + item.year + ')'))];
+    //     }
+    //
+    //     for (let i = 0; i < mainLabels.length; i++) {
+    //         let itemPassCount = 0;
+    //         let itemFailCount = 0;
+    //         for (let j = 0; j < sessions.length; j++) {
+    //             let name = sessions[j].course_name + ' (' + sessions[j].semester + ' ' + sessions[j].year + ')';
+    //             if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
+    //                 itemPassCount++;
+    //             } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
+    //                 itemFailCount++;
+    //             }
+    //         }
+    //
+    //         countPass.push(itemPassCount);
+    //         countFail.push(itemFailCount);
+    //     }
+    //
+    // } else {
+    //     console.log('++++ INSIDE COURSDID ' + course_id + '++++++++++');
+    //     if (skill_id === 'All') {
+    //         if (trainee_id !== 'All') {
+    //             // query = query + ' and s.trainee_id=' + trainee_id + ';';
+    //         }
+    //     } else {
+    //         // query = query + ' and s.skill_id=' + skill_id;
+    //
+    //         if (trainee_id !== 'All') {
+    //
+    //         }
+    //     }
+    // }
+
+    console.log(sessions);
 
     $('#chartPanel').show();
     var ctx = document.getElementById('chartArea').getContext("2d");
