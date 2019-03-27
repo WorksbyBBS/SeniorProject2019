@@ -444,7 +444,8 @@ class CourseRepository {
         });
     }
 
-    async getSessionBasedOnFilters(trainerId, courseId, skillId, traineeId) {
+    async getSessionBasedOnFilters(sessionTrainerId, courseId, skillId, traineeId, trainerId) {
+
         let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
             'FROM sp2019_db.Sessions s\n' +
             'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
@@ -452,27 +453,44 @@ class CourseRepository {
             'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
             'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
             'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
-            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
-            'WHERE s.trainer_id=' + trainerId;
+            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n';
 
-        if (courseId === 'All') {
+        if (typeof trainerId === 'undefined') {
+            if (typeof sessionTrainerId === 'undefined') {
+            } else {
+                console.log('++++ INSIDE TRAINERID +++++' + sessionTrainerId);
+                query = query + 'WHERE s.trainer_id=' + sessionTrainerId;
+            }
+
+
+        } else {
+            if (trainerId === 'All' || trainerId == 'all') {
+            } else {
+                console.log('++++ INSIDE TRAINERID !=ALL+++++' + trainerId);
+                query = query + 'WHERE s.trainer_id=' + trainerId;
+            }
+        }
+
+        if (courseId === 'All' || courseId === 'all') {
             console.log('++++ INSIDE COURSDID ALL+++++');
-            if (traineeId !== 'All') {
+            if (traineeId === 'All' || traineeId === 'all') {
+            } else {
                 console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + traineeId);
                 query = query + ' and s.trainee_id=' + traineeId + ';';
-                console.log(query);
             }
         } else {
             console.log('++++ INSIDE COURSDID ' + courseId + '++++++++++');
             query = query + ' and s.course_id=' + courseId;
-            if (skillId === 'All') {
-                if (traineeId !== 'All') {
+            if (skillId === 'All' || skillId === 'all') {
+                if (traineeId === 'All' || traineeId === 'all') {
+                } else {
                     query = query + ' and s.trainee_id=' + traineeId + ';';
                 }
             } else {
                 query = query + ' and s.skill_id=' + skillId;
 
-                if (traineeId !== 'All') {
+                if (traineeId === 'All' || traineeId === 'all') {
+                } else {
                     query = query + ' and s.trainee_id=' + traineeId + ';';
                 }
             }
@@ -532,8 +550,13 @@ class CourseRepository {
                 'inner join sp2019_db.Course_Trainers ctt\n' +
                 'on ctt.course_id=c.course_id\n' +
                 'where s.trainer_id = ' + user.trainer_id + ';';
+        } else if (user.manager_role === 1) {
+            query = 'select distinct c.* from sp2019_db.Courses c\n' +
+                'inner join sp2019_db.Sessions s\n' +
+                'on s.course_id = c.course_id\n' +
+                'inner join sp2019_db.Course_Trainers ctt\n' +
+                'on ctt.course_id=c.course_id;';
         }
-
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(courses => {
             return courses;

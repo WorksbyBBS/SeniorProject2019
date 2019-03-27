@@ -138,25 +138,47 @@ class HomeController {
         let courseId = req.params.course_id;
         let skillId = req.params.skill_id;
         let traineeId = req.params.trainee_id;
+        let trainerId = req.params.trainer_id;
 
         console.log(courseId);
         console.log(skillId);
         console.log(traineeId);
+        console.log(trainerId);
 
         if (req.session.user) {
-            if (req.session.user.manager_role === 1 || req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
-                let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId).catch(e => {
-                    res.send(e);
-                });
-                res.json(sessions);
+
+            //meaning that a trainer accessed the link of courseId/skillId/sessionId
+            if (typeof trainerId === 'undefined') {
+                if (req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
+                    let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId, trainerId).catch(e => {
+                        res.send(e);
+                    });
+                    res.json(sessions);
+                } else {
+                    res.render('error', {
+                        errorCode: '403',
+                        error: "Forbidden Access",
+                        extraMessage: 'Not authorized to see the list of sessions',
+                        layout: 'errorLayout.hbs'
+                    });
+                }
             } else {
-                res.render('error', {
-                    errorCode: '403',
-                    error: "Forbidden Access",
-                    extraMessage: 'Not authorized to see the list of sessions',
-                    layout: 'errorLayout.hbs'
-                });
+                //meaning that a manager accessed the link of courseId/skillId/sessionId
+                if (req.session.user.manager_role === 1) {
+                    let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId, trainerId).catch(e => {
+                        res.send(e);
+                    });
+                    res.json(sessions);
+                } else {
+                    res.render('error', {
+                        errorCode: '403',
+                        error: "Forbidden Access",
+                        extraMessage: 'Not authorized to see the list of sessions',
+                        layout: 'errorLayout.hbs'
+                    });
+                }
             }
+
         } else {
             res.render('error', {
                 errorCode: '404',
@@ -299,10 +321,22 @@ class HomeController {
 
     async TrainerReport(req, res) {
         //console.log(req.session.user);
-        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
-        let trainees = await this.userRepository.getTraineeUsersWhoHaveSessions(req.session.user.trainer_id);
 
-        res.render('trainerReport', {title: 'Student Sessions Report', courses: courses, trainees: trainees});
+        let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
+        console.log(courses);
+
+        let trainees = await this.userRepository.getTraineeUsersWhoHaveSessions(req.session.user);
+        console.log(trainees);
+        let trainers = await this.userRepository.getTrainersWhoHaveSessions();
+        console.log(trainers);
+
+
+        res.render('trainerReport', {
+            title: 'Student Sessions Report',
+            courses: courses,
+            trainees: trainees,
+            trainers: trainers
+        });
     }
 
     async registerUser(req, res) {

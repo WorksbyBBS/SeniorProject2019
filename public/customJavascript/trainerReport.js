@@ -19,6 +19,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                             <th>Final Score</th>
                             <th>Date</th>
                             <th>Time</th>
+                            <th>Trainer Name</th>
                             <th>Trainer Comment</th>
                             <!--<th>Your Comment</th>-->
                         </tr>
@@ -35,6 +36,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                             <td><span id="score_span">{{final_score}}</span></td>
                             <td>{{sessionDate}}</td>
                             <td>{{sessionTime}}</td>
+                            <td>{{trainer_firstname}} {{trainer_lastname}}</td>
                             <td>{{trainer_comment}}</td>
                             <!--<td>{{trainee_comment}}</td>-->
                         </tr>
@@ -86,7 +88,22 @@ async function getSessionsOnSelection() {
     let trainee_id = trainee_dropdown.options[trainee_dropdown.selectedIndex].value;
     //console.log(course_id);
 
-    let dataSessions = await fetch(`users/api/sessions/${course_id}/${skill_id}/${trainee_id}`, {credentials: 'include'});
+    let trainer_dropdown = document.getElementById('trainer_drop_trainer');
+    let trainer_id;
+    let path = '';
+    console.log(trainer_dropdown);
+    if (trainer_dropdown === null) {
+
+        path = `users/api/sessions/${course_id}/${skill_id}/${trainee_id}`
+
+
+    } else {
+        trainer_id = trainer_dropdown.options[trainer_dropdown.selectedIndex].value;
+        console.log(trainer_id);
+        path = `users/api/sessions/${trainer_id}/${course_id}/${skill_id}/${trainee_id}`
+    }
+
+    let dataSessions = await fetch(path, {credentials: 'include'});
     let sessions = await dataSessions.json();
 
     // let options = "<option disabled selected value></option>";
@@ -153,7 +170,22 @@ async function drawChart(filter) {
     let trainee_id = trainee_dropdown.options[trainee_dropdown.selectedIndex].value;
     //console.log(course_id);
 
-    let dataSessions = await fetch(`users/api/sessions/${course_id}/${skill_id}/${trainee_id}`, {credentials: 'include'});
+    let trainer_dropdown = document.getElementById('trainer_drop_trainer');
+    let trainer_id;
+    let path = '';
+    console.log(trainer_dropdown);
+    if (trainer_dropdown === null) {
+
+        path = `users/api/sessions/${course_id}/${skill_id}/${trainee_id}`
+
+
+    } else {
+        trainer_id = trainer_dropdown.options[trainer_dropdown.selectedIndex].value;
+        console.log(trainer_id);
+        path = `users/api/sessions/${trainer_id}/${course_id}/${skill_id}/${trainee_id}`
+    }
+
+    let dataSessions = await fetch(path, {credentials: 'include'});
     let sessions = await dataSessions.json();
 
     for (let i = 0; i < sessions.length; i++) {
@@ -190,8 +222,9 @@ async function drawChart(filter) {
                 }
             }
 
-            countPass.push(itemPassCount);
-            countFail.push(itemFailCount);
+            countPass.push((itemPassCount / sessions.length) * 100);
+            countFail.push((itemFailCount / sessions.length) * 100);
+            //countFail.push(itemFailCount/sessions.length);
         }
 
     } else if (filter === 'groupBySkill') {
@@ -210,8 +243,8 @@ async function drawChart(filter) {
                 }
             }
 
-            countPass.push(itemPassCount);
-            countFail.push(itemFailCount);
+            countPass.push((itemPassCount / sessions.length) * 100);
+            countFail.push((itemFailCount / sessions.length) * 100);
         }
 
     } else if (filter === 'groupByTrainee') {
@@ -231,86 +264,36 @@ async function drawChart(filter) {
                 }
             }
 
-            countPass.push(itemPassCount);
-            countFail.push(itemFailCount);
+            countPass.push((itemPassCount / sessions.length) * 100);
+            countFail.push((itemFailCount / sessions.length) * 100);
+        }
+    } else if (filter === 'groupByTrainer') {
+        mainLabels = [...new Set(sessions.map(item => item.trainer_firstname + ' ' + item.trainer_lastname))];
+
+        for (let i = 0; i < mainLabels.length; i++) {
+            let itemPassCount = 0;
+            let itemFailCount = 0;
+            for (let j = 0; j < sessions.length; j++) {
+                let name = sessions[j].trainer_firstname + ' ' + sessions[j].trainer_lastname;
+                console.log(mainLabels[i]);
+                console.log(name);
+                if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
+                    itemPassCount++;
+                } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
+                    itemFailCount++;
+                }
+            }
+
+            countPass.push((itemPassCount / sessions.length) * 100);
+            countFail.push((itemFailCount / sessions.length) * 100);
         }
     }
 
     console.log("MAIN GENERAL LABELS\n");
     console.log(mainLabels);
-    //let dataSetsSession = [];
-
-
-    // if (course_id === 'All') {
-    //     //generalLabels = sessions.map(d=>d.course_name);
-    //     // console.log('++++ INSIDE COURSDID ALL+++++');
-    //     if (trainee_id !== 'All') {
-    //         console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + trainee_id);
-    //
-    //         sessions.forEach(function (session) {
-    //             let sessionTraineeID = session.trainee_id + '';
-    //             if (sessionTraineeID === trainee_id) {
-    //                 // console.log(mainLabels);
-    //                 // console.log(mainLabels.length);
-    //                 // console.log(session.trainee_id + '========' + trainee_id);
-    //                 if (mainLabels.length > 0) {
-    //                     // console.log("MAINLABELS>0=====" + mainLabels.length);
-    //                     let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
-    //                     if (mainLabels.includes(name)) {
-    //                     } else {
-    //                         mainLabels.push(name);
-    //                     }
-    //                 } else {
-    //                     // console.log("MAINLABELS=0!" + mainLabels.length);
-    //                     let name = session.course_name + ' (' + session.semester + ' ' + session.year + ')';
-    //                     mainLabels.push(name);
-    //                 }
-    //
-    //             } else {
-    //                 // console.log(typeof sessionTraineeID);
-    //                 // console.log(typeof trainee_id);
-    //                 // console.log(session.trainee_id + '!=' + trainee_id);
-    //             }
-    //         })
-    //
-    //         // query = query + ' and s.trainee_id=' + trainee_id + ';';
-    //         // console.log(query);
-    //     } else {
-    //         mainLabels = [...new Set(sessions.map(item => item.course_name + ' (' + item.semester + ' ' + item.year + ')'))];
-    //     }
-    //
-    //     for (let i = 0; i < mainLabels.length; i++) {
-    //         let itemPassCount = 0;
-    //         let itemFailCount = 0;
-    //         for (let j = 0; j < sessions.length; j++) {
-    //             let name = sessions[j].course_name + ' (' + sessions[j].semester + ' ' + sessions[j].year + ')';
-    //             if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
-    //                 itemPassCount++;
-    //             } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
-    //                 itemFailCount++;
-    //             }
-    //         }
-    //
-    //         countPass.push(itemPassCount);
-    //         countFail.push(itemFailCount);
-    //     }
-    //
-    // } else {
-    //     console.log('++++ INSIDE COURSDID ' + course_id + '++++++++++');
-    //     if (skill_id === 'All') {
-    //         if (trainee_id !== 'All') {
-    //             // query = query + ' and s.trainee_id=' + trainee_id + ';';
-    //         }
-    //     } else {
-    //         // query = query + ' and s.skill_id=' + skill_id;
-    //
-    //         if (trainee_id !== 'All') {
-    //
-    //         }
-    //     }
-    // }
 
     console.log(sessions);
+    $('#noSessions').html("Total Number of Sessions: " + sessions.length);
 
     $('#chartPanel').show();
     var ctx = document.getElementById('chartArea').getContext("2d");
@@ -322,14 +305,14 @@ async function drawChart(filter) {
             labels: mainLabels,
             datasets: [
                 {
-                    label: 'Pass',
+                    label: 'Pass %',
                     data: countPass,
                     backgroundColor: 'rgba(40,167,69, 0.5)',
                     borderColor: 'rgba(40,167,69, 0.8)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Fail',
+                    label: 'Fail %',
                     data: countFail,
                     backgroundColor: 'rgba(220,53,69,0.5)',
                     borderColor: 'rgba(220,53,69,0.8)',

@@ -49,4 +49,8 @@ router.get('/api/sessions/:course_id/:skill_id/:trainee_id', function (req, res,
     homeController.getSessionBasedOnFilters(req, res);
 });
 
+router.get('/api/sessions/:trainer_id/:course_id/:skill_id/:trainee_id', function (req, res, next) {
+    homeController.getSessionBasedOnFilters(req, res);
+});
+
 module.exports = router;

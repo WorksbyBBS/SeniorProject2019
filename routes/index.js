@@ -61,6 +61,10 @@ router.get('/trainee-report/session/:sessionIdForm', isLoggedIn, function (req, 
 router.get('/trainer-report', isLoggedIn, function (req, res, next) {
     homeController.TrainerReport(req, res)
 });
+
+router.get('/manager-report', isLoggedIn, function (req, res, next) {
+    homeController.TrainerReport(req, res)
+});
 /* POST LINKS */
 router.post('/login', (req, res) => homeController.login(req,res));
 router.post('/registerUser',isLoggedIn, (req, res) => homeController.registerUser(req,res));

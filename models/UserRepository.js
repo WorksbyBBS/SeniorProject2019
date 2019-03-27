@@ -238,6 +238,19 @@ class UserRepository {
         });
     }
 
+    async getTrainersWhoHaveSessions() {
+        let query = 'select distinct u.first_name, u.last_name, s.trainer_id \n' +
+            'from sp2019_db.Sessions s \n' +
+            'inner join sp2019_db.trainers t\n' +
+            'on s.trainer_id = t.trainer_id\n' +
+            'inner join sp2019_db.Users u\n' +
+            'on u.user_id=t.user_id;';
+
+        return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainers => {
+            return trainers;
+        });
+    }
+
     async getAllTrainersForSchedule() {
         let query = 'select trainer.trainer_id, users.username,users.first_name,users.last_name from sp2019_db.Users users\n' +
             'inner join sp2019_db.Trainers trainer\n' +
@@ -270,13 +283,24 @@ class UserRepository {
         });
     }
 
-    async getTraineeUsersWhoHaveSessions(trainer_id) {
-        let query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
-            'from sp2019_db.Trainees as t\n' +
-            'inner join sp2019_db.Sessions as s\n' +
-            'on s.trainee_id=t.trainee_id\n' +
-            'inner join sp2019_db.Users as u\n' +
-            'on t.user_id=u.user_id where s.trainer_id=' + trainer_id + ';';
+    async getTraineeUsersWhoHaveSessions(user) {
+        let query = '';
+        if (user.trainer_role === 1) {
+            query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
+                'from sp2019_db.Trainees as t\n' +
+                'inner join sp2019_db.Sessions as s\n' +
+                'on s.trainee_id=t.trainee_id\n' +
+                'inner join sp2019_db.Users as u\n' +
+                'on t.user_id=u.user_id where s.trainer_id=' + user.trainer_id + ';';
+        } else if (user.manager_role === 1) {
+            query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
+                'from sp2019_db.Trainees as t\n' +
+                'inner join sp2019_db.Sessions as s\n' +
+                'on s.trainee_id=t.trainee_id\n' +
+                'inner join sp2019_db.Users as u\n' +
+                'on t.user_id=u.user_id;';
+        }
+
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainees => {
             return trainees;

@@ -9,51 +9,107 @@
     <div class="panel">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
-                    <label class="col-form-label" for="course_drop">Course</label>
-                    <select name="course_drop_trainer" class="form-control" id="course_drop_trainer"
-                            onchange="getSkillOnCourseSelection()">
-                        <!--<option disabled selected value></option>-->
-                        <option selected value="All">All</option>
-                        {{#courses}}
-                            <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
-                        {{/courses}}
-                    </select>
-                </div>
+                {{#ifUserIsManager session.user.manager_role 1}}
+                    <div class="col-md-3">
+                        <label class="col-form-label" for="trainer_drop_trainer">Trainer</label>
+                        <select name="trainer_drop_trainer" class="form-control" id="trainer_drop_trainer">
+                            <!--<option disabled selected value></option>-->
+                            <option selected value="All">All</option>
+                            {{#trainers}}
+                                <option value="{{trainer_id}}">{{first_name}} {{last_name}}</option>
+                            {{/trainers}}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="col-form-label" for="course_drop_trainer">Course</label>
+                        <select name="course_drop_trainer" class="form-control" id="course_drop_trainer"
+                                onchange="getSkillOnCourseSelection()">
+                            <!--<option disabled selected value></option>-->
+                            <option selected value="All">All</option>
+                            {{#courses}}
+                                <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
+                            {{/courses}}
+                        </select>
+                    </div>
 
-                <!--<div class="row">-->
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="col-form-label">Skill</label>
-                        <select name="skills_drop_trainer" class="form-control" id="skills_drop_trainer"
-                        >
-                            <option selected value='All'>All</option>
+                    <!--<div class="row">-->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-form-label" for="skills_drop_trainer">Skill</label>
+                            <select name="skills_drop_trainer" class="form-control" id="skills_drop_trainer">
+                                <option selected value='All'>All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="col-form-label" for="trainee_drop_trainer">Trainee</label>
+                            <select name="trainee_drop_trainer" class="form-control" id="trainee_drop_trainer">
+                                <!--<option disabled selected value></option>-->
+                                <option value="All" selected>All</option>
+                                {{#trainees}}
+                                    <option value="{{trainee_id}}">{{first_name}} {{last_name}}</option>
+                                {{/trainees}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="col-form-label" style="opacity: 0">Filter</label><br>
+                            <button id="filterButton" class="btn btn-primary btn-pill"
+                                    name="filterButton" onclick="getSessionsOnSelection()">Filter
+                            </button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="col-md-4">
+                        <label class="col-form-label" for="course_drop_trainer">Course</label>
+                        <select name="course_drop_trainer" class="form-control" id="course_drop_trainer"
+                                onchange="getSkillOnCourseSelection()">
+                            <!--<option disabled selected value></option>-->
+                            <option selected value="All">All</option>
+                            {{#courses}}
+                                <option value="{{course_id}}">{{course_name}} ({{semester}} {{year}})</option>
+                            {{/courses}}
                         </select>
                     </div>
-                </div>
-                <!--</div>-->
-                <!--<div class="row">-->
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="col-form-label">Trainee</label>
-                        <select name="trainee_drop_trainer" class="form-control" id="trainee_drop_trainer"
-                        ">
-                        <!--<option disabled selected value></option>-->
-                        <option value="All" selected>All</option>
-                        {{#trainees}}
-                            <option value="{{trainee_id}}">{{first_name}} {{last_name}}</option>
-                        {{/trainees}}
-                        </select>
+
+                    <!--<div class="row">-->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="skills_drop_trainer">Skill</label>
+                            <select name="skills_drop_trainer" class="form-control" id="skills_drop_trainer"
+                            >
+                                <option selected value='All'>All</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="col-form-label" style="opacity: 0">Filter</label><br>
-                        <button id="filterButton" class="btn btn-primary btn-pill"
-                                name="filterButton" onclick="getSessionsOnSelection()">Filter
-                        </button>
+                    <!--</div>-->
+                    <!--<div class="row">-->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-form-label" for="trainee_drop_trainer">Trainee</label>
+                            <select name="trainee_drop_trainer" class="form-control" id="trainee_drop_trainer">
+                                <!--<option disabled selected value></option>-->
+                                <option value="All" selected>All</option>
+                                {{#trainees}}
+                                    <option value="{{trainee_id}}">{{first_name}} {{last_name}}</option>
+                                {{/trainees}}
+                            </select>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="col-form-label" style="opacity: 0">Filter</label><br>
+                            <button id="filterButton" class="btn btn-primary btn-pill"
+                                    name="filterButton" onclick="getSessionsOnSelection()">Filter
+                            </button>
+                        </div>
+                    </div>
+                {{/ifUserIsManager}}
+
                 <!--</div>-->
             </div>
         </div>
@@ -66,35 +122,71 @@
         <div class="panel-head">
             <div class="form-group">
                 <div class="row text-center">
-                    <div class="col-md-3">
-                        <label class="col-form-label">Group columns by:</label>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="custom-control custom-radio custom-radio-1">
-                            <input type="radio" id="groupByCourse" class="custom-control-input"
-                                   name="groupBy" value="groupByCourse" checked onclick="drawChart(this.value)">
-                            <label for="groupByCourse" class="custom-control-label">Course Name</label>
+                    {{#ifUserIsManager session.user.manager_role 1}}
+                        <div class="col-md-2">
+                            <label class="col-form-label">Group columns by:</label>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="custom-control custom-radio custom-radio-1">
-                            <input type="radio" id="groupBySkills" class="custom-control-input"
-                                   name="groupBy" value="groupBySkill" onclick="drawChart(this.value)">
-                            <label for="groupBySkills" class="custom-control-label">Skill Name</label>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupByCourse" class="custom-control-input"
+                                       name="groupBy" value="groupByCourse" checked onclick="drawChart(this.value)">
+                                <label for="groupByCourse" class="custom-control-label">Course Name</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="custom-control custom-radio custom-radio-1">
-                            <input type="radio" id="groupByTrainee" class="custom-control-input"
-                                   name="groupBy" value="groupByTrainee" onclick="drawChart(this.value)">
-                            <label for="groupByTrainee" class="custom-control-label">Trainee Name</label>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupByTrainer" class="custom-control-input"
+                                       name="groupBy" value="groupByTrainer" onclick="drawChart(this.value)">
+                                <label for="groupByTrainer" class="custom-control-label">Trainer Name</label>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-2">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupBySkills" class="custom-control-input"
+                                       name="groupBy" value="groupBySkill" onclick="drawChart(this.value)">
+                                <label for="groupBySkills" class="custom-control-label">Skill Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupByTrainee" class="custom-control-input"
+                                       name="groupBy" value="groupByTrainee" onclick="drawChart(this.value)">
+                                <label for="groupByTrainee" class="custom-control-label">Trainee Name</label>
+                            </div>
+                        </div>
+                    {{else}}
+                        <div class="col-md-3">
+                            <label class="col-form-label">Group columns by:</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupByCourse" class="custom-control-input"
+                                       name="groupBy" value="groupByCourse" checked onclick="drawChart(this.value)">
+                                <label for="groupByCourse" class="custom-control-label">Course Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupBySkills" class="custom-control-input"
+                                       name="groupBy" value="groupBySkill" onclick="drawChart(this.value)">
+                                <label for="groupBySkills" class="custom-control-label">Skill Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="custom-control custom-radio custom-radio-1">
+                                <input type="radio" id="groupByTrainee" class="custom-control-input"
+                                       name="groupBy" value="groupByTrainee" onclick="drawChart(this.value)">
+                                <label for="groupByTrainee" class="custom-control-label">Trainee Name</label>
+                            </div>
+                        </div>
+                    {{/ifUserIsManager}}
+
                 </div>
             </div>
         </div>
         <div class="panel-body">
             <div class="container">
+                <div class="text-center"><h3 id="noSessions">Total Number of Sessions: 0</h3></div>
                 <canvas id="chartArea" style="width:100px"></canvas>
             </div>
 
