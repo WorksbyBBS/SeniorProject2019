@@ -37,7 +37,11 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                             <td>{{sessionDate}}</td>
                             <td>{{sessionTime}}</td>
                             <td>{{trainer_firstname}} {{trainer_lastname}}</td>
-                            <td>{{trainer_comment}}</td>
+                            {{#if trainer_comment}}
+                                <td>{{trainer_comment}}</td>
+                             {{else}}
+                                  <td><button class="btn btn-pill btn-primary" data-toggle="modal" data-target="#sessionCommentModal" data-session_id="{{session_id}}" onclick="addSessionComment(this)"><i class="fa fa-plus"></i> Add Comment</td>
+                             {{/if}}
                             <!--<td>{{trainee_comment}}</td>-->
                         </tr>
 
@@ -49,7 +53,35 @@ const studentSessionTableTemplate = `<div class="container-fluid">
         </div>
     </div>
 </div>
+<div class="modal fade" id="sessionCommentModal">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="basicModalLabel">Add Comment for Session</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h4>Woohoo, you're reading this text in a modal!</h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quisquam quas amet itaque voluptates. Ut, architecto maiores est dicta laborum nam repellendus sed eaque recusandae quisquam voluptate, impedit cupiditate explicabo!</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 `;
+
+function addSessionComment(btn) {
+
+    var session_id = $(btn).attr('data-session_id');
+    console.log("Session ID : " + session_id);
+    event.cancelBubble = true;
+    $("#sessionCommentModal").modal('show');
+
+    $('basicModalLabel').text('Add Comment for Session ' + session_id);
+}
 
 async function getSkillOnCourseSelection() {
     let course_dropdown = document.getElementById('course_drop_trainer');

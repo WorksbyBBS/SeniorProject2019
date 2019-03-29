@@ -2033,7 +2033,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    /*margin-bottom: 1rem;*/
 }
 
 .form-text {
@@ -11743,7 +11743,7 @@ select.form-control:not([size]):not([multiple]) {
 
 .form-group {
     align-items: center;
-    margin-bottom: 25px;
+    /*margin-bottom: 25px;*/
 }
 
 .form-group select {
