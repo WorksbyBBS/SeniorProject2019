@@ -250,15 +250,15 @@ class HomeController {
     async TrainerToTrainee(req, res) {
 
         let session_id = req.params.sessionIdForm;
-
+        console.log(session_id);
         let usersession = await this.courseRepository.getSessionBasedOnId(session_id);
         console.log(usersession);
         if (usersession.length > 0) {
             let training_session_trainer_id = usersession[0].trainer_id
-            //console.log("------------"+ typeof training_session_trainer_id );
+            console.log("------------" + training_session_trainer_id);
             let current_trainer_id = req.session.user.trainer_id;
-            //console.log("---++++---+--"+ typeof current_trainer_id);
-            if (training_session_trainer_id === current_trainer_id) {
+            console.log("---++++---+--" + current_trainer_id);
+            if (training_session_trainer_id === current_trainer_id || (req.session.user.manager_role === 1)) {
 
                 let date = usersession[0].createdAt + '';
                 let splitDate = date.split(/[- :]/);
@@ -289,6 +289,7 @@ class HomeController {
                     }
                 }
 
+                console.log(usersession);
                 res.render('traineeReport', {
                     title: 'Session Report',
                     usersession: usersession,
@@ -335,7 +336,8 @@ class HomeController {
             title: 'Student Sessions Report',
             courses: courses,
             trainees: trainees,
-            trainers: trainers
+            trainers: trainers,
+            trainer_role: req.session.user.trainer_role
         });
     }
 
@@ -461,6 +463,16 @@ class HomeController {
             req.session.success = 'Successfully assigned the course to the instructor!';
             res.redirect('/assign-schedule');
         }
+    }
+
+    async AddSessionComment(req, res) {
+        let session_id = req.body.commentSessionId;
+        console.log(session_id);
+        let comment = req.body.sessionComment;
+        console.log(comment);
+
+        let response = await this.courseRepository.AddSessionComment(req.session.user, session_id, comment);
+        res.send('success');
     }
 
     async AssignCourseTrainee(req, res) {

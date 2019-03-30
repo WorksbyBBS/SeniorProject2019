@@ -73,6 +73,7 @@ router.post('/addSkill',isLoggedIn, (req, res) => homeController.addSkill(req,re
 router.post('/addCriteria',isLoggedIn, (req, res) => homeController.addCriteria(req,res));
 router.post('/assign-course',isLoggedIn, (req, res) => homeController.AssignCourse(req,res));
 router.post('/assign-course-trainee', isLoggedIn, (req, res) => homeController.AssignCourseTrainee(req, res));
+router.post('/add-session-comment', isLoggedIn, (req, res) => homeController.AddSessionComment(req, res));
 
 //router.post('/trainee-session-report', isLoggedIn, (req, res) => homeController.TrainerToTrainee(req, res));
 //router.get('/trainee-session-report', isLoggedIn, (req, res) => res.render('trainerTraineeReport'));

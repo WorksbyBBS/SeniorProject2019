@@ -24,6 +24,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                             <!--<th>Your Comment</th>-->
                         </tr>
                         </thead>
+                        
                         <tbody>
                         {{#each sessions}}
                         <tr class="coursesCategory" onclick="redirectToDetailedSession(this)">
@@ -38,9 +39,11 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                             <td>{{sessionTime}}</td>
                             <td>{{trainer_firstname}} {{trainer_lastname}}</td>
                             {{#if trainer_comment}}
-                                <td>{{trainer_comment}}</td>
+                                <td>{{trainer_comment}} </td>
                              {{else}}
-                                  <td><button class="btn btn-pill btn-primary" data-toggle="modal" data-target="#sessionCommentModal" data-session_id="{{session_id}}" onclick="addSessionComment(this)"><i class="fa fa-plus"></i> Add Comment</td>
+                                
+                                  <td>{{#ifUserIsTrainer ../../trainer_role '1'}}<button class="btn btn-pill btn-primary" data-toggle="modal" data-target="#sessionCommentModal" data-session_id="{{session_id}}" onclick="addSessionComment(this)"><i class="fa fa-plus"></i> Add Comment {{/ifUserIsTrainer}}</td>
+                                
                              {{/if}}
                             <!--<td>{{trainee_comment}}</td>-->
                         </tr>
@@ -54,23 +57,29 @@ const studentSessionTableTemplate = `<div class="container-fluid">
     </div>
 </div>
 <div class="modal fade" id="sessionCommentModal">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="basicModalLabel">Add Comment for Session</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h4>Woohoo, you're reading this text in a modal!</h4>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quisquam quas amet itaque voluptates. Ut, architecto maiores est dicta laborum nam repellendus sed eaque recusandae quisquam voluptate, impedit cupiditate explicabo!</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-primary">Submit Comment</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+     <div class="modal-dialog">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h4 class="modal-title" id="basicModalLabel">Add Comment for Session </span></h4>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">
+              <form class="form-vertical" method="post" id="sessionCommentForm">
+                <div class="form-body" id="commentForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                          <input type="hidden" name="commentSessionId" id="commentSessionId">
+                          <div class="textwrapper"><textarea rows="3" name="sessionComment" form="sessionCommentForm" placeholder="Enter Your Comment Here..." required></textarea></div>
+                        </div>
+                    </div>
+            </form>
+              <div class="modal-footer">
+                  <button type="button"  class="btn btn-pill btn-danger close" data-dismiss="modal">Cancel</button>
+                  <button type="submit" onclick="submitForm()" class="btn btn-pill btn-success">Submit Comment</button>
+               </div>
+       </div>
+     </div>
+</div>
 `;
 
 function addSessionComment(btn) {
@@ -79,8 +88,33 @@ function addSessionComment(btn) {
     console.log("Session ID : " + session_id);
     event.cancelBubble = true;
     $("#sessionCommentModal").modal('show');
-
     $('basicModalLabel').text('Add Comment for Session ' + session_id);
+    $('#commentSessionId').val(session_id);
+}
+
+function submitForm() {
+    $('form').on('submit', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    console.log("on submit");
+    //e.preventDefault();
+    $.ajax({
+        url: '/add-session-comment',
+        type: 'post',
+        xhrFields: {
+            withCredentials: true
+        },
+        data: $('#sessionCommentForm').serialize(),
+        success: function () {
+            $("#sessionCommentModal").modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $("#filterButton").click();
+        }
+    });
+
+
 }
 
 async function getSkillOnCourseSelection() {
@@ -157,12 +191,30 @@ async function getSessionsOnSelection() {
 
     let course_name = $("#course_drop_trainer option:selected").text();
     let skill_name = $("#skills_drop_trainer option:selected").text();
+    Handlebars.registerHelper('ifUserIsTrainer', function (userS, userT, options) {
+        if (userS === userT) {
+            console.log(typeof userS);
+            console.log(typeof userT);
+            console.log(userS + "===" + userT)
+            return options.fn(this);
+        } else {
+            console.log(typeof userS);
+            console.log(typeof userT);
+            console.log(userS + "!==" + userT)
+            return options.inverse(this);
+        }
+
+    });
+
+    let trainer_role = $('#trainer_role_hidden').text();
+    console.log("TRAINER ROLE---- " + trainer_role);
 
     let compliedTemplate = Handlebars.compile(studentSessionTableTemplate);
     let generatedHTMLContent = compliedTemplate({
         sessions,
         course_name,
-        skill_name
+        skill_name,
+        trainer_role
     });
     $('#students-session-table').html(generatedHTMLContent);
 

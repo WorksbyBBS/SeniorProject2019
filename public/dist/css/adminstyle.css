@@ -17404,3 +17404,13 @@ input[type=range]:focus::-ms-fill-upper {
 .custom-control {
     display: inline-block;
 }
+
+textarea {
+    width: 100%;
+}
+
+.textwrapper {
+    border: 1px solid #dedede;
+    margin: 5px 0;
+    padding: 3px;
+}

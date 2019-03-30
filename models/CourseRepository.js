@@ -444,6 +444,24 @@ class CourseRepository {
         });
     }
 
+    async AddSessionComment(user, session_id, comment) {
+        console.log(user);
+        console.log(session_id);
+        console.log(comment);
+
+        if (user.trainer_role === 1) {
+            Sessions.update(
+                {trainer_comment: comment},
+                {returning: true, where: {session_id: session_id}}
+            )
+        } else if (user.trainee_role === 1) {
+            Sessions.update(
+                {trainee_comment: comment},
+                {returning: true, where: {session_id: session_id}}
+            )
+        }
+    }
+
     async getSessionBasedOnFilters(sessionTrainerId, courseId, skillId, traineeId, trainerId) {
 
         let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +

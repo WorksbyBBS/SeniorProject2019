@@ -49,7 +49,7 @@
     </div>
 {{/ifUserIsTrainee}}
 
-{{#ifUserIsTrainer session.user.trainer_role 1}}
+{{#ifUserIsTrainer session.user.trainer_role 1 }}
     <div class="container-fluid">
         <div class="panel">
             <div class="panel-head">
@@ -168,6 +168,127 @@
                 </div>
             </div>
         </div>
+{{else}}
+    {{#ifUserIsManager session.user.manager_role 1}}
+        <div class="container-fluid">
+            <div class="panel">
+                <div class="panel-head">
+                    {{#each usersession}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span><h4><b>Trainee Name:</b> {{trainee_firstname}} {{trainee_lastname}}</h4></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><h4><b>Course:</b> {{course_name}}</h4></span>
+                            </div>
+                            <div class="col-md-6">
+                                <span><h4><b>Skill:</b> {{skill_name}}</h4></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><h4><b>Date:</b> {{sessionDate}}</h4></span>
+                            </div>
+                            <div class="col-md-6">
+                                <span><h4><b>Time (24 hrs):</b> {{sessionTime}}</h4></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><h4><b>Duration (min):</b> {{duration}}</h4></span>
+                            </div>
+                            <div class="col-md-6">
+                                <span><h4><b>Session Type:</b> {{type}}</h4></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <span><h4><b>Trainer Name:</b> {{trainer_firstname}} {{trainer_lastname}}</h4></span>
+                            </div>
+                            {{#if trainer_comment}}
+                                <div class="col-md-8">
+                                    <span><h4><b>Trainer Comment:</b> {{trainer_comment}}</h4></span>
+                                </div>
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table" id="table">
+                                <thead class="light-background">
+                                <tr>
+                                    <th hidden>Skill ID</th>
+                                    <th>Criteria</th>
+                                    <th>Score</th>
+                                    <th>Trainer Comment</th>
+                                    <!--<th>Your Comment</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each scores}}
+                                    <tr class="scoreCategory">
+                                        <td hidden>{{score_id}}</td>
+                                        <td>{{criteria_name}}</td>
+                                        <td><span id="score_span">{{score_value}}</span></td>
+                                        <td>{{trainer_comment}}</td>
+                                        <!--<td>{{trainee_comment}}</td>-->
+                                    </tr>
+
+                                {{/each}}
+                                <tr>
+                                    <td class="light-background"><h2><b>Final Score</b></h2></td>
+                                    <td class="light-background" colspan="3"><span
+                                            class="finalScore"><h3><b>{{finalScore}}</b></h3></span>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h4>Extra Criteria Details</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table" id="table">
+                                <thead class="light-background">
+                                <tr>
+                                    <th hidden>Skill ID</th>
+                                    <th>Criteria</th>
+                                    <th>Value</th>
+                                    <th>Trainer Comment</th>
+                                    <!--<th>Your Comment</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#each extraCriteriaScores}}
+                                    <tr class="scoreCategory">
+                                        <td hidden>{{score_id}}</td>
+                                        <td>{{criteria_name}}</td>
+                                        <td><span id="score_span">{{score_value}}</span></td>
+                                        <td>{{trainer_comment}}</td>
+                                        <!--<td>{{trainee_comment}}</td>-->
+                                    </tr>
+
+                                {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {{/ifUserIsManager}}
 {{/ifUserIsTrainer}}
 
 <div id="chartArea"></div>
