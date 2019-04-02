@@ -475,6 +475,16 @@ class HomeController {
         res.send('success');
     }
 
+    async AddScoreComment(req, res) {
+        let score_id = req.body.commentScoreId;
+        console.log(score_id);
+        let comment = req.body.scoreComment;
+        console.log(comment);
+
+        let response = await this.courseRepository.AddScoreComment(req.session.user, score_id, comment);
+        res.send('success');
+    }
+
     async AssignCourseTrainee(req, res) {
         let course_id = parseInt(req.body.schedule_courses);
 

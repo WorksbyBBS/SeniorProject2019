@@ -3,7 +3,6 @@ module.exports = (sequelize, Sequelize) => {
         score_id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         score_value: {type: Sequelize.DOUBLE, allowNull:false},
         trainer_comment: {type: Sequelize.TEXT},
-        trainee_action: {type: Sequelize.STRING},
         criteria_id: {type: Sequelize.INTEGER, allowNull: false,
             references: {
                 model: 'Skill_Criteria',

@@ -25,6 +25,7 @@ module.exports = (sequelize, Sequelize) => {
         type: {type: Sequelize.STRING, allowNull: false},
         duration: {type: Sequelize.TIME, allowNull: false},
         trainer_comment: {type: Sequelize.STRING},
+        trainee_comment: {type: Sequelize.STRING},
         final_score: {type: Sequelize.DOUBLE, allowNull: false},
         skill_id: {
             type: Sequelize.INTEGER, allowNull: false,

@@ -408,7 +408,7 @@ class CourseRepository {
     }
 
     async getCriteriaBasedOnCourseAndSkillIDs(courseid, skillid) {
-        let query = 'select sc.criteria_id, sc.criteria_name from sp2019_db.Skill_Criteria sc\n' +
+        let query = 'select sc.criteria_id, sc.criteria_name,sc.criteria_type from sp2019_db.Skill_Criteria sc\n' +
             'inner join sp2019_db.Skills s \n' +
             'where sc.skill_id = s.skill_id and s.skill_id = ' + skillid + ' and s.course_id = ' + courseid + ';';
 
@@ -458,6 +458,19 @@ class CourseRepository {
             Sessions.update(
                 {trainee_comment: comment},
                 {returning: true, where: {session_id: session_id}}
+            )
+        }
+    }
+
+    async AddScoreComment(user, score_id, comment) {
+        console.log(user);
+        console.log(score_id);
+        console.log(comment);
+
+        if (user.trainer_role === 1) {
+            Scores.update(
+                {trainer_comment: comment},
+                {returning: true, where: {score_id: score_id}}
             )
         }
     }

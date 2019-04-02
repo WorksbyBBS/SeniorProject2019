@@ -42,7 +42,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                                 <td>{{trainer_comment}} </td>
                              {{else}}
                                 
-                                  <td>{{#ifUserIsTrainer ../../trainer_role '1'}}<button class="btn btn-pill btn-primary" data-toggle="modal" data-target="#sessionCommentModal" data-session_id="{{session_id}}" onclick="addSessionComment(this)"><i class="fa fa-plus"></i> Add Comment {{/ifUserIsTrainer}}</td>
+                                  <td>{{#ifUserIsTrainer ../../trainer_role '1'}}<button class="btn btn-pill btn-primary" data-toggle="modal" data-target="#sessionCommentModal" data-session_id="{{session_id}}" onclick="addSessionComment(this)"><i class="fa fa-plus"></i> Add Comment {{/ifUserIsTrainer}}</button></td>
                                 
                              {{/if}}
                             <!--<td>{{trainee_comment}}</td>-->
@@ -60,7 +60,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
      <div class="modal-dialog">
        <div class="modal-content">
           <div class="modal-header">
-             <h4 class="modal-title" id="basicModalLabel">Add Comment for Session </span></h4>
+             <h4 class="modal-title" id="basicModalLabel">Add Comment for Session</h4>
              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="modal-body">
@@ -72,6 +72,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                           <div class="textwrapper"><textarea rows="3" name="sessionComment" form="sessionCommentForm" placeholder="Enter Your Comment Here..." required></textarea></div>
                         </div>
                     </div>
+                   </div>
             </form>
               <div class="modal-footer">
                   <button type="button"  class="btn btn-pill btn-danger close" data-dismiss="modal">Cancel</button>
@@ -88,7 +89,7 @@ function addSessionComment(btn) {
     console.log("Session ID : " + session_id);
     event.cancelBubble = true;
     $("#sessionCommentModal").modal('show');
-    $('basicModalLabel').text('Add Comment for Session ' + session_id);
+    $('#basicModalLabel').text('Add Comment for Session ' + session_id);
     $('#commentSessionId').val(session_id);
 }
 
