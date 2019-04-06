@@ -5,6 +5,7 @@ const Managers = db.managers;
 const Trainers = db.trainers;
 const Trainees = db.trainees;
 const Roles = db.roles;
+const bcrypt = require('bcrypt');
 
 class UserRepository {
     async createAdminUserOnDBInit() {
@@ -25,16 +26,20 @@ class UserRepository {
                     email: 'admin@test.com'
                 };
 
-                return Users.create(userObj).then(function (adminUser) {
-                    Admins.create({user_id: adminUser.user_id});
-                    Roles.create({
-                        user_id: adminUser.user_id,
-                        admin_role: 1,
-                        trainer_role: 0,
-                        manager_role: 0,
-                        trainee_role: 0
-                    });
-                })
+                return bcrypt.hash(userObj.password, 10, function (err, hash) {
+                    console.log(hash + "------");
+                    userObj.password = hash;
+                    return Users.create(userObj).then(function (adminUser) {
+                        Admins.create({user_id: adminUser.user_id});
+                        Roles.create({
+                            user_id: adminUser.user_id,
+                            admin_role: 1,
+                            trainer_role: 0,
+                            manager_role: 0,
+                            trainee_role: 0
+                        });
+                    })
+                });
             }
         });
     }
@@ -65,7 +70,20 @@ class UserRepository {
     }
 
     async login(username, password) {
-        let user = await Users.findOne({where: {username: username, password: password}});
+
+
+        const correctPassword = (enteredPassword, originalPassword) => {
+            return new Promise(resolve => {
+                bcrypt.compare(enteredPassword, originalPassword, (err, res) => {
+                    resolve(res)
+                });
+            })
+        };
+
+
+        //let user = await Users.findOne({where: {username: username, password: password}});
+        let user = await Users.findOne({where: {username: username}});
+        console.log(user);
         if (user) {
 
             let newUserObj = {
@@ -81,45 +99,65 @@ class UserRepository {
                 admin_role: 0
             };
 
-            let foundRole = await Roles.findOne({where: {user_id: user.user_id}});
+            const authenticated = await correctPassword(password, user.password);
 
-            if (foundRole.manager_role) {
-                await Managers.findOne({where: {user_id: user.user_id}}).then(manager => {
-                    newUserObj['manager_id'] = manager.manager_id;
-                });
-                newUserObj.manager_role = 1;
+            console.log("------------" + authenticated);
+
+            if (authenticated) {
+                let foundRole = await Roles.findOne({where: {user_id: user.user_id}});
+
+                if (foundRole.manager_role) {
+                    await Managers.findOne({where: {user_id: user.user_id}}).then(manager => {
+                        newUserObj['manager_id'] = manager.manager_id;
+                    });
+                    newUserObj.manager_role = 1;
+                }
+
+                if (foundRole.trainer_role) {
+                    await Trainers.findOne({where: {user_id: user.user_id}}).then(trainer => {
+                        newUserObj['trainer_id'] = trainer.trainer_id;
+                    });
+                    newUserObj.trainer_role = 1;
+                }
+
+                if (foundRole.trainee_role) {
+                    await Trainees.findOne({where: {user_id: user.user_id}}).then(trainee => {
+                        newUserObj['trainee_id'] = trainee.trainee_id;
+                    });
+                    newUserObj.trainee_role = 1;
+                }
+                if (foundRole.admin_role) {
+                    await Admins.findOne({where: {user_id: user.user_id}}).then(admin => {
+                        newUserObj['admin_id'] = admin.admin_id;
+                    });
+                    newUserObj.admin_role = 1;
+                }
+
+                newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
+                // console.log(newUserObj);
+                return newUserObj;
+            } else {
+                throw 'Username and/or password invalid'
             }
 
-            if (foundRole.trainer_role) {
-                await Trainers.findOne({where: {user_id: user.user_id}}).then(trainer => {
-                    newUserObj['trainer_id'] = trainer.trainer_id;
-                });
-                newUserObj.trainer_role = 1;
-            }
-
-            if (foundRole.trainee_role) {
-                await Trainees.findOne({where: {user_id: user.user_id}}).then(trainee => {
-                    newUserObj['trainee_id'] = trainee.trainee_id;
-                });
-                newUserObj.trainee_role = 1;
-            }
-            if (foundRole.admin_role) {
-                await Admins.findOne({where: {user_id: user.user_id}}).then(admin => {
-                    newUserObj['admin_id'] = admin.admin_id;
-                });
-                newUserObj.admin_role = 1;
-            }
-
-            newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
-            // console.log(newUserObj);
-            return newUserObj;
         } else {
             throw 'Username and/or password invalid'
         }
     }
 
     async loginUnity(username, password) {
-        let user = await Users.findOne({where: {username: username, password: password}});
+
+        const correctPassword = (enteredPassword, originalPassword) => {
+            return new Promise(resolve => {
+                bcrypt.compare(enteredPassword, originalPassword, (err, res) => {
+                    resolve(res)
+                });
+            })
+        };
+
+        //let user = await Users.findOne({where: {username: username, password: password}});
+        let user = await Users.findOne({where: {username: username}});
+        console.log(user);
         if (user) {
 
             let newUserObj = {
@@ -129,17 +167,27 @@ class UserRepository {
                 last_name: user.last_name
             };
 
+            const authenticated = await correctPassword(password, user.password);
 
-            let trainee = await Trainees.findOne({where: {user_id: user.user_id}});
+            console.log("------------" + authenticated);
 
-            if (trainee) {
-                newUserObj['trainee_id'] = trainee.trainee_id;
+            if (authenticated) {
+                let trainee = await Trainees.findOne({where: {user_id: user.user_id}});
+
+                if (trainee) {
+                    newUserObj['trainee_id'] = trainee.trainee_id;
+                }
+                newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
+                return newUserObj;
+            } else {
+                throw 'Username and/or password invalid'
             }
-            newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
-            return newUserObj;
+
+
         } else {
             throw 'Username and/or password invalid'
         }
+
     }
 
     async registerUser(regUserObj) {
@@ -157,11 +205,28 @@ class UserRepository {
         }
 
         //since username and email are unique. Add the user.
+
+        const hashedPassword = (enteredPassword) => {
+            return new Promise(resolve => {
+                bcrypt.hash(enteredPassword, 10, (err, hash) => {
+                    resolve(hash);
+                });
+            });
+        };
+
+        const hashValue = await hashedPassword(regUserObj.password);
+
+        // let hashedPassword = await bcrypt.hash(regUserObj.password, 10, function (err, hash) {
+        //     regUserObj.password = hash;
+        // });
+
+        console.log("-------!!!!---\n" + hashValue);
+
         let u = await Users.create({
             username: regUserObj.username,
             first_name: regUserObj.firstname.capitalizeFirstLetter(),
             last_name: regUserObj.lastname.capitalizeFirstLetter(),
-            password: regUserObj.password,
+            password: hashValue,
             email: regUserObj.email,
             address: regUserObj.address.capitalizeFirstLetter(),
             phone: regUserObj.phone

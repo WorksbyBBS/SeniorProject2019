@@ -13,6 +13,8 @@ class UnityController {
 
         this.userRepository.loginUnity(username, password).then(user => {
 
+            req.session.user = user;
+            // console.log(req.session.user);
             res.send(user);
         })
             .catch(e => {

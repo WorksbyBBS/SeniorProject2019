@@ -39,6 +39,8 @@ class HomeController {
         let password = req.body.password;
 
         this.userRepository.login(username, password).then(user => {
+            console.log("---\n---");
+            console.log(user);
             req.session.user = user;
             // console.log(req.session.user);
             return res.redirect('/')

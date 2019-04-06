@@ -8,6 +8,7 @@ const handlebars = require('express-handlebars')
 const session = require('express-session');
 const Sequelize = require('sequelize');
 const mysql2 = require('mysql2');
+const bcrypt = require('bcrypt');
 
 const homeController = require('./controllers/HomeController');
 
