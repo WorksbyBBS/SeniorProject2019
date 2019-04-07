@@ -27,7 +27,7 @@ class UserRepository {
                 };
 
                 return bcrypt.hash(userObj.password, 10, function (err, hash) {
-                    console.log(hash + "------");
+                    //console.log(hash + "------");
                     userObj.password = hash;
                     return Users.create(userObj).then(function (adminUser) {
                         Admins.create({user_id: adminUser.user_id});
@@ -83,7 +83,7 @@ class UserRepository {
 
         //let user = await Users.findOne({where: {username: username, password: password}});
         let user = await Users.findOne({where: {username: username}});
-        console.log(user);
+        //console.log(user);
         if (user) {
 
             let newUserObj = {
@@ -101,7 +101,7 @@ class UserRepository {
 
             const authenticated = await correctPassword(password, user.password);
 
-            console.log("------------" + authenticated);
+            //console.log("------------" + authenticated);
 
             if (authenticated) {
                 let foundRole = await Roles.findOne({where: {user_id: user.user_id}});
@@ -134,7 +134,7 @@ class UserRepository {
                 }
 
                 newUserObj['full_name'] = newUserObj.first_name + " " + newUserObj.last_name;
-                // console.log(newUserObj);
+                // //console.log(newUserObj);
                 return newUserObj;
             } else {
                 throw 'Username and/or password invalid'
@@ -157,7 +157,7 @@ class UserRepository {
 
         //let user = await Users.findOne({where: {username: username, password: password}});
         let user = await Users.findOne({where: {username: username}});
-        console.log(user);
+        //console.log(user);
         if (user) {
 
             let newUserObj = {
@@ -169,7 +169,7 @@ class UserRepository {
 
             const authenticated = await correctPassword(password, user.password);
 
-            console.log("------------" + authenticated);
+            //console.log("------------" + authenticated);
 
             if (authenticated) {
                 let trainee = await Trainees.findOne({where: {user_id: user.user_id}});
@@ -220,7 +220,7 @@ class UserRepository {
         //     regUserObj.password = hash;
         // });
 
-        console.log("-------!!!!---\n" + hashValue);
+        //console.log("-------!!!!---\n" + hashValue);
 
         let u = await Users.create({
             username: regUserObj.username,
@@ -317,7 +317,7 @@ class UserRepository {
     }
 
     async getAllTrainersForSchedule() {
-        let query = 'select trainer.trainer_id, users.username,users.first_name,users.last_name from sp2019_db.Users users\n' +
+        let query = 'select trainer.trainer_id,users.first_name,users.last_name from sp2019_db.Users users\n' +
             'inner join sp2019_db.Trainers trainer\n' +
             'on users.user_id = trainer.user_id;';
 

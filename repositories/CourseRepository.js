@@ -393,7 +393,7 @@ class CourseRepository {
     async getUserCourses(userId) {
         return await Course_Trainee.findAll({where: {trainee_id: userId}}).then(async courses => {
             let coursesInfo = [];
-            console.log(JSON.stringify(courses));
+            //console.log(JSON.stringify(courses));
             for (let i = 0; i < courses.length; i++) {
                 let courseFound = await Courses.findOne({where: {course_id: courses[i].course_id}});
                 coursesInfo.push(courseFound);
@@ -445,9 +445,9 @@ class CourseRepository {
     }
 
     async AddSessionComment(user, session_id, comment) {
-        console.log(user);
-        console.log(session_id);
-        console.log(comment);
+        //console.log(user);
+        //console.log(session_id);
+        //console.log(comment);
 
         if (user.trainer_role === 1) {
             Sessions.update(
@@ -463,9 +463,9 @@ class CourseRepository {
     }
 
     async AddScoreComment(user, score_id, comment) {
-        console.log(user);
-        console.log(score_id);
-        console.log(comment);
+        //console.log(user);
+        //console.log(score_id);
+        //console.log(comment);
 
         if (user.trainer_role === 1) {
             Scores.update(
@@ -489,7 +489,7 @@ class CourseRepository {
         if (typeof trainerId === 'undefined') {
             if (typeof sessionTrainerId === 'undefined') {
             } else {
-                console.log('++++ INSIDE TRAINERID +++++' + sessionTrainerId);
+                //console.log('++++ INSIDE TRAINERID +++++' + sessionTrainerId);
                 query = query + 'WHERE s.trainer_id=' + sessionTrainerId;
             }
 
@@ -497,20 +497,20 @@ class CourseRepository {
         } else {
             if (trainerId === 'All' || trainerId == 'all') {
             } else {
-                console.log('++++ INSIDE TRAINERID !=ALL+++++' + trainerId);
+                //console.log('++++ INSIDE TRAINERID !=ALL+++++' + trainerId);
                 query = query + 'WHERE s.trainer_id=' + trainerId;
             }
         }
 
         if (courseId === 'All' || courseId === 'all') {
-            console.log('++++ INSIDE COURSDID ALL+++++');
+            //console.log('++++ INSIDE COURSDID ALL+++++');
             if (traineeId === 'All' || traineeId === 'all') {
             } else {
-                console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + traineeId);
+                //console.log('++++ INSIDE COURSDID ALL and TRAINEEID+++++' + traineeId);
                 query = query + ' and s.trainee_id=' + traineeId + ';';
             }
         } else {
-            console.log('++++ INSIDE COURSDID ' + courseId + '++++++++++');
+            //console.log('++++ INSIDE COURSDID ' + courseId + '++++++++++');
             query = query + ' and s.course_id=' + courseId;
             if (skillId === 'All' || skillId === 'all') {
                 if (traineeId === 'All' || traineeId === 'all') {
@@ -527,7 +527,7 @@ class CourseRepository {
             }
         }
 
-        console.log(query);
+        //console.log(query);
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
             return sessions;
@@ -565,7 +565,7 @@ class CourseRepository {
     async getCoursesWhichHaveSessions(user) {
         let query = '';
         if (user.trainee_role === 1) {
-            console.log("+++" + user.trainee_role + "++++" + user.trainee_id + "+++");
+            //console.log("+++" + user.trainee_role + "++++" + user.trainee_id + "+++");
             query = 'select distinct c.* from sp2019_db.Courses c\n' +
                 'inner join sp2019_db.Sessions s\n' +
                 'on s.course_id = c.course_id\n' +
@@ -573,7 +573,7 @@ class CourseRepository {
                 'on ctt.course_id=c.course_id\n' +
                 'where s.trainee_id = ' + user.trainee_id + ';';
         } else if (user.trainer_role === 1) {
-            //console.log("+++" + user.trainer_role + "++++" + user.trainer_id + "+++");
+            ////console.log("+++" + user.trainer_role + "++++" + user.trainer_id + "+++");
 
             query = 'select distinct c.* from sp2019_db.Courses c\n' +
                 'inner join sp2019_db.Sessions s\n' +
