@@ -11,18 +11,18 @@ class CourseRepository {
 
     async getAllCourses() {
         //manager can see courses
-        return await Courses.findAll({});
+        return await Courses.findAll({raw: true});
 
     }
 
     async getAllCTrainers() {
         //manager can see courses
-        return await Course_Trainer.findAll({});
+        return await Course_Trainer.findAll({raw: true});
 
     }
 
     async getAllCTrainees() {
-        return await Course_Trainee.findAll({});
+        return await Course_Trainee.findAll({raw: true});
 
     }
 
@@ -43,10 +43,10 @@ class CourseRepository {
         if (user) {
             if (user.manager_role === 1 || user.trainee_role === 1 || user.trainer_role === 1) {
                 let query = 'select distinct courses.course_id, courses.course_name, courses.year, courses.semester,ctrainer.trainer_id, users.first_name,users.last_name \n' +
-                    'from sp2019_db.Users users\n' +
-                    'inner join sp2019_db.Course_Trainers as ctrainer\n' +
-                    'inner join sp2019_db.Trainers trainers\n' +
-                    'inner join sp2019_db.Courses courses\n' +
+                    'from Users users\n' +
+                    'inner join Course_Trainers as ctrainer\n' +
+                    'inner join Trainers trainers\n' +
+                    'inner join Courses courses\n' +
                     'on courses.course_id=ctrainer.course_id\n' +
                     'and ctrainer.trainer_id = trainers.trainer_id\n' +
                     'and trainers.user_id = users.user_id;';
@@ -408,8 +408,8 @@ class CourseRepository {
     }
 
     async getCriteriaBasedOnCourseAndSkillIDs(courseid, skillid) {
-        let query = 'select sc.criteria_id, sc.criteria_name,sc.criteria_type from sp2019_db.Skill_Criteria sc\n' +
-            'inner join sp2019_db.Skills s \n' +
+        let query = 'select sc.criteria_id, sc.criteria_name,sc.criteria_type from Skill_Criteria sc\n' +
+            'inner join Skills s \n' +
             'where sc.skill_id = s.skill_id and s.skill_id = ' + skillid + ' and s.course_id = ' + courseid + ';';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(criteria => {
@@ -418,8 +418,8 @@ class CourseRepository {
     }
 
     async getSkillsBasedOnCourseIDInSession(courseid) {
-        let query = 'select distinct skills.* from sp2019_db.Skills skills \n' +
-            'inner join sp2019_db.Sessions sessions\n' +
+        let query = 'select distinct skills.* from Skills skills \n' +
+            'inner join Sessions sessions\n' +
             'on sessions.skill_id = skills.skill_id\n' +
             'where skills.course_id = ' + courseid + ';'
 
@@ -430,13 +430,13 @@ class CourseRepository {
 
     async getSessionsBasedOnSkillId(skillid, trainee_id) {
         let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
-            'FROM sp2019_db.Sessions s\n' +
-            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
-            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
-            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
-            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
-            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
-            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
+            'FROM Sessions s\n' +
+            'JOIN Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN Skills AS skill ON skill.skill_id = s.skill_id\n' +
             'WHERE s.skill_id=' + skillid + ' and s.trainee_id=' + trainee_id + ';';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
@@ -478,13 +478,13 @@ class CourseRepository {
     async getSessionBasedOnFilters(sessionTrainerId, courseId, skillId, traineeId, trainerId) {
 
         let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
-            'FROM sp2019_db.Sessions s\n' +
-            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
-            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
-            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
-            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
-            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
-            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n';
+            'FROM Sessions s\n' +
+            'JOIN Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN Skills AS skill ON skill.skill_id = s.skill_id\n';
 
         if (typeof trainerId === 'undefined') {
             if (typeof sessionTrainerId === 'undefined') {
@@ -536,8 +536,8 @@ class CourseRepository {
     }
 
     async getScoreBasedOnSessionId(sessionid) {
-        let query = 'select cs.*,skill_c.criteria_name from sp2019_db.Criteria_Scores cs\n' +
-            'inner join sp2019_db.Skill_Criteria skill_c\n' +
+        let query = 'select cs.*,skill_c.criteria_name from Criteria_Scores cs\n' +
+            'inner join Skill_Criteria skill_c\n' +
             'on skill_c.criteria_id = cs.criteria_id\n' +
             'where cs.session_id=' + sessionid + ';';
 
@@ -548,13 +548,13 @@ class CourseRepository {
 
     async getSessionBasedOnId(sessionid) {
         let query = 'SELECT s.*, u2.first_name as trainer_firstname,u2.last_name as trainer_lastname, course.course_name,course.semester,course.year, skill.skill_name ,u1.first_name as trainee_firstname,u1.last_name as trainee_lastname\n' +
-            'FROM sp2019_db.Sessions s\n' +
-            'JOIN sp2019_db.Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
-            'JOIN sp2019_db.Users u1 ON trainee.user_id = u1.user_id\n' +
-            'JOIN sp2019_db.Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
-            'JOIN sp2019_db.Users u2 ON trainer.user_id = u2.user_id\n' +
-            'JOIN sp2019_db.Courses AS course ON course.course_id = s.course_id\n' +
-            'JOIN sp2019_db.Skills AS skill ON skill.skill_id = s.skill_id\n' +
+            'FROM Sessions s\n' +
+            'JOIN Trainees AS trainee ON trainee.trainee_id = s.trainee_id\n' +
+            'JOIN Users u1 ON trainee.user_id = u1.user_id\n' +
+            'JOIN Trainers AS trainer ON trainer.trainer_id = s.trainer_id\n' +
+            'JOIN Users u2 ON trainer.user_id = u2.user_id\n' +
+            'JOIN Courses AS course ON course.course_id = s.course_id\n' +
+            'JOIN Skills AS skill ON skill.skill_id = s.skill_id\n' +
             'WHERE s.session_id=' + sessionid + ';';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(sessions => {
@@ -566,32 +566,73 @@ class CourseRepository {
         let query = '';
         if (user.trainee_role === 1) {
             //console.log("+++" + user.trainee_role + "++++" + user.trainee_id + "+++");
-            query = 'select distinct c.* from sp2019_db.Courses c\n' +
-                'inner join sp2019_db.Sessions s\n' +
+            query = 'select distinct c.* from Courses c\n' +
+                'inner join Sessions s\n' +
                 'on s.course_id = c.course_id\n' +
-                'inner join sp2019_db.Course_Trainees ctt\n' +
+                'inner join Course_Trainees ctt\n' +
                 'on ctt.course_id=c.course_id\n' +
                 'where s.trainee_id = ' + user.trainee_id + ';';
         } else if (user.trainer_role === 1) {
             ////console.log("+++" + user.trainer_role + "++++" + user.trainer_id + "+++");
 
-            query = 'select distinct c.* from sp2019_db.Courses c\n' +
-                'inner join sp2019_db.Sessions s\n' +
+            query = 'select distinct c.* from Courses c\n' +
+                'inner join Sessions s\n' +
                 'on s.course_id = c.course_id\n' +
-                'inner join sp2019_db.Course_Trainers ctt\n' +
+                'inner join Course_Trainers ctt\n' +
                 'on ctt.course_id=c.course_id\n' +
                 'where s.trainer_id = ' + user.trainer_id + ';';
         } else if (user.manager_role === 1) {
-            query = 'select distinct c.* from sp2019_db.Courses c\n' +
-                'inner join sp2019_db.Sessions s\n' +
+            query = 'select distinct c.* from Courses c\n' +
+                'inner join Sessions s\n' +
                 'on s.course_id = c.course_id\n' +
-                'inner join sp2019_db.Course_Trainers ctt\n' +
+                'inner join Course_Trainers ctt\n' +
                 'on ctt.course_id=c.course_id;';
         }
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(courses => {
             return courses;
         });
+    }
+
+    async addUserSession(criteria_json, trainee_id, course_id, skill_id, duration) {
+        let finalScore = -1; //assume pass
+
+        for (let i = 0; i < criteria_json.length; i++) {
+            if (criteria_json.criteria_type === 'Essential' && criteria_json.criteria_score === -2) {
+                finalScore = -2; //if fail, set fail and break
+                break;
+            }
+        }
+
+        let course_trainer = await Course_Trainer.findOne({where: {course_id}});
+        let trainer_id = course_trainer.trainer_id;
+
+        let result = Sessions.create({
+            trainer_id: trainer_id,
+            course_id: course_id,
+            skill_id: skill_id,
+            duration: duration,
+            final_score: finalScore
+        }).then(function (session) {
+            let scoreCreationOkay = false;
+            for (let i = 0; i < criteria_json.length; i++) {
+                Scores.create({
+                    criteria_id: criteria_json[i].criteria_id,
+                    score_value: criteria_json[i].criteria_score,
+                    session_id: session.session_id
+                }).then(function (score) {
+                    if (score != null) {
+                        scoreCreationOkay = true;
+                    } else {
+                        scoreCreationOkay = false;
+                    }
+                });
+            }
+
+            result = scoreCreationOkay;
+        });
+
+        return result;
     }
 
 }

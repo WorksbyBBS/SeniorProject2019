@@ -6,8 +6,19 @@ const Trainers = db.trainers;
 const Trainees = db.trainees;
 const Roles = db.roles;
 const bcrypt = require('bcrypt');
+const fs = require('fs-extra');
 
 class UserRepository {
+
+    async createTestDatabase() {
+        await db.sequelize.sync({
+            force: true
+        }).then(function () {
+
+        });
+    }
+
+
     async createAdminUserOnDBInit() {
 
         //check if this first admin is in the DB
@@ -271,8 +282,8 @@ class UserRepository {
     }
 
     async getAllAdminUsers() {
-        let query = 'select users.username,users.first_name,users.last_name,users.email from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Roles roles\n' +
+        let query = 'select users.username,users.first_name,users.last_name,users.email from Users users\n' +
+            'inner join Roles roles\n' +
             'on users.user_id = roles.user_id\n' +
             'where roles.admin_role=1;';
 
@@ -282,8 +293,8 @@ class UserRepository {
     }
 
     async getAllManagerUsers() {
-        let query = 'select users.username,users.first_name,users.last_name,users.email from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Roles roles\n' +
+        let query = 'select users.username,users.first_name,users.last_name,users.email from Users users\n' +
+            'inner join Roles roles\n' +
             'on users.user_id = roles.user_id\n' +
             'where roles.manager_role=1;';
 
@@ -293,8 +304,8 @@ class UserRepository {
     }
 
     async getAllTrainerUsers() {
-        let query = 'select users.username,users.first_name,users.last_name,users.email from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Roles roles\n' +
+        let query = 'select users.username,users.first_name,users.last_name,users.email from Users users\n' +
+            'inner join Roles roles\n' +
             'on users.user_id = roles.user_id\n' +
             'where roles.trainer_role=1;';
 
@@ -305,10 +316,10 @@ class UserRepository {
 
     async getTrainersWhoHaveSessions() {
         let query = 'select distinct u.first_name, u.last_name, s.trainer_id \n' +
-            'from sp2019_db.Sessions s \n' +
-            'inner join sp2019_db.trainers t\n' +
+            'from Sessions s \n' +
+            'inner join trainers t\n' +
             'on s.trainer_id = t.trainer_id\n' +
-            'inner join sp2019_db.Users u\n' +
+            'inner join Users u\n' +
             'on u.user_id=t.user_id;';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainers => {
@@ -317,8 +328,8 @@ class UserRepository {
     }
 
     async getAllTrainersForSchedule() {
-        let query = 'select trainer.trainer_id,users.first_name,users.last_name from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Trainers trainer\n' +
+        let query = 'select trainer.trainer_id,users.first_name,users.last_name from Users users\n' +
+            'inner join Trainers trainer\n' +
             'on users.user_id = trainer.user_id;';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainers => {
@@ -327,8 +338,8 @@ class UserRepository {
     }
 
     async getAllTraineesForSchedule() {
-        let query = 'select trainee.trainee_id, users.first_name,users.last_name from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Trainees trainee\n' +
+        let query = 'select trainee.trainee_id, users.first_name,users.last_name from Users users\n' +
+            'inner join Trainees trainee\n' +
             'on users.user_id = trainee.user_id;';
 
         return await db.sequelize.query(query, {type: db.sequelize.QueryTypes.SELECT}).then(trainees => {
@@ -338,8 +349,8 @@ class UserRepository {
 
 
     async getAllTraineeUsers() {
-        let query = 'select users.username,users.first_name,users.last_name,users.email from sp2019_db.Users users\n' +
-            'inner join sp2019_db.Roles roles\n' +
+        let query = 'select users.username,users.first_name,users.last_name,users.email from Users users\n' +
+            'inner join Roles roles\n' +
             'on users.user_id = roles.user_id\n' +
             'where roles.trainee_role=1;';
 
@@ -352,17 +363,17 @@ class UserRepository {
         let query = '';
         if (user.trainer_role === 1) {
             query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
-                'from sp2019_db.Trainees as t\n' +
-                'inner join sp2019_db.Sessions as s\n' +
+                'from Trainees as t\n' +
+                'inner join Sessions as s\n' +
                 'on s.trainee_id=t.trainee_id\n' +
-                'inner join sp2019_db.Users as u\n' +
+                'inner join Users as u\n' +
                 'on t.user_id=u.user_id where s.trainer_id=' + user.trainer_id + ';';
         } else if (user.manager_role === 1) {
             query = 'select distinct u.first_name,u.last_name,t.trainee_id\n' +
-                'from sp2019_db.Trainees as t\n' +
-                'inner join sp2019_db.Sessions as s\n' +
+                'from Trainees as t\n' +
+                'inner join Sessions as s\n' +
                 'on s.trainee_id=t.trainee_id\n' +
-                'inner join sp2019_db.Users as u\n' +
+                'inner join Users as u\n' +
                 'on t.user_id=u.user_id;';
         }
 

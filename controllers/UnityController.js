@@ -30,13 +30,13 @@ class UnityController {
         let criteriaJsonData = req.body.criteriaJson;
         let criteriaJsonParsed = JSON.parse(criteriaJsonData);
         let criteriaJson = criteriaJsonParsed.Items;
-        let userId = req.body.userId;
+        let traineeId = req.body.traineeId;
         let courseId = req.body.courseId;
         let skillId = req.body.skillId;
         let duration = req.body.duration;
         let type = req.body.type;
 
-        console.log(userId);
+        console.log(traineeId);
         console.log(courseId);
         console.log(skillId);
         console.log(duration);
@@ -44,7 +44,7 @@ class UnityController {
         console.log("---UNITY---CRITERIA---" + JSON.stringify(criteriaJson));
         //console.log("---UNITY---USERID---"+userId);
 
-        // this.courseRepository.addUserSession(criteria_json,user_id).catch(e => {
+        // this.courseRepository.addUserSession(criteriaJson,traineeId).catch(e => {
         //     res.send(e);
         // });
         //
