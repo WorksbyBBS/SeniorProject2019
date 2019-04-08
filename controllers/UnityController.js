@@ -44,11 +44,12 @@ class UnityController {
         console.log("---UNITY---CRITERIA---" + JSON.stringify(criteriaJson));
         //console.log("---UNITY---USERID---"+userId);
 
-        // this.courseRepository.addUserSession(criteriaJson,traineeId).catch(e => {
-        //     res.send(e);
-        // });
-        //
-        // res.send("DONE")
+        //criteria_json, trainee_id, course_id, skill_id, duration,type
+        this.courseRepository.addUserSession(criteriaJson, traineeId, courseId, skillId, duration, type).catch(e => {
+            res.send(e);
+        });
+
+        res.send("DONE")
 
     }
 

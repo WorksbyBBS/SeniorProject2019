@@ -594,7 +594,7 @@ class CourseRepository {
         });
     }
 
-    async addUserSession(criteria_json, trainee_id, course_id, skill_id, duration) {
+    async addUserSession(criteria_json, trainee_id, course_id, skill_id, duration, type) {
         let finalScore = -1; //assume pass
 
         for (let i = 0; i < criteria_json.length; i++) {
@@ -612,7 +612,8 @@ class CourseRepository {
             course_id: course_id,
             skill_id: skill_id,
             duration: duration,
-            final_score: finalScore
+            final_score: finalScore,
+            type: type
         }).then(function (session) {
             let scoreCreationOkay = false;
             for (let i = 0; i < criteria_json.length; i++) {
