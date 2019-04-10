@@ -282,6 +282,63 @@ describe("Repository Methods Unit Tests", function () {
                 {course_id: 2, course_name: 'FireFighter II', semester: 'Spring', year: 2019}])
         });
 
+        it("The function should successfully add three skills)", async function () {
+            let skill1 = {skill_name: 'FF-1', course_id: 1};
+            let skill2 = {skill_name: 'FF-2', course_id: 1};
+            let skill3 = {skill_name: 'FF-3', course_id: 1};
+
+            let value1 = await courseRepository.addSkill(skill1);
+            value1 = value1.toJSON();
+            skill1['skill_id'] = 1;
+            delete value1.createdAt;
+            delete value1.updatedAt;
+
+            let value2 = await courseRepository.addSkill(skill2);
+            value2 = value2.toJSON();
+            skill2['skill_id'] = 2;
+            delete value2.createdAt;
+            delete value2.updatedAt;
+
+            let value3 = await courseRepository.addSkill(skill3);
+            value3 = value3.toJSON();
+            delete value3.createdAt;
+            delete value3.updatedAt;
+            skill3['skill_id'] = 3;
+
+            expect(value1).toEqual(skill1);
+            expect(value2).toEqual(skill2);
+            expect(value3).toEqual(skill3);
+        });
+
+        it("The function should successfully add criteria to the 3 skills added just before)", async function () {
+            let criteria1 = {
+                skill_id: 1,
+                criteria1: 'Test Essential Criteria 1',
+                criteria1Type: 'Essential',
+                rangeValue: '1'
+            };
+            let criteria4 = {skill_id: 1, criteria1: 'Test Extra Criteria 1', criteria1Type: 'Extra', rangeValue: '1'};
+
+            let array1 = await courseRepository.getCriteriaBasedOnCourseAndSkillIDs(1, 1);
+            expect(array1.length).toEqual(0); //no criteria yet for course 1 and skill 1
+
+            let value1 = await courseRepository.addCriteria(criteria1);
+            let value4 = await courseRepository.addCriteria(criteria4);
+
+            let array2 = await courseRepository.getCriteriaBasedOnCourseAndSkillIDs(1, 1);
+            expect(array2.length).toEqual(2); //no criteria yet for course 1 and skill 1
+
+        });
+
+        it("The function should successfully assign course 1 to trainer 1)", async function () {
+            let value = await courseRepository.assignCourseTrainer(1, 1);
+            value = value.toJSON();
+            delete value.createdAt;
+            delete value.updatedAt;
+
+            expect(value).toEqual({course_id: 1, trainer_id: 1});
+        });
+
     });
     describe("[UserRepository]", function () {
         it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id) for this specific Trainer", async function () {

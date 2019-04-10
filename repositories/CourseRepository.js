@@ -595,6 +595,7 @@ class CourseRepository {
     }
 
     async addUserSession(criteria_json, trainee_id, course_id, skill_id, duration, type) {
+        console.log("---- INSIDE ADD USER SESSION REPO ---------");
         let finalScore = -1; //assume pass
 
         for (let i = 0; i < criteria_json.length; i++) {
@@ -604,8 +605,13 @@ class CourseRepository {
             }
         }
 
+        console.log("---- FINAL SCORE ---------" + finalScore);
+
         let course_trainer = await Course_Trainer.findOne({where: {course_id}});
+        console.log(course_trainer);
+
         let trainer_id = course_trainer.trainer_id;
+        console.log("----- TRAINER ID----" + trainer_id);
 
         let result = Sessions.create({
             trainer_id: trainer_id,
@@ -627,12 +633,17 @@ class CourseRepository {
                     } else {
                         scoreCreationOkay = false;
                     }
+                }).catch(e => {
+                    throw e;
                 });
             }
 
             result = scoreCreationOkay;
+        }).catch(e => {
+            throw e;
         });
 
+        console.log("----- RESULT ----" + result);
         return result;
     }
 

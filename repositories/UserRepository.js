@@ -7,10 +7,40 @@ const Trainees = db.trainees;
 const Roles = db.roles;
 const bcrypt = require('bcrypt');
 const fs = require('fs-extra');
+const mysql2 = require('mysql2');
 
 class UserRepository {
 
     async createTestDatabase() {
+
+        const connection = mysql2.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'CSE_SP_2019'
+        });
+
+        let db_name = 'sp2019_test_db';
+
+        connection.query('CREATE DATABASE IF NOT EXISTS ??', db_name, function (err) {
+            if (err) {
+                console.log('error in creating sp2019_test_db database');
+                return;
+            }
+            console.log('created a new database');
+
+            connection.changeUser({
+                database: db_name
+            }, function (err) {
+                if (err) {
+                    console.log('error in changing database', err);
+                    return;
+                }
+                connection.end();
+                console.log('connection terminated successfully');
+                // });
+            });
+        });
+
         await db.sequelize.sync({
             force: true
         }).then(function () {
