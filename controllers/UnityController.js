@@ -28,8 +28,8 @@ class UnityController {
         console.log("INSIDE POST SESSION  ");
 
         let criteriaJsonData = req.body.criteriaJson;
-        //let criteriaJsonParsed = JSON.parse(criteriaJsonData);
-        let criteriaJson = criteriaJsonData.Items;
+        let criteriaJsonParsed = JSON.parse(criteriaJsonData);
+        let criteriaJson = criteriaJsonParsed.Items;
         let traineeId = req.body.traineeId;
         let courseId = req.body.courseId;
         let skillId = req.body.skillId;
