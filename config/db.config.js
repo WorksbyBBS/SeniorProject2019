@@ -5,7 +5,13 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
     host: env.host,
     dialect: env.dialect,
     operatorsAliases: false,
-
+    dialectOptions: {
+        // useUTC: false, //for reading from database
+        dateStrings: true,
+        typeCast: true,
+        timezone: "+03:00"
+    },
+    timezone: '+03:00', // your timezone comes here, ex.: 'US/Hawaii'
     pool: {
         max: env.max,
         min: env.pool.min,

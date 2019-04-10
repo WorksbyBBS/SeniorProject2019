@@ -176,10 +176,10 @@ async function getSessionsOnSelection() {
     // let options = "<option disabled selected value></option>";
     //
     for (let i = 0; i < sessions.length; i++) {
-        let splitDate = sessions[i].createdAt.split('T');
-        sessions[i]["sessionDate"] = splitDate[0];
-        let splitTime = splitDate[1].split('.');
-        sessions[i]["sessionTime"] = splitTime[0];
+        let splitDate = sessions[i].createdAt.split(/[- :]/);
+        console.log(splitDate);
+        sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
+        sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
         if (sessions[i].final_score === -1) {
             sessions[i].final_score = "Pass"
@@ -274,10 +274,12 @@ async function drawChart(filter) {
     let sessions = await dataSessions.json();
 
     for (let i = 0; i < sessions.length; i++) {
-        let splitDate = sessions[i].createdAt.split('T');
-        sessions[i]["sessionDate"] = splitDate[0];
-        let splitTime = splitDate[1].split('.');
-        sessions[i]["sessionTime"] = splitTime[0];
+
+        let splitDate = sessions[i].createdAt.split(/[- :]/);
+        console.log(splitDate);
+        sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
+        sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
+
 
         if (sessions[i].final_score === -1) {
             sessions[i].final_score = "Pass"

@@ -264,9 +264,9 @@ class HomeController {
 
                 let date = usersession[0].createdAt + '';
                 let splitDate = date.split(/[- :]/);
-                usersession[0]["sessionTime"] = splitDate[4] + ":" + splitDate[5] + ":" + splitDate[6];
-                usersession[0]["sessionDate"] = splitDate[0] + ", " + splitDate[1] + "-" + splitDate[2] + "-" + splitDate[3];
 
+                usersession[0]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
+                usersession[0]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
                 let scores = await this.courseRepository.getScoreBasedOnSessionId(session_id);
 
                 let essentialCriteriaScores = [];

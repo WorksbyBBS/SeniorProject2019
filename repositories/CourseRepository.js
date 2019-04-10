@@ -656,7 +656,9 @@ class CourseRepository {
             resultScore = await Scores.create({
                 criteria_id: criteriaJson.criteria_id,
                 score_value: criteriaJson.criteria_score,
-                session_id: sessionId
+                session_id: sessionId,
+                createdAt: new Date(),
+                updatedAt: new Date()
             }).then(score => {
                 // console.log(score);
                 return true;
@@ -671,7 +673,9 @@ class CourseRepository {
                 resultScore = await Scores.create({
                     criteria_id: criteriaJson[i].criteria_id,
                     score_value: criteriaJson[i].criteria_score,
-                    session_id: sessionId
+                    session_id: sessionId,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
                 }).then(score => {
                     // console.log(score);
                     return true;
