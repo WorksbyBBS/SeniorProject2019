@@ -28,8 +28,8 @@ class UnityController {
         console.log("INSIDE POST SESSION  ");
 
         let criteriaJsonData = req.body.criteriaJson;
-        let criteriaJsonParsed = JSON.parse(criteriaJsonData);
-        let criteriaJson = criteriaJsonParsed.Items;
+        //let criteriaJsonParsed = JSON.parse(criteriaJsonData);
+        let criteriaJson = criteriaJsonData.Items;
         let traineeId = req.body.traineeId;
         let courseId = req.body.courseId;
         let skillId = req.body.skillId;
@@ -45,11 +45,14 @@ class UnityController {
         //console.log("---UNITY---USERID---"+userId);
 
         //criteria_json, trainee_id, course_id, skill_id, duration,type
-        this.courseRepository.addUserSession(criteriaJson, traineeId, courseId, skillId, duration, type).catch(e => {
+        let result = this.courseRepository.addUserSession(criteriaJson, traineeId, courseId, skillId, duration, type).catch(e => {
             res.send(e);
         });
 
-        res.send("DONE")
+        if (result)
+            res.send("DONE");
+        else
+            res.send("CANNOT ADD");
 
     }
 

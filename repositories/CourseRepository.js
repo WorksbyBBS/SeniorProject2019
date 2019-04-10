@@ -594,57 +594,100 @@ class CourseRepository {
         });
     }
 
-    async addUserSession(criteria_json, trainee_id, course_id, skill_id, duration, type) {
+    async addUserSession(criteriaJson, trainee_id, course_id, skill_id, duration, type) {
         console.log("---- INSIDE ADD USER SESSION REPO ---------");
-        let finalScore = -1; //assume pass
-
-        for (let i = 0; i < criteria_json.length; i++) {
-            if (criteria_json.criteria_type === 'Essential' && criteria_json.criteria_score === -2) {
-                finalScore = -2; //if fail, set fail and break
-                break;
+        let finalScore = 0; //assume pass
+        // console.log(criteriaJson);
+        if (!(criteriaJson instanceof Array)) {
+            // console.log('inside first typeof')
+            finalScore = criteriaJson.score_value;
+        } else {
+            // console.log('inside first typeof')
+            for (let i = 0; i < criteriaJson.length; i++) {
+                if (criteriaJson[i].criteria_type === 'Essential' && criteriaJson[i].criteria_score === -2) {
+                    finalScore = -2; //if fail, set fail and break
+                    break;
+                } else {
+                    finalScore = -1;
+                }
             }
         }
 
-        console.log("---- FINAL SCORE ---------" + finalScore);
+        // console.log(finalScore);
+        let durationString = duration.split(':');
+        // console.log(durationString);
+        let durationFinal = '';
+        for (let i = 0; i < durationString.length; i++) {
+            durationFinal = durationFinal + durationString[i];
+        }
+        // console.log(durationFinal);
+        // console.log("---- FINAL SCORE ---------" + finalScore);
 
         let course_trainer = await Course_Trainer.findOne({where: {course_id}});
-        console.log(course_trainer);
 
-        let trainer_id = course_trainer.trainer_id;
-        console.log("----- TRAINER ID----" + trainer_id);
+        let trainer_id = (course_trainer.toJSON()).trainer_id;
+        // console.log("----- TRAINER ID----" + trainer_id);
 
-        let result = Sessions.create({
+        let sessionInstance = await Sessions.create({
             trainer_id: trainer_id,
+            trainee_id: trainee_id,
             course_id: course_id,
             skill_id: skill_id,
-            duration: duration,
+            duration: durationFinal,
             final_score: finalScore,
             type: type
-        }).then(function (session) {
-            let scoreCreationOkay = false;
-            for (let i = 0; i < criteria_json.length; i++) {
-                Scores.create({
-                    criteria_id: criteria_json[i].criteria_id,
-                    score_value: criteria_json[i].criteria_score,
-                    session_id: session.session_id
-                }).then(function (score) {
-                    if (score != null) {
-                        scoreCreationOkay = true;
-                    } else {
-                        scoreCreationOkay = false;
-                    }
-                }).catch(e => {
-                    throw e;
-                });
-            }
-
-            result = scoreCreationOkay;
         }).catch(e => {
-            throw e;
+            // console.log(e)
+            // throw e;
         });
+        //console.log(sessionInstance);
+        let resultSession = false;
+        let sessionId;
+        if (sessionInstance != null) {
+            resultSession = true;
+            sessionId = sessionInstance.session_id;
+        }
 
-        console.log("----- RESULT ----" + result);
-        return result;
+        let resultScore = false;
+        // console.log("!!!!!!!!"+sessionId);
+        // console.log(criteriaJson.length);
+        if (!(criteriaJson instanceof Array)) {
+            // console.log("inside typeof");
+            resultScore = await Scores.create({
+                criteria_id: criteriaJson.criteria_id,
+                score_value: criteriaJson.criteria_score,
+                session_id: sessionId
+            }).then(score => {
+                // console.log(score);
+                return true;
+            }).catch(e => {
+                // console.log(e);
+                //throw e;
+                return false;
+            });
+        } else {
+            // console.log("inside typeof ELSE");
+            for (let i = 0; i < criteriaJson.length; i++) {
+                resultScore = await Scores.create({
+                    criteria_id: criteriaJson[i].criteria_id,
+                    score_value: criteriaJson[i].criteria_score,
+                    session_id: sessionId
+                }).then(score => {
+                    // console.log(score);
+                    return true;
+                }).catch(e => {
+                    // console.log(e);
+                    return false;
+                    //throw e;
+                });
+
+            }
+        }
+
+        if (resultScore && resultSession)
+            return true;
+        else
+            return false;
     }
 
 }
