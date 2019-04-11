@@ -281,11 +281,13 @@ async function getSessionsOnSkillSelection() {
     let options = "<option disabled selected value></option>";
 
     for (let i = 0; i < sessions.length; i++) {
-        let splitDate = sessions[i].createdAt.split('T');
-        let sessionDate = splitDate[0];
-        let splitTime = splitDate[1].split('.');
-        let sessionTime = splitTime[0];
-        options += "<option value='" + sessions[i].session_id + "'>" + sessionDate + " on " + sessionTime + "</option>";
+
+        let splitDate = sessions[i].createdAt.split(/[- :]/);
+        console.log(splitDate);
+        sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
+        sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
+
+        options += "<option value='" + sessions[i].session_id + "'>" + sessions[i].sessionDate + " on " + sessions[i].sessionTime + "</option>";
     }
     console.log(options);
     let session_dropdown = document.getElementById('sessions_drop');
