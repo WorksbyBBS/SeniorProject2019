@@ -30,7 +30,7 @@ class UnityController {
         let criteriaJsonData = req.body.criteriaJson;
         let criteriaJsonParsed = JSON.parse(criteriaJsonData);
         let criteriaJson = criteriaJsonParsed.Items;
-        
+
         let traineeId = req.body.traineeId;
         let courseId = req.body.courseId;
         let skillId = req.body.skillId;

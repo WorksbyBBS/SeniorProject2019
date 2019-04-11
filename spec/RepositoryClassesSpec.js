@@ -339,6 +339,34 @@ describe("Repository Methods Unit Tests", function () {
             expect(value).toEqual({course_id: 1, trainer_id: 1});
         });
 
+        it("The function should successfully assign course 1 to trainee 1)", async function () {
+            let value = await courseRepository.assignCourseTrainee(1, [1]);
+            delete value.createdAt;
+            delete value.updatedAt;
+
+            expect(value.length).toEqual(1);
+        });
+
+        it("The function should successfully add a session for trainee 1)", async function () {
+            let criteriaJson = [{
+                "criteria_id": 1,
+                "criteria_name": "Test Essential Criteria 1",
+                "criteria_score": -1,
+                "criteria_type": "Essential"
+            },
+                {
+                    "criteria_id": 2,
+                    "criteria_name": "Test Extra Criteria 1",
+                    "criteria_score": -2,
+                    "criteria_type": "Extra"
+                }];
+            let value = await courseRepository.addUserSession(criteriaJson, 1, 1, 1, '0215', 'Training')
+            delete value.createdAt;
+            delete value.updatedAt;
+
+            expect(value).toEqual(true);
+        });
+
     });
     describe("[UserRepository]", function () {
         it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id) for this specific Trainer", async function () {
@@ -360,15 +388,10 @@ describe("Repository Methods Unit Tests", function () {
 
             let value1 = await userRepository.getTraineeUsersWhoHaveSessions(user);
             expect(value1).toEqual([{
-                first_name: 'Safa',
-                last_name: 'Aa',
+                first_name: 'Adel',
+                last_name: 'Al-Khalaf',
                 trainee_id: 1
-            },
-                {
-                    first_name: 'Adel',
-                    last_name: 'Aa',
-                    trainee_id: 2
-                }]);
+            }]);
         });
 
         it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id)", async function () {
@@ -390,15 +413,10 @@ describe("Repository Methods Unit Tests", function () {
 
             let value1 = await userRepository.getTraineeUsersWhoHaveSessions(user);
             expect(value1).toEqual([{
-                first_name: 'Safa',
-                last_name: 'Aa',
+                first_name: 'Adel',
+                last_name: 'Al-Khalaf',
                 trainee_id: 1
-            },
-                {
-                    first_name: 'Adel',
-                    last_name: 'Aa',
-                    trainee_id: 2
-                }]);
+            }]);
         });
 
         it("The function should return all the Trainers who have sessions (only first and last names, and trainer_id)", async function () {
@@ -406,7 +424,7 @@ describe("Repository Methods Unit Tests", function () {
             let value = await userRepository.getTrainersWhoHaveSessions();
             expect(value).toEqual([{
                 first_name: 'Allaa',
-                last_name: 'Aa',
+                last_name: 'Al-Khalaf',
                 trainer_id: 1
             }]);
         });
