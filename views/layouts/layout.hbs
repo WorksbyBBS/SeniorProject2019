@@ -68,19 +68,19 @@
                                     </li>
                                     <li class="menu-megamenu-li">
                                         <a href="/manager-report" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> View Student Reports</a>
+                                                class="fa fa-book"></i> View Progress Reports</a>
                                     </li>
                                 {{/ifUserIsManager}}
                                 {{#ifUserIsTrainee session.user.trainee_role 1}}
                                     <li class="menu-megamenu-li">
                                         <a href="/trainee-report" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> View Reports</a>
+                                                class="fa fa-book"></i> View Sessions Reports</a>
                                     </li>
                                 {{/ifUserIsTrainee}}
                                 {{#ifUserIsTrainer session.user.trainer_role 1}}
                                     <li class="menu-megamenu-li">
                                         <a href="/trainer-report" class="mdl-button mdl-js-button mdl-js-ripple-effect"><i
-                                                class="fa fa-book"></i> View Student Reports</a>
+                                                class="fa fa-book"></i> View Progress Reports</a>
                                     </li>
                                 {{/ifUserIsTrainer}}
 
