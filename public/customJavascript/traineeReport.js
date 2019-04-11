@@ -321,14 +321,14 @@ async function getScoreBasedOnSessionID() {
     }
 
 
-    console.log(session);
-    let splitDate = session.createdAt.split('T');
-    let sessionDate = splitDate[0];
-    console.log(sessionDate);
+    let splitDate = session.createdAt.split(/[- :]/);
+    console.log(splitDate);
+    let sessionTime = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
+    let sessionDate = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
-    let splitTime = splitDate[1].split('.');
-    let sessionTime = splitTime[0];
-    console.log(sessionTime);
+
+    console.log(session);
+
 
     //let course_dropdown = document.getElementById('course_drop');
     let course_name = $("#course_drop option:selected").text();
