@@ -1,19 +1,17 @@
 const userRepository = require("../repositories/UserRepository");
 const courseRepository = require("../repositories/CourseRepository");
-// setup Jasmine
-const Jasmine = require("jasmine");
-const jasmine = new Jasmine();
+// setup mocha and chai
 
-
-jasmine.loadConfigFile('spec/support/jasmine.json');
-
-// Register a Custom Reporter
-const Reporter = require('jasmine-console-reporter');
-jasmine.jasmine.getEnv().addReporter(new Reporter());
+const assert = require('assert');
+const expect = require('chai').expect;
+const should = require('chai').should();
 
 describe("Repository Methods Unit Tests", function () {
-    beforeAll(async function () {
-        await userRepository.createTestDatabase().then(async function () {
+    before(async function () {
+        await userRepository.connectAndCreateToDB().then(async function () {
+            console.log('success')
+        }).catch(e => {
+            console.log(e);
         });
     });
 
@@ -127,26 +125,26 @@ describe("Repository Methods Unit Tests", function () {
 
         it("The function should return the correct number of Trainee Users", async function () {
             let value = await userRepository.countTrainees();
-            expect(value).toBe(2);
+            assert.equal(value, 2);
         });
 
         it("The function should return the correct number of Trainer Users", async function () {
             let value = await userRepository.countTrainers();
-            expect(value).toBe(2);
+            assert.equal(value, 2);
         });
 
         it("The function should return the correct number of Manager Users", async function () {
             let value = await userRepository.countManagers();
-            expect(value).toBe(1);
+            assert.equal(value, 1);
         });
         it("The function should return the correct number of Admin Users", async function () {
             let value = await userRepository.countAdmins();
-            expect(value).toBe(1);
+            assert.equal(value, 1);
         });
         it("The function should return all Trainee Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllTraineeUsers();
 
-            expect(value).toEqual([{
+            (JSON.stringify(value)).should.eql(JSON.stringify([{
                 username: 'adel',
                 first_name: 'Adel',
                 last_name: 'Al-Khalaf',
@@ -156,31 +154,45 @@ describe("Repository Methods Unit Tests", function () {
                 first_name: 'Safa',
                 last_name: 'Ibrahim',
                 email: 'safa@gmail.com'
-            }]);
+            }]));
+
         });
         it("The function should return all Trainer Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllTrainerUsers();
-            expect(value).toEqual([{
-                username: 'allaa',
-                first_name: 'Allaa',
-                last_name: 'Al-Khalaf',
-                email: 'allaa@gmail.com'
-            },
-                {
-                    username: 'fatma', first_name: 'Fatma', last_name: 'Al-Atom', email: 'fatma@gmail.com'
-                }]);
+
+            (JSON.stringify(value)).should.eql(JSON.stringify([{
+                    username: 'allaa',
+                    first_name: 'Allaa',
+                    last_name: 'Al-Khalaf',
+                    email: 'allaa@gmail.com'
+                },
+                    {
+                        username: 'fatma', first_name: 'Fatma', last_name: 'Al-Atom', email: 'fatma@gmail.com'
+                    }]
+            ));
+
         });
         it("The function should return all Manager Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllManagerUsers();
-            expect(value).toEqual([{username: 'aa', first_name: 'Aa', last_name: 'Aa', email: 'aa@gmail.com'}]);
+
+            (JSON.stringify(value)).should.eql(JSON.stringify([{
+                username: 'aa',
+                first_name: 'Aa',
+                last_name: 'Aa',
+                email: 'aa@gmail.com'
+            }]));
+
         });
         it("The function should return all Admin Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllAdminUsers();
-            expect(value).toEqual([{username: 'admin', first_name: 'John', last_name: 'Doe', email: 'admin@test.com'}]);
+            let expected = [{username: 'admin', first_name: 'John', last_name: 'Doe', email: 'admin@test.com'}];
+            (JSON.stringify(value)).should.eql(JSON.stringify(expected));
         });
+
         it("The function should return a user object corresponding to the username and password", async function () {
             let value1 = await userRepository.login("admin", "pass");
-            expect(value1).toEqual({
+
+            let expected = {
                 username: 'admin',
                 first_name: 'John',
                 last_name: 'Doe',
@@ -193,10 +205,13 @@ describe("Repository Methods Unit Tests", function () {
                 admin_role: 1,
                 admin_id: 1,
                 full_name: "John Doe"
-            });
+            };
+            (JSON.stringify(value1)).should.eql(JSON.stringify(expected));
+
 
             let value2 = await userRepository.login("adel", "aa");
-            expect(value2).toEqual({
+
+            let expected2 = {
                 username: 'adel',
                 first_name: 'Adel',
                 last_name: 'Al-Khalaf',
@@ -209,7 +224,8 @@ describe("Repository Methods Unit Tests", function () {
                 admin_role: 0,
                 trainee_id: 1,
                 full_name: "Adel Al-Khalaf"
-            });
+            };
+            (JSON.stringify(value2)).should.eql(JSON.stringify(expected2));
         });
 
         it("The function should return the first Admin User who is the first User in the DB", async function () {
@@ -219,21 +235,29 @@ describe("Repository Methods Unit Tests", function () {
             let specficValue = {
                 admin_id: value.admin_id,
                 user_id: value.user_id,
-            }
-            expect(specficValue).toEqual({admin_id: 1, user_id: 1});
+            };
+
+            (JSON.stringify(specficValue)).should.eql(JSON.stringify({admin_id: 1, user_id: 1}));
         });
+
         it("The function should return all Trainee Users (only trainee_id, first and last names)", async function () {
             let value = await userRepository.getAllTraineesForSchedule();
-            expect(value).toEqual([{
+
+            let expectedValue = [{
                 trainee_id: 1,
                 first_name: 'Adel',
                 last_name: 'Al-Khalaf'
-            }, {trainee_id: 2, first_name: 'Safa', last_name: 'Ibrahim'}]);
+            }, {trainee_id: 2, first_name: 'Safa', last_name: 'Ibrahim'}];
+
+            (JSON.stringify(value)).should.eql(JSON.stringify(expectedValue));
         });
         it("The function should return all Trainer Users (only trainer_id, first and last names)", async function () {
             let value = await userRepository.getAllTrainersForSchedule();
-            expect(value).toEqual([{trainer_id: 1, first_name: 'Allaa', last_name: 'Al-Khalaf'},
-                {trainer_id: 2, first_name: 'Fatma', last_name: 'Al-Atom'}]);
+
+            let expectedValue = [{trainer_id: 1, first_name: 'Allaa', last_name: 'Al-Khalaf'},
+                {trainer_id: 2, first_name: 'Fatma', last_name: 'Al-Atom'}];
+
+            (JSON.stringify(value)).should.eql(JSON.stringify(expectedValue));
         });
     });
 
@@ -248,13 +272,14 @@ describe("Repository Methods Unit Tests", function () {
             };
             let value1 = await courseRepository.addCourse(courseObj1);
 
-            let parsedValue1 = {
+            let expectedValue = {
                 course_name: value1.course_name,
-                semester: value1.semester,
-                year: value1.year
+                year: value1.year,
+                semester: value1.semester
             };
 
-            expect(parsedValue1).toEqual(courseObj1);
+            (JSON.stringify(expectedValue)).should.eql(JSON.stringify(courseObj1));
+
 
             let courseObj2 = {
                 course_name: 'FireFighter II',
@@ -264,10 +289,12 @@ describe("Repository Methods Unit Tests", function () {
             let value2 = await courseRepository.addCourse(courseObj2);
             let parsedValue2 = {
                 course_name: value2.course_name,
-                semester: value2.semester,
-                year: value2.year
+                year: value2.year,
+                semester: value2.semester
             };
-            expect(parsedValue2).toEqual(courseObj2);
+
+
+            (JSON.stringify(parsedValue2)).should.eql(JSON.stringify(courseObj2));
         });
 
         it("The function should successfully get all courses)", async function () {
@@ -278,8 +305,11 @@ describe("Repository Methods Unit Tests", function () {
                 delete course.updatedAt;
             });
 
-            expect(courses).toEqual([{course_id: 1, course_name: 'FireFighter I', semester: 'Fall', year: 2019},
-                {course_id: 2, course_name: 'FireFighter II', semester: 'Spring', year: 2019}])
+            let expectedValue = [{course_id: 1, course_name: 'FireFighter I', semester: 'Fall', year: 2019},
+                {course_id: 2, course_name: 'FireFighter II', semester: 'Spring', year: 2019}];
+
+            (JSON.stringify(courses)).should.eql(JSON.stringify(expectedValue));
+
         });
 
         it("The function should successfully add three skills)", async function () {
@@ -289,25 +319,28 @@ describe("Repository Methods Unit Tests", function () {
 
             let value1 = await courseRepository.addSkill(skill1);
             value1 = value1.toJSON();
-            skill1['skill_id'] = 1;
+            // skill1['skill_id'] = 1;
             delete value1.createdAt;
             delete value1.updatedAt;
+            delete value1.skill_id;
 
             let value2 = await courseRepository.addSkill(skill2);
             value2 = value2.toJSON();
-            skill2['skill_id'] = 2;
+            //skill2['skill_id'] = 2;
             delete value2.createdAt;
             delete value2.updatedAt;
+            delete value2.skill_id;
 
             let value3 = await courseRepository.addSkill(skill3);
             value3 = value3.toJSON();
             delete value3.createdAt;
             delete value3.updatedAt;
-            skill3['skill_id'] = 3;
+            delete value3.skill_id;
+            //skill3['skill_id'] = 3;
 
-            expect(value1).toEqual(skill1);
-            expect(value2).toEqual(skill2);
-            expect(value3).toEqual(skill3);
+            JSON.stringify(value1).should.eql(JSON.stringify(skill1));
+            JSON.stringify(value2).should.eql(JSON.stringify(skill2));
+            JSON.stringify(value3).should.eql(JSON.stringify(skill3));
         });
 
         it("The function should successfully add criteria to the 3 skills added just before)", async function () {
@@ -320,13 +353,14 @@ describe("Repository Methods Unit Tests", function () {
             let criteria4 = {skill_id: 1, criteria1: 'Test Extra Criteria 1', criteria1Type: 'Extra', rangeValue: '1'};
 
             let array1 = await courseRepository.getCriteriaBasedOnCourseAndSkillIDs(1, 1);
-            expect(array1.length).toEqual(0); //no criteria yet for course 1 and skill 1
+            expect(array1.length).to.equal(0); //no criteria yet for course 1 and skill 1
 
             let value1 = await courseRepository.addCriteria(criteria1);
             let value4 = await courseRepository.addCriteria(criteria4);
 
             let array2 = await courseRepository.getCriteriaBasedOnCourseAndSkillIDs(1, 1);
-            expect(array2.length).toEqual(2); //no criteria yet for course 1 and skill 1
+
+            expect(array2.length).to.equal(2); //added 2 criteria
 
         });
 
@@ -336,7 +370,7 @@ describe("Repository Methods Unit Tests", function () {
             delete value.createdAt;
             delete value.updatedAt;
 
-            expect(value).toEqual({course_id: 1, trainer_id: 1});
+            JSON.stringify(value).should.eql(JSON.stringify({course_id: 1, trainer_id: 1}));
         });
 
         it("The function should successfully assign course 1 to trainee 1)", async function () {
@@ -344,7 +378,7 @@ describe("Repository Methods Unit Tests", function () {
             delete value.createdAt;
             delete value.updatedAt;
 
-            expect(value.length).toEqual(1);
+            expect(value.length).to.equal(1);
         });
 
         it("The function should successfully add a session for trainee 1)", async function () {
@@ -358,13 +392,13 @@ describe("Repository Methods Unit Tests", function () {
                     "criteria_id": 2,
                     "criteria_name": "Test Extra Criteria 1",
                     "criteria_score": -2,
-                    "criteria_type": "Extra"
+                    "criteria_type": "Essential"
                 }];
             let value = await courseRepository.addUserSession(criteriaJson, 1, 1, 1, '0215', 'Training')
             delete value.createdAt;
             delete value.updatedAt;
 
-            expect(value).toEqual(true);
+            assert.equal(value, true);
         });
 
     });
@@ -387,11 +421,12 @@ describe("Repository Methods Unit Tests", function () {
             };
 
             let value1 = await userRepository.getTraineeUsersWhoHaveSessions(user);
-            expect(value1).toEqual([{
+
+            JSON.stringify(value1).should.eql(JSON.stringify([{
                 first_name: 'Adel',
                 last_name: 'Al-Khalaf',
                 trainee_id: 1
-            }]);
+            }]));
         });
 
         it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id)", async function () {
@@ -412,25 +447,29 @@ describe("Repository Methods Unit Tests", function () {
             };
 
             let value1 = await userRepository.getTraineeUsersWhoHaveSessions(user);
-            expect(value1).toEqual([{
+
+            JSON.stringify(value1).should.eql(JSON.stringify([{
                 first_name: 'Adel',
                 last_name: 'Al-Khalaf',
                 trainee_id: 1
-            }]);
+            }]));
         });
 
         it("The function should return all the Trainers who have sessions (only first and last names, and trainer_id)", async function () {
 
             let value = await userRepository.getTrainersWhoHaveSessions();
-            expect(value).toEqual([{
+
+            JSON.stringify(value).should.eql(JSON.stringify([{
                 first_name: 'Allaa',
                 last_name: 'Al-Khalaf',
                 trainer_id: 1
-            }]);
+            }]));
         });
 
     });
 
+    after(async function () {
+        await userRepository.closeDBConnection();
+    })
 
 });
-jasmine.execute();

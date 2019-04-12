@@ -6,27 +6,40 @@ const Trainers = db.trainers;
 const Trainees = db.trainees;
 const Roles = db.roles;
 const bcrypt = require('bcrypt');
-const fs = require('fs-extra');
 const mysql2 = require('mysql2');
 
 class UserRepository {
 
-    async createTestDatabase() {
+    async connectAndCreateToDB() {
 
+        let db_name = '';
+        let syncOption = false;
+        if (process.env.APP_ENV === 'utest' || 'itest') {
+            db_name = 'sp2019_test_db';
+        } else {
+            db_name = 'sp2019_db';
+        }
+
+        if (process.env.APP_ENV === 'utest') {
+            syncOption = true;
+        } else {
+            syncOption = false;
+        }
+
+
+        let thisInstance = this;
         const connection = mysql2.createConnection({
             host: 'localhost',
             user: 'root',
             password: 'CSE_SP_2019'
         });
 
-        let db_name = 'sp2019_test_db';
-
         connection.query('CREATE DATABASE IF NOT EXISTS ??', db_name, function (err) {
             if (err) {
-                console.log('error in creating sp2019_test_db database');
+                console.log('error in creating ' + db_name + ' database');
                 return;
             }
-            console.log('created a new database');
+            console.log('created a new database ' + db_name);
 
             connection.changeUser({
                 database: db_name
@@ -41,13 +54,29 @@ class UserRepository {
             });
         });
 
-        await db.sequelize.sync({
-            force: true
-        }).then(function () {
+        db.sequelize.authenticate().then(() => {
+            console.log('Sequelize Connection has been established successfully to the DB ' + db_name);
+        })
+            .catch(err => {
+                console.error('Sequelize Unable to connect to the DB:', err);
+            });
 
+
+        await db.sequelize.sync({
+            force: syncOption
+        }).then(function () {
+            if (db_name === 'sp2019_db')
+                thisInstance.createAdminUserOnDBInit();
         });
     }
 
+    async closeDBConnection() {
+        await db.sequelize.close();
+    }
+
+    async dropTestDB() {
+        await db.sequelize.dropSchema('sp2019_test_db', {});
+    }
 
     async createAdminUserOnDBInit() {
 

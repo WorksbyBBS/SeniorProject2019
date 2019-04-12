@@ -11,6 +11,7 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
         typeCast: true,
         timezone: "+03:00"
     },
+    logging: false,
     timezone: '+03:00', // your timezone comes here, ex.: 'US/Hawaii'
     pool: {
         max: env.max,

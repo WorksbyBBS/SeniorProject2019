@@ -39,14 +39,14 @@ class UserController {
         let password = req.body.password;
 
         this.userRepository.login(username, password).then(user => {
-            console.log("---\n---");
-            console.log(user);
+            //console.log("---\n---");
+            //console.log(user);
             req.session.user = user;
-            // console.log(req.session.user);
+            // //console.log(req.session.user);
             return res.redirect('/')
         })
             .catch(e => {
-                //console.log(e)
+                ////console.log(e)
                 res.render('login', {title: 'Login', error: e})
             })
     }
@@ -58,15 +58,15 @@ class UserController {
     }
 
     async TrainerReport(req, res) {
-        //console.log(req.session.user);
+        ////console.log(req.session.user);
 
         let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
-        console.log(courses);
+        //console.log(courses);
 
         let trainees = await this.userRepository.getTraineeUsersWhoHaveSessions(req.session.user);
-        console.log(trainees);
+        //console.log(trainees);
         let trainers = await this.userRepository.getTrainersWhoHaveSessions();
-        console.log(trainers);
+        //console.log(trainers);
 
 
         res.render('trainerReport', {
@@ -97,7 +97,7 @@ class UserController {
             res.render('registerUser', {title: 'Register User', success: 'Successfully Registered New User'})
         })
             .catch(e => {
-                console.log(e);
+                //console.log(e);
                 res.render('registerUser', {title: 'Register User', error: e, prevUser: regUserObj})
 
             })

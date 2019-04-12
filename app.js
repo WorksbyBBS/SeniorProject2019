@@ -10,7 +10,7 @@ const Sequelize = require('sequelize');
 const mysql2 = require('mysql2');
 const bcrypt = require('bcrypt');
 
-const homeController = require('./controllers/UserController');
+const userRepository = require('./repositories/UserRepository');
 
 const app = express();
 
@@ -122,54 +122,61 @@ app.use(function (err, req, res, next) {
 /*connect to DB to check if the DB has been initialized*/
 /*if yes, connect with sequelize. If no, initialize DB */
 
-const connection = mysql2.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'CSE_SP_2019'
+// const connection = mysql2.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'CSE_SP_2019'
+// });
+
+// let db_name = 'sp2019_db';
+//
+// connection.query('CREATE DATABASE IF NOT EXISTS ??', db_name, function (err) {
+//     if (err) {
+//         console.log('error in creating sp2019_db database');
+//         return;
+//     }
+//     console.log('created a new database');
+//
+//     connection.changeUser({
+//         database: db_name
+//     }, function (err) {
+//         if (err) {
+//             console.log('error in changing database', err);
+//             return;
+//         }
+//         connection.end();
+//         console.log('connection terminated successfully');
+//         // });
+//     });
+// });
+//
+// const db = require('./config/db.config.js');
+//
+// db.sequelize.authenticate().then(() => {
+//     console.log('Sequelize Connection has been established successfully to the DB');
+// })
+//     .catch(err => {
+//         console.error('Sequelize Unable to connect to the DB:', err);
+//     });
+//
+// db.sequelize.sync({
+//     force: false, // Don't drop tables even if already exist
+// }).then(function () {
+//     homeController.createAdminUser();
+// });
+
+userRepository.connectAndCreateToDB('production').then(function () {
+    console.log("connection success");
 });
-
-let db_name = 'sp2019_db';
-
-connection.query('CREATE DATABASE IF NOT EXISTS ??', db_name, function (err) {
-    if (err) {
-        console.log('error in creating sp2019_db database');
-        return;
-    }
-    console.log('created a new database');
-
-    connection.changeUser({
-        database: db_name
-    }, function (err) {
-        if (err) {
-            console.log('error in changing database', err);
-            return;
-        }
-        connection.end();
-        console.log('connection terminated successfully');
-        // });
-    });
-});
-
-const db = require('./config/db.config.js');
-
-db.sequelize.authenticate().then(() => {
-    console.log('Sequelize Connection has been established successfully to the DB');
-})
-    .catch(err => {
-        console.error('Sequelize Unable to connect to the DB:', err);
-    });
-
-db.sequelize.sync({
-    force: false, // Don't drop tables even if already exist
-}).then(function () {
-    homeController.createAdminUser();
-});
-
 
 const port = 8000;
-app.listen(port, () => {
+let server = app.listen(port, () => {
     const host = "localhost";
     console.log(`App is running @http://${host}:${port}`);
 });
 
+function stop() {
+    server.close();
+}
 module.exports = app;
+module.exports.stop = stop;
