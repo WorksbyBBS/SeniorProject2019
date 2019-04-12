@@ -186,8 +186,8 @@ function addScoreComment(btn) {
 
     var score_id = $(btn).attr('data-score_id');
     var criteria_name = $(btn).attr('data-criteria-name');
-    console.log("Score ID : " + score_id);
-    console.log("Criteria : " + criteria_name);
+    //console.log("Score ID : " + score_id);
+    //console.log("Criteria : " + criteria_name);
     event.cancelBubble = true;
     $("#scoreCommentModal").modal('show');
     $('#titleModal').text('Add Comment For ' + criteria_name);
@@ -199,7 +199,7 @@ function submitForm() {
         event.preventDefault();
         event.stopPropagation();
     });
-    console.log("on submit");
+    //console.log("on submit");
     //e.preventDefault();
     $.ajax({
         url: '/add-score-comment',
@@ -220,7 +220,7 @@ function submitForm() {
 function addSessionComment(btn) {
 
     var session_id = $(btn).attr('data-session_id');
-    console.log("Session ID : " + session_id);
+    //console.log("Session ID : " + session_id);
     event.cancelBubble = true;
     $("#sessionCommentModal").modal('show');
     $('#basicModalLabel').text('Add Comment for Session ' + session_id);
@@ -232,7 +232,7 @@ function submitSessionForm() {
         event.preventDefault();
         event.stopPropagation();
     });
-    console.log("on submit");
+    //console.log("on submit");
     //e.preventDefault();
     $.ajax({
         url: '/add-session-comment',
@@ -256,25 +256,25 @@ function submitSessionForm() {
 async function getSkillOnCourseSelection() {
     let course_dropdown = document.getElementById('course_drop');
     let course_id = course_dropdown.options[course_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let dataSkills = await fetch(`users/api/course/${course_id}/skills/sessions`, {credentials: 'include'});
     let skills = await dataSkills.json();
-    //console.log(skills);
+    ////console.log(skills);
     let options = "<option disabled selected value></option>";
     for (let i = 0; i < skills.length; i++) {
         options += "<option value='" + skills[i].skill_id + "'>" + skills[i].skill_name + "</option>";
     }
-    console.log(options);
+    //console.log(options);
     let skill_dropdown = document.getElementById('skills_drop');
-    console.log(skill_dropdown);
+    //console.log(skill_dropdown);
     skill_dropdown.innerHTML = options;
 }
 
 async function getSessionsOnSkillSelection() {
     let skill_dropdown = document.getElementById('skills_drop');
     let skill_id = skill_dropdown.options[skill_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let dataSessions = await fetch(`users/api/${skill_id}/sessions`, {credentials: 'include'});
     let sessions = await dataSessions.json();
@@ -283,13 +283,13 @@ async function getSessionsOnSkillSelection() {
     for (let i = 0; i < sessions.length; i++) {
 
         let splitDate = sessions[i].createdAt.split(/[- :]/);
-        console.log(splitDate);
+        //console.log(splitDate);
         sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
         sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
         options += "<option value='" + sessions[i].session_id + "'>" + sessions[i].sessionDate + " on " + sessions[i].sessionTime + "</option>";
     }
-    console.log(options);
+    //console.log(options);
     let session_dropdown = document.getElementById('sessions_drop');
     session_dropdown.innerHTML = options;
 }
@@ -297,15 +297,15 @@ async function getSessionsOnSkillSelection() {
 async function getScoreBasedOnSessionID() {
     let session_dropdown = document.getElementById('sessions_drop');
     let session_id = session_dropdown.options[session_dropdown.selectedIndex].value;
-    console.log(session_id);
+    //console.log(session_id);
     //get session info based on session ID
     let dataSession = await fetch(`users/api/sessions/${session_id}`, {credentials: 'include'});
     let sessionArray = await dataSession.json();
     let session = sessionArray[0];
-    console.log(session);
+    //console.log(session);
     let dataScore = await fetch(`users/api/${session_id}/score`, {credentials: 'include'});
     let scores = await dataScore.json();
-    console.log(scores);
+    //console.log(scores);
     let essentialCriteriaScores = [];
     let extraCriteriaScores = [];
     for (let i = 0; i < scores.length; i++) {
@@ -322,18 +322,18 @@ async function getScoreBasedOnSessionID() {
 
 
     let splitDate = session.createdAt.split(/[- :]/);
-    console.log(splitDate);
+    //console.log(splitDate);
     let sessionTime = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
     let sessionDate = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
 
-    console.log(session);
+    //console.log(session);
 
 
     //let course_dropdown = document.getElementById('course_drop');
     let course_name = $("#course_drop option:selected").text();
     let skill_name = $("#skills_drop option:selected").text();
-    //console.log(course_name);
+    ////console.log(course_name);
 
     let finalScore = "";
     if (session.final_score === -2) {

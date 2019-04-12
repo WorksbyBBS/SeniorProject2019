@@ -75,7 +75,6 @@ const studentSessionTableTemplate = `<div class="container-fluid">
                    </div>
             </form>
               <div class="modal-footer">
-                  <button type="button"  class="btn btn-pill btn-danger close" data-dismiss="modal">Cancel</button>
                   <button type="submit" onclick="submitForm()" class="btn btn-pill btn-success">Submit Comment</button>
                </div>
        </div>
@@ -86,7 +85,7 @@ const studentSessionTableTemplate = `<div class="container-fluid">
 function addSessionComment(btn) {
 
     var session_id = $(btn).attr('data-session_id');
-    console.log("Session ID : " + session_id);
+    // //console.log("Session ID : " + session_id);
     event.cancelBubble = true;
     $("#sessionCommentModal").modal('show');
     $('#basicModalLabel').text('Add Comment for Session ' + session_id);
@@ -98,7 +97,7 @@ function submitForm() {
         event.preventDefault();
         event.stopPropagation();
     });
-    console.log("on submit");
+    //console.log("on submit");
     //e.preventDefault();
     $.ajax({
         url: '/add-session-comment',
@@ -121,44 +120,44 @@ function submitForm() {
 async function getSkillOnCourseSelection() {
     let course_dropdown = document.getElementById('course_drop_trainer');
     let course_id = course_dropdown.options[course_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
     let options = '';
     if (course_id === 'All') {
         options = "<option selected value='All'>All</option>";
     } else {
         let dataSkills = await fetch(`users/api/course/${course_id}/skills/sessions`, {credentials: 'include'});
         let skills = await dataSkills.json();
-        //console.log(skills);
+        ////console.log(skills);
         options = "<option selected value='All'>All</option>";
 
         for (let i = 0; i < skills.length; i++) {
             options += "<option value='" + skills[i].skill_id + "'>" + skills[i].skill_name + "</option>";
         }
-        //console.log(options);
+        ////console.log(options);
 
     }
 
     let skill_dropdown = document.getElementById('skills_drop_trainer');
-    //console.log(skill_dropdown);
+    ////console.log(skill_dropdown);
     skill_dropdown.innerHTML = options;
 }
 
 async function getSessionsOnSelection() {
     let course_dropdown = document.getElementById('course_drop_trainer');
     let course_id = course_dropdown.options[course_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let skill_dropdown = document.getElementById('skills_drop_trainer');
     let skill_id = skill_dropdown.options[skill_dropdown.selectedIndex].value;
 
     let trainee_dropdown = document.getElementById('trainee_drop_trainer');
     let trainee_id = trainee_dropdown.options[trainee_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let trainer_dropdown = document.getElementById('trainer_drop_trainer');
     let trainer_id;
     let path = '';
-    console.log(trainer_dropdown);
+    //console.log(trainer_dropdown);
     if (trainer_dropdown === null) {
 
         path = `users/api/sessions/${course_id}/${skill_id}/${trainee_id}`
@@ -166,7 +165,7 @@ async function getSessionsOnSelection() {
 
     } else {
         trainer_id = trainer_dropdown.options[trainer_dropdown.selectedIndex].value;
-        console.log(trainer_id);
+        //console.log(trainer_id);
         path = `users/api/sessions/${trainer_id}/${course_id}/${skill_id}/${trainee_id}`
     }
 
@@ -177,7 +176,7 @@ async function getSessionsOnSelection() {
     //
     for (let i = 0; i < sessions.length; i++) {
         let splitDate = sessions[i].createdAt.split(/[- :]/);
-        console.log(splitDate);
+        //console.log(splitDate);
         sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
         sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
@@ -194,21 +193,21 @@ async function getSessionsOnSelection() {
     let skill_name = $("#skills_drop_trainer option:selected").text();
     Handlebars.registerHelper('ifUserIsTrainer', function (userS, userT, options) {
         if (userS === userT) {
-            console.log(typeof userS);
-            console.log(typeof userT);
-            console.log(userS + "===" + userT)
+            //console.log(typeof userS);
+            //console.log(typeof userT);
+            //console.log(userS + "===" + userT)
             return options.fn(this);
         } else {
-            console.log(typeof userS);
-            console.log(typeof userT);
-            console.log(userS + "!==" + userT)
+            //console.log(typeof userS);
+            //console.log(typeof userT);
+            //console.log(userS + "!==" + userT)
             return options.inverse(this);
         }
 
     });
 
     let trainer_role = $('#trainer_role_hidden').text();
-    console.log("TRAINER ROLE---- " + trainer_role);
+    //console.log("TRAINER ROLE---- " + trainer_role);
 
     let compliedTemplate = Handlebars.compile(studentSessionTableTemplate);
     let generatedHTMLContent = compliedTemplate({
@@ -234,9 +233,9 @@ async function getSessionsOnSelection() {
 }
 
 async function redirectToDetailedSession(row) {
-    //console.log(row);
+    ////console.log(row);
     let session_id = $(row).find('#sessionId').text();
-    //console.log(session_id);
+    ////console.log(session_id);
     let url = "http://localhost:8000/trainee-report/session/" + session_id;
 
     window.open(url, '_blank',);
@@ -246,19 +245,19 @@ async function drawChart(filter) {
 
     let course_dropdown = document.getElementById('course_drop_trainer');
     let course_id = course_dropdown.options[course_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let skill_dropdown = document.getElementById('skills_drop_trainer');
     let skill_id = skill_dropdown.options[skill_dropdown.selectedIndex].value;
 
     let trainee_dropdown = document.getElementById('trainee_drop_trainer');
     let trainee_id = trainee_dropdown.options[trainee_dropdown.selectedIndex].value;
-    //console.log(course_id);
+    ////console.log(course_id);
 
     let trainer_dropdown = document.getElementById('trainer_drop_trainer');
     let trainer_id;
     let path = '';
-    console.log(trainer_dropdown);
+    //console.log(trainer_dropdown);
     if (trainer_dropdown === null) {
 
         path = `users/api/sessions/${course_id}/${skill_id}/${trainee_id}`
@@ -266,7 +265,7 @@ async function drawChart(filter) {
 
     } else {
         trainer_id = trainer_dropdown.options[trainer_dropdown.selectedIndex].value;
-        console.log(trainer_id);
+        //console.log(trainer_id);
         path = `users/api/sessions/${trainer_id}/${course_id}/${skill_id}/${trainee_id}`
     }
 
@@ -276,7 +275,7 @@ async function drawChart(filter) {
     for (let i = 0; i < sessions.length; i++) {
 
         let splitDate = sessions[i].createdAt.split(/[- :]/);
-        console.log(splitDate);
+        //console.log(splitDate);
         sessions[i]["sessionTime"] = splitDate[3] + ":" + splitDate[4] + ":" + splitDate[5];
         sessions[i]["sessionDate"] = splitDate[0] + "-" + splitDate[1] + "-" + splitDate[2];
 
@@ -288,7 +287,7 @@ async function drawChart(filter) {
         }
     }
 
-    console.log("--FILTER--- " + filter);
+    //console.log("--FILTER--- " + filter);
 
     let mainLabels = [];
     let countPass = [];
@@ -342,8 +341,8 @@ async function drawChart(filter) {
             let itemFailCount = 0;
             for (let j = 0; j < sessions.length; j++) {
                 let name = sessions[j].trainee_firstname + ' ' + sessions[j].trainee_lastname;
-                console.log(mainLabels[i]);
-                console.log(name);
+                //console.log(mainLabels[i]);
+                //console.log(name);
                 if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
                     itemPassCount++;
                 } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
@@ -362,8 +361,8 @@ async function drawChart(filter) {
             let itemFailCount = 0;
             for (let j = 0; j < sessions.length; j++) {
                 let name = sessions[j].trainer_firstname + ' ' + sessions[j].trainer_lastname;
-                console.log(mainLabels[i]);
-                console.log(name);
+                //console.log(mainLabels[i]);
+                //console.log(name);
                 if (mainLabels[i] === name && sessions[j].final_score === 'Pass') {
                     itemPassCount++;
                 } else if (mainLabels[i] === name && sessions[j].final_score === 'Fail') {
@@ -376,10 +375,10 @@ async function drawChart(filter) {
         }
     }
 
-    console.log("MAIN GENERAL LABELS\n");
-    console.log(mainLabels);
+    //console.log("MAIN GENERAL LABELS\n");
+    //console.log(mainLabels);
 
-    console.log(sessions);
+    //console.log(sessions);
     $('#noSessions').html("Total Number of Sessions: " + sessions.length);
 
     $('#chartPanel').show();

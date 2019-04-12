@@ -249,7 +249,7 @@ function validateOnSubmit() {
 
     let courseValue = $('#schedule_courses option:selected').val();
     let trainerValue = $('#trainers option:selected').val();
-    //console.log(courseValue);
+    ////console.log(courseValue);
 
     let submitCourseOkay = false;
     let submitTrainerOkay = false;
@@ -288,7 +288,7 @@ function validateOnSubmitTrainee() {
 
     let courseValue = $('#schedule_courses option:selected').val();
 
-    //console.log(courseValue);
+    ////console.log(courseValue);
 
     let submitStudentOkay=false;
     let submitCourseOkay=false;
@@ -330,7 +330,7 @@ async function checkIfTrainer() {
             return element.course_id === parseInt(value);
         });
 
-        console.log(ctt_found);
+        //console.log(ctt_found);
 
 
         $("#ctt_trainer_id").val(ctt_found.trainer_id).change();
@@ -349,7 +349,7 @@ async function checkIfTrainer() {
 function onTrainerChange() {
     let value = $('#trainers option:selected').val();
     $('#invalid-trainer').hide();
-    //console.log(value);
+    ////console.log(value);
     if (value === '') {
         alert('Please choose a valid Trainer, not an empty option')
     }

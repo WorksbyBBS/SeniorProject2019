@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var homeController = require('../controllers/HomeController');
+var userController = require('../controllers/UserController');
+var courseController = require('../controllers/CourseController');
 
 //Middleware function to check if user is logged in before requesting pages
 function isLoggedIn(req, res, next) {
@@ -30,11 +31,11 @@ router.get('/profile',isLoggedIn, function(req, res, next) {
 });
 
 router.get('/dashboard',isLoggedIn,function (req,res,next) {
- homeController.adminDashboard(req,res);
+    userController.adminDashboard(req, res);
 });
 
 router.get('/logout',function (req,res,next) {
-  homeController.logout(req,res);
+    userController.logout(req, res);
 });
 
 router.get('/registerUser',isLoggedIn, function(req, res, next) {
@@ -42,39 +43,38 @@ router.get('/registerUser',isLoggedIn, function(req, res, next) {
 });
 
 router.get('/courses',isLoggedIn, function(req, res, next) {
-  homeController.manageCourses(req,res);
+    courseController.manageCourses(req, res);
 })
 
 router.get('/assign-schedule',isLoggedIn, function(req, res, next) {
-  homeController.assignSchedule(req,res);
+    courseController.assignSchedule(req, res);
 });
 
 router.get('/trainee-report', isLoggedIn, function (req, res, next) {
-    homeController.TraineeReport(req, res)
+    courseController.TraineeReport(req, res)
 });
 
 router.get('/trainee-report/session/:sessionIdForm', isLoggedIn, function (req, res, next) {
-    console.log(res.locals.session);
-    homeController.TrainerToTrainee(req, res)
+    courseController.TrainerToTrainee(req, res)
 });
 
 router.get('/trainer-report', isLoggedIn, function (req, res, next) {
-    homeController.TrainerReport(req, res)
+    userController.TrainerReport(req, res)
 });
 
 router.get('/manager-report', isLoggedIn, function (req, res, next) {
-    homeController.TrainerReport(req, res)
+    userController.TrainerReport(req, res)
 });
 /* POST LINKS */
-router.post('/login', (req, res) => homeController.login(req,res));
-router.post('/registerUser',isLoggedIn, (req, res) => homeController.registerUser(req,res));
-router.post('/addCourse',isLoggedIn, (req, res) => homeController.addCourse(req,res));
-router.post('/addSkill',isLoggedIn, (req, res) => homeController.addSkill(req,res));
-router.post('/addCriteria',isLoggedIn, (req, res) => homeController.addCriteria(req,res));
-router.post('/assign-course',isLoggedIn, (req, res) => homeController.AssignCourse(req,res));
-router.post('/assign-course-trainee', isLoggedIn, (req, res) => homeController.AssignCourseTrainee(req, res));
-router.post('/add-session-comment', isLoggedIn, (req, res) => homeController.AddSessionComment(req, res));
-router.post('/add-score-comment', isLoggedIn, (req, res) => homeController.AddScoreComment(req, res));
+router.post('/login', (req, res) => userController.login(req, res));
+router.post('/registerUser', isLoggedIn, (req, res) => userController.registerUser(req, res));
+router.post('/addCourse', isLoggedIn, (req, res) => courseController.addCourse(req, res));
+router.post('/addSkill', isLoggedIn, (req, res) => courseController.addSkill(req, res));
+router.post('/addCriteria', isLoggedIn, (req, res) => courseController.addCriteria(req, res));
+router.post('/assign-course', isLoggedIn, (req, res) => courseController.AssignCourse(req, res));
+router.post('/assign-course-trainee', isLoggedIn, (req, res) => courseController.AssignCourseTrainee(req, res));
+router.post('/add-session-comment', isLoggedIn, (req, res) => courseController.AddSessionComment(req, res));
+router.post('/add-score-comment', isLoggedIn, (req, res) => courseController.AddScoreComment(req, res));
 
 //router.post('/trainee-session-report', isLoggedIn, (req, res) => homeController.TrainerToTrainee(req, res));
 //router.get('/trainee-session-report', isLoggedIn, (req, res) => res.render('trainerTraineeReport'));

@@ -1,56 +1,57 @@
 var express = require('express');
 var router = express.Router();
-var homeController = require('../controllers/HomeController')
+var userController = require('../controllers/UserController')
+var courseController = require('../controllers/CourseController')
 
 /* GET users listing. */
 
 router.get('/api/courses',function (req,res,next) {
- homeController.getAllCourses(req,res);
+    courseController.getAllCourses(req, res);
 });
 
 router.get('/api/ctrainers', function (req, res, next) {
-    homeController.getAllCTrainers(req, res);
+    courseController.getAllCTrainers(req, res);
 });
 
 router.get('/api/ctrainees', function (req, res, next) {
-    homeController.getAllCTrainees(req, res);
+    courseController.getAllCTrainees(req, res);
 });
 
 
 router.get('/api/trainers',function (req,res,next) {
- homeController.getAllTrainers(req,res);
+    userController.getAllTrainers(req, res);
 });
 
 router.get('/api/trainees',function (req,res,next) {
- homeController.getAllTrainees(req,res);
+    userController.getAllTrainees(req, res);
 });
 
 router.get('/api/course/:course_id/skills',function (req,res,next) {
- homeController.getSkillsBasedOnCourseID(req,res);
+    courseController.getSkillsBasedOnCourseID(req, res);
 });
 
 router.get('/api/course/:course_id/skills/sessions', function (req, res, next) {
- homeController.getSkillsBasedOnCourseIDInSession(req, res);
+    courseController.getSkillsBasedOnCourseIDInSession(req, res);
 });
 
 router.get('/api/:skill_id/sessions', function (req, res, next) {
- homeController.getSessionsBasedOnSkillId(req, res);
+    courseController.getSessionsBasedOnSkillId(req, res);
 });
 
 router.get('/api/:session_id/score', function (req, res, next) {
- homeController.getScoreBasedOnSessionId(req, res);
+    courseController.getScoreBasedOnSessionId(req, res);
 });
 
 router.get('/api/sessions/:session_id', function (req, res, next) {
- homeController.getSessionBasedOnId(req, res);
+    courseController.getSessionBasedOnId(req, res);
 });
 
 router.get('/api/sessions/:course_id/:skill_id/:trainee_id', function (req, res, next) {
-    homeController.getSessionBasedOnFilters(req, res);
+    courseController.getSessionBasedOnFilters(req, res);
 });
 
 router.get('/api/sessions/:trainer_id/:course_id/:skill_id/:trainee_id', function (req, res, next) {
-    homeController.getSessionBasedOnFilters(req, res);
+    courseController.getSessionBasedOnFilters(req, res);
 });
 
 module.exports = router;
