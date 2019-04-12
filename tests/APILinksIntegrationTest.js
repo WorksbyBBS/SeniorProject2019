@@ -1,5 +1,4 @@
 const userRepository = require("../repositories/UserRepository");
-const courseRepository = require("../repositories/CourseRepository");
 // setup mocha and chai
 
 process.env.APP_ENV = 'itest';
