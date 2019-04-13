@@ -76,13 +76,6 @@ router.post('/assign-course-trainee', isLoggedIn, (req, res) => courseController
 router.post('/add-session-comment', isLoggedIn, (req, res) => courseController.AddSessionComment(req, res));
 router.post('/add-score-comment', isLoggedIn, (req, res) => courseController.AddScoreComment(req, res));
 
-//router.post('/trainee-session-report', isLoggedIn, (req, res) => homeController.TrainerToTrainee(req, res));
-//router.get('/trainee-session-report', isLoggedIn, (req, res) => res.render('trainerTraineeReport'));
-//router.post('/assign-course-trainee',isLoggedIn, (req, res) => homeController.AssignCourseTrainee(req,res));
-//router.post('/addCourse',isLoggedIn, (req, res) => homeController.registerUser(req,res));
-// router.get('/', (req, res) => res.redirect('/home'));
-
-//router.get('/home',isLoggedIn, (request, response) => response.render('home'))
 
 
 module.exports = router;

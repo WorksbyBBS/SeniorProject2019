@@ -88,14 +88,15 @@ class CourseController {
         let traineeId = req.params.trainee_id;
         let trainerId = req.params.trainer_id;
 
-        console.log(courseId);
-        console.log(skillId);
-        console.log(traineeId);
-        console.log(trainerId);
+        //console.log(courseId);
+        //console.log(skillId);
+        //console.log(traineeId);
+        //console.log(trainerId);
 
         if (req.session.user) {
 
-            //meaning that a trainer accessed the link of courseId/skillId/sessionId
+            //meaning that a manager accessed the link of courseId/skillId/sessionId
+
             if (typeof trainerId === 'undefined') {
                 if (req.session.user.trainer_role === 1 || req.session.user.trainee_role === 1) {
                     let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId, trainerId).catch(e => {
@@ -111,7 +112,7 @@ class CourseController {
                     });
                 }
             } else {
-                //meaning that a manager accessed the link of courseId/skillId/sessionId
+                //meaning that a trainer accessed the link of courseId/skillId/sessionId
                 if (req.session.user.manager_role === 1) {
                     let sessions = await this.courseRepository.getSessionBasedOnFilters(req.session.user.trainer_id, courseId, skillId, traineeId, trainerId).catch(e => {
                         res.send(e);
@@ -190,7 +191,7 @@ class CourseController {
     }
 
     async TraineeReport(req, res) {
-        console.log(req.session.user);
+        //console.log(req.session.user);
         let courses = await this.courseRepository.getCoursesWhichHaveSessions(req.session.user);
         res.render('traineeReport', {title: 'Session Report', courses: courses});
     }
@@ -198,14 +199,14 @@ class CourseController {
     async TrainerToTrainee(req, res) {
 
         let session_id = req.params.sessionIdForm;
-        console.log(session_id);
+        //console.log(session_id);
         let usersession = await this.courseRepository.getSessionBasedOnId(session_id);
-        console.log(usersession);
+        //console.log(usersession);
         if (usersession.length > 0) {
             let training_session_trainer_id = usersession[0].trainer_id
-            console.log("------------" + training_session_trainer_id);
+            //console.log("------------" + training_session_trainer_id);
             let current_trainer_id = req.session.user.trainer_id;
-            console.log("---++++---+--" + current_trainer_id);
+            //console.log("---++++---+--" + current_trainer_id);
             if (training_session_trainer_id === current_trainer_id || (req.session.user.manager_role === 1)) {
 
                 let date = usersession[0].createdAt + '';
@@ -237,7 +238,7 @@ class CourseController {
                     }
                 }
 
-                console.log(usersession);
+                //console.log(usersession);
                 res.render('traineeReport', {
                     title: 'Session Report',
                     usersession: usersession,
@@ -301,6 +302,7 @@ class CourseController {
         let ctt_trainer_id = parseInt(req.body.ctt_trainer_id);
 
         console.log("---------------------------" + ctt_trainer_id);
+        console.log("---------------------------" + course_id);
 
 
         let successCourseTrainer = await this.courseRepository.assignCourseTrainer(course_id, ctt_trainer_id)
@@ -317,9 +319,9 @@ class CourseController {
 
     async AddSessionComment(req, res) {
         let session_id = req.body.commentSessionId;
-        console.log(session_id);
+        //console.log(session_id);
         let comment = req.body.sessionComment;
-        console.log(comment);
+        //console.log(comment);
 
         let response = await this.courseRepository.AddSessionComment(req.session.user, session_id, comment);
         res.send('success');
@@ -327,9 +329,9 @@ class CourseController {
 
     async AddScoreComment(req, res) {
         let score_id = req.body.commentScoreId;
-        console.log(score_id);
+        //console.log(score_id);
         let comment = req.body.scoreComment;
-        console.log(comment);
+        //console.log(comment);
 
         let response = await this.courseRepository.AddScoreComment(req.session.user, score_id, comment);
         res.send('success');
@@ -337,10 +339,11 @@ class CourseController {
 
     async AssignCourseTrainee(req, res) {
         let course_id = parseInt(req.body.schedule_courses);
-
+        console.log(course_id);
         let selectedTraineesArray = req.body.selectedTraineesArray;
+        console.log(selectedTraineesArray);
         let selectedTraineesIDs = selectedTraineesArray.split(',');
-
+        console.log(selectedTraineesIDs);
         let successCourseTrainer = await this.courseRepository.assignCourseTrainee(course_id, selectedTraineesIDs)
             .catch(e => {
                 req.session.error = 'Error in assigning the course to the student(s)';
@@ -461,12 +464,16 @@ class CourseController {
             rangeValue: rangeValue
         };
 
-        //console.log(criteriaObj);
+        // //console.log("============\n");
+        // //console.log(criteriaObj);
+        // //console.log(rangeValue);
 
         switch (rangeValue) {
             case '2': {
                 criteriaObj['criteria2'] = (req.body.criteria2).trim();
                 criteriaObj['criteria2Type'] = req.body.criteriaType2;
+                // //console.log(criteriaObj.criteria2);
+                // //console.log(criteriaObj.criteria2Type);
                 break;
             }
             case '3': {
@@ -585,7 +592,7 @@ class CourseController {
 
         }
         this.courseRepository.addCriteria(criteriaObj).then(criteria => {
-            console.log(criteria);
+            //console.log(criteria);
             req.session.success = 'Successfully added the Criteria!';
             res.redirect('/courses');
         })
