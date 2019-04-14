@@ -12,8 +12,8 @@ module.exports = (sequelize, Sequelize) => {
         }
     // }, {
     //     classMethods: {
-        //         associate: function (repositories) {
-        //             Admin.belongsTo(repositories.User, {foreignKey: 'user_id', targetKey: 'user_id'});
+        //         associate: function (models) {
+        //             Admin.belongsTo(models.User, {foreignKey: 'user_id', targetKey: 'user_id'});
     //         }
     //     }
     });

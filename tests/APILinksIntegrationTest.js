@@ -1,4 +1,4 @@
-const userRepository = require("../repositories/UserRepository");
+const userRepository = require("../models/UserRepository");
 //setup chai
 
 process.env.APP_ENV = 'itest';

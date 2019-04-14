@@ -1,6 +1,6 @@
 class CourseController {
     constructor() {
-        this.courseRepository = require('../repositories/CourseRepository');
+        this.courseRepository = require('../models/CourseRepository');
     }
 
     async manageCourses(req, res) {

@@ -1,8 +1,8 @@
 class UnityController {
 
     constructor() {
-        this.userRepository = require('../repositories/UserRepository');
-        this.courseRepository = require('../repositories/CourseRepository');
+        this.userRepository = require('../models/UserRepository');
+        this.courseRepository = require('../models/CourseRepository');
     }
 
     async login(req, res) {

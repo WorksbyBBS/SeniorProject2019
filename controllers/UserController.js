@@ -1,7 +1,7 @@
 class UserController {
     constructor() {
-        this.userRepository = require('../repositories/UserRepository');
-        this.courseRepository = require('../repositories/CourseRepository');
+        this.userRepository = require('../models/UserRepository');
+        this.courseRepository = require('../models/CourseRepository');
     }
 
     async createAdminUser(req, res) {

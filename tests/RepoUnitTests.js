@@ -1,5 +1,5 @@
-const userRepository = require("../repositories/UserRepository");
-const courseRepository = require("../repositories/CourseRepository");
+const userRepository = require("../models/UserRepository");
+const courseRepository = require("../models/CourseRepository");
 // setup mocha and chai
 
 const assert = require('assert');

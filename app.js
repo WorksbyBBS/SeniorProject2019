@@ -10,7 +10,7 @@ const Sequelize = require('sequelize');
 const mysql2 = require('mysql2');
 const bcrypt = require('bcrypt');
 
-const userRepository = require('./repositories/UserRepository');
+const userRepository = require('./models/UserRepository');
 
 const app = express();
 
