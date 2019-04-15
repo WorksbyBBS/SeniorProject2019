@@ -12,9 +12,10 @@ class UserRepository {
 
     async connectAndCreateToDB() {
 
+        console.log(process.env.APP_ENV);
         let db_name = '';
         let syncOption = false;
-        if (process.env.APP_ENV === 'utest' || 'itest') {
+        if ((process.env.APP_ENV == 'utest') || (process.env.APP_ENV == 'itest')) {
             db_name = 'sp2019_test_db';
         } else {
             db_name = 'sp2019_db';

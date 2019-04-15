@@ -1,5 +1,5 @@
 const env = {
-    database: (process.env.APP_ENV === 'utest' || 'itest') ? 'sp2019_test_db' : 'sp2019_db',
+    database: ((process.env.APP_ENV == 'utest') || (process.env.APP_ENV == 'itest')) ? 'sp2019_test_db' : 'sp2019_db',
     username: 'root',
     password: 'CSE_SP_2019',
     host: 'localhost',
