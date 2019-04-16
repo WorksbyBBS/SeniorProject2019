@@ -16,7 +16,8 @@ describe("Repository Methods Unit Tests", function () {
     });
 
     describe("[UserRepository]", function () {
-        it("The function should register Admin Users", async function () {
+        it("1. The function registerUser() should register Admin Users", async function () {
+            let AdminCountBefore = await userRepository.countAdmins();
             let userObj1 = {
                 username: 'admin',
                 password: 'pass',
@@ -33,11 +34,14 @@ describe("Repository Methods Unit Tests", function () {
 
             });
 
+            let AdminCountAfter = await userRepository.countAdmins();
+            assert.equal(AdminCountBefore, 0);
+            assert.equal(AdminCountAfter, 1);
 
         });
 
-        it("The function should register Manager Users", async function () {
-
+        it("2. The function registerUser() should register Manager Users", async function () {
+            let ManagerCountBefore = await userRepository.countManagers();
             let userObj2 = {
                 username: 'aa',
                 password: 'aa',
@@ -52,10 +56,15 @@ describe("Repository Methods Unit Tests", function () {
             let user2 = await userRepository.registerUser(userObj2).then(function (user) {
                 return user;
             });
-
+            let ManagerCountAfter = await userRepository.countManagers();
+            assert.equal(ManagerCountBefore, 0);
+            assert.equal(ManagerCountAfter, 1);
         });
 
-        it("The function should register Trainer Users", async function () {
+        it("3. The function registerUser() should register Trainer Users", async function () {
+
+            let TrainerCountBefore = await userRepository.countTrainers();
+
             let userObj1 = {
                 username: 'allaa',
                 password: 'aa',
@@ -87,9 +96,15 @@ describe("Repository Methods Unit Tests", function () {
                 return user;
             });
 
+            let TrainerCountAfter = await userRepository.countTrainers();
+            assert.equal(TrainerCountBefore, 0);
+            assert.equal(TrainerCountAfter, 2);
         });
 
-        it("The function should register Trainee Users", async function () {
+        it("4. The function registerUser() should register Trainee Users", async function () {
+
+            let TraineeCountBefore = await userRepository.countTrainees();
+
             let userObj1 = {
                 username: 'adel',
                 password: 'aa',
@@ -121,27 +136,31 @@ describe("Repository Methods Unit Tests", function () {
                 return user;
             });
 
+            let TraineeCountAfter = await userRepository.countTrainees();
+            assert.equal(TraineeCountBefore, 0);
+            assert.equal(TraineeCountAfter, 2);
+
         });
 
-        it("The function should return the correct number of Trainee Users", async function () {
+        it("5. The function countTrainees() should return the correct number of Trainee Users", async function () {
             let value = await userRepository.countTrainees();
             assert.equal(value, 2);
         });
 
-        it("The function should return the correct number of Trainer Users", async function () {
+        it("6. The function countTrainers() should return the correct number of Trainer Users", async function () {
             let value = await userRepository.countTrainers();
             assert.equal(value, 2);
         });
 
-        it("The function should return the correct number of Manager Users", async function () {
+        it("7. The function countManagers() should return the correct number of Manager Users", async function () {
             let value = await userRepository.countManagers();
             assert.equal(value, 1);
         });
-        it("The function should return the correct number of Admin Users", async function () {
+        it("8. The function countAdmins() should return the correct number of Admin Users", async function () {
             let value = await userRepository.countAdmins();
             assert.equal(value, 1);
         });
-        it("The function should return all Trainee Users (usernames,first & last names, email)", async function () {
+        it("9. The function getAllTraineeUsers() should return all Trainee Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllTraineeUsers();
 
             (JSON.stringify(value)).should.eql(JSON.stringify([{
@@ -157,7 +176,7 @@ describe("Repository Methods Unit Tests", function () {
             }]));
 
         });
-        it("The function should return all Trainer Users (usernames,first & last names, email)", async function () {
+        it("10. The function getAllTrainerUsers() should return all Trainer Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllTrainerUsers();
 
             (JSON.stringify(value)).should.eql(JSON.stringify([{
@@ -172,7 +191,7 @@ describe("Repository Methods Unit Tests", function () {
             ));
 
         });
-        it("The function should return all Manager Users (usernames,first & last names, email)", async function () {
+        it("11. The function getAllManagerUsers() should return all Manager Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllManagerUsers();
 
             (JSON.stringify(value)).should.eql(JSON.stringify([{
@@ -183,13 +202,13 @@ describe("Repository Methods Unit Tests", function () {
             }]));
 
         });
-        it("The function should return all Admin Users (usernames,first & last names, email)", async function () {
+        it("12. The function getAllAdminUsers() should return all Admin Users (usernames,first & last names, email)", async function () {
             let value = await userRepository.getAllAdminUsers();
             let expected = [{username: 'admin', first_name: 'John', last_name: 'Doe', email: 'admin@test.com'}];
             (JSON.stringify(value)).should.eql(JSON.stringify(expected));
         });
 
-        it("The function should return a user object corresponding to the username and password", async function () {
+        it("13. The function login() should return a user object corresponding to the username and password", async function () {
             let value1 = await userRepository.login("admin", "pass");
 
             let expected = {
@@ -228,7 +247,7 @@ describe("Repository Methods Unit Tests", function () {
             (JSON.stringify(value2)).should.eql(JSON.stringify(expected2));
         });
 
-        it("The function should return the first Admin User who is the first User in the DB", async function () {
+        it("14. The function findFirstAdmin() should return the first Admin User who is the first User in the DB", async function () {
             let value = await userRepository.findFirstAdmin(); //returns SequelizeInstance
 
             //get all the fields except the createdAt and updatedAt, they don't matter in this case
@@ -240,7 +259,7 @@ describe("Repository Methods Unit Tests", function () {
             (JSON.stringify(specficValue)).should.eql(JSON.stringify({admin_id: 1, user_id: 1}));
         });
 
-        it("The function should return all Trainee Users (only trainee_id, first and last names)", async function () {
+        it("15. The function getAllTraineesForSchedule() should return all Trainee Users (only trainee_id, first and last names)", async function () {
             let value = await userRepository.getAllTraineesForSchedule();
 
             let expectedValue = [{
@@ -251,7 +270,7 @@ describe("Repository Methods Unit Tests", function () {
 
             (JSON.stringify(value)).should.eql(JSON.stringify(expectedValue));
         });
-        it("The function should return all Trainer Users (only trainer_id, first and last names)", async function () {
+        it("16. The function getAllTrainersForSchedule() should return all Trainer Users (only trainer_id, first and last names)", async function () {
             let value = await userRepository.getAllTrainersForSchedule();
 
             let expectedValue = [{trainer_id: 1, first_name: 'Allaa', last_name: 'Al-Khalaf'},
@@ -264,7 +283,7 @@ describe("Repository Methods Unit Tests", function () {
 
     ////////////////////////////////COURSE
     describe('[Course Repository]', function () {
-        it("The function should successfully add a course [two courses])", async function () {
+        it("1. The function addCourse() should successfully add a course [two courses])", async function () {
             let courseObj1 = {
                 course_name: 'FireFighter I',
                 year: 2019,
@@ -297,7 +316,7 @@ describe("Repository Methods Unit Tests", function () {
             (JSON.stringify(parsedValue2)).should.eql(JSON.stringify(courseObj2));
         });
 
-        it("The function should successfully get all courses)", async function () {
+        it("2. The function getAllCourses() should successfully get all courses)", async function () {
             let courses = await courseRepository.getAllCourses();
 
             courses.forEach(function (course) {
@@ -312,7 +331,7 @@ describe("Repository Methods Unit Tests", function () {
 
         });
 
-        it("The function should successfully add three skills)", async function () {
+        it("3. The function addSkill() should successfully add three skills)", async function () {
             let skill1 = {skill_name: 'FF-1', course_id: 1};
             let skill2 = {skill_name: 'FF-2', course_id: 1};
             let skill3 = {skill_name: 'FF-3', course_id: 1};
@@ -343,7 +362,7 @@ describe("Repository Methods Unit Tests", function () {
             JSON.stringify(value3).should.eql(JSON.stringify(skill3));
         });
 
-        it("The function should successfully add criteria to the 3 skills added just before)", async function () {
+        it("4. The function addCriteria() should successfully add criteria to the 3 skills added just before)", async function () {
             let criteria1 = {
                 skill_id: 1,
                 criteria1: 'Test Essential Criteria 1',
@@ -364,7 +383,7 @@ describe("Repository Methods Unit Tests", function () {
 
         });
 
-        it("The function should successfully assign course 1 to trainer 1)", async function () {
+        it("5. The function assignCourseTrainer() should successfully assign course 1 to trainer 1)", async function () {
             let value = await courseRepository.assignCourseTrainer(1, 1);
             value = value.toJSON();
             delete value.createdAt;
@@ -373,7 +392,7 @@ describe("Repository Methods Unit Tests", function () {
             JSON.stringify(value).should.eql(JSON.stringify({course_id: 1, trainer_id: 1}));
         });
 
-        it("The function should successfully assign course 1 to trainee 1)", async function () {
+        it("6. The function assignCourseTrainee() should successfully assign course 1 to trainee 1)", async function () {
             let value = await courseRepository.assignCourseTrainee(1, [1]);
             delete value.createdAt;
             delete value.updatedAt;
@@ -381,7 +400,7 @@ describe("Repository Methods Unit Tests", function () {
             expect(value.length).to.equal(1);
         });
 
-        it("The function should successfully add a session for trainee 1)", async function () {
+        it("7. The function addUserSession() should successfully add a session for trainee 1)", async function () {
             let criteriaJson = [{
                 "criteria_id": 1,
                 "criteria_name": "Test Essential Criteria 1",
@@ -403,7 +422,7 @@ describe("Repository Methods Unit Tests", function () {
 
     });
     describe("[UserRepository]", function () {
-        it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id) for this specific Trainer", async function () {
+        it("1. The function getTraineeUsersWhoHaveSessions() should return all the Trainees who have sessions (only first and last names, and trainee_id) for this specific Trainer", async function () {
 
             let user = {
                 username: 'allaa',
@@ -429,7 +448,7 @@ describe("Repository Methods Unit Tests", function () {
             }]));
         });
 
-        it("The function should return all the Trainees who have sessions (only first and last names, and trainee_id)", async function () {
+        it("2. The function getTraineeUsersWhoHaveSessions() should return all the Trainees who have sessions (only first and last names, and trainee_id)", async function () {
 
             let user = {
                 username: 'aa',
@@ -455,7 +474,7 @@ describe("Repository Methods Unit Tests", function () {
             }]));
         });
 
-        it("The function should return all the Trainers who have sessions (only first and last names, and trainer_id)", async function () {
+        it("3. The function getTrainersWhoHaveSessions() should return all the Trainers who have sessions (only first and last names, and trainer_id)", async function () {
 
             let value = await userRepository.getTrainersWhoHaveSessions();
 
