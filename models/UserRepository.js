@@ -269,6 +269,10 @@ class UserRepository {
             throw "Username already in use. Please change it";
         }
 
+        if ((typeof regUserObj.admin_role === 'undefined') && (typeof regUserObj.manager_role === 'undefined') && (typeof regUserObj.trainer_role === 'undefined') && (typeof regUserObj.trainee_role === 'undefined')) {
+            throw "Please choose at least one role for this user"
+        }
+
         //check email before adding
         let userInDBEmail = await Users.findOne({where: {email: regUserObj.email}});
         if (userInDBEmail) {

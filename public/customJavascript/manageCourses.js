@@ -465,6 +465,7 @@ const criteriaFormTemplate = `<div class="container-fluid">
                                     </div>
                             </div>
                             </div>
+                            <br>
                             <div class="text-center">
                                 <div class="row">
                                     <div class="col-md-6">

@@ -93,6 +93,7 @@ class UserController {
             trainee_role: req.body.trainee_role
         };
 
+
         this.userRepository.registerUser(regUserObj).then(user => {
             res.render('registerUser', {title: 'Register User', success: 'Successfully Registered New User'})
         })

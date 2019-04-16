@@ -2,7 +2,7 @@ const assignCourseFormTemplate = `
 <div class="container-fluid"> 
 <div class="panel">
 <div class="panel-head">
-<h4>Assign Instructor a Course</h4>
+<h4>Assign Trainer to a Course</h4>
 </div>
         <div class="panel-body">
             <form class="form-vertical" method="post" action="/assign-course" id="assignCoursesForm" onsubmit="return validateOnSubmit()">
@@ -79,7 +79,7 @@ const assignCourseTraineeFormTemplate = `
 <div class="container-fluid"> 
 <div class="panel">
 <div class="panel-head">
-<h4>Assign Trainee a Course</h4>
+<h4>Register Trainees to a Course</h4>
 </div>
         <div class="panel-body">
             <form class="form-vertical" method="post" action="/assign-course-trainee" id="assignCoursesTraineeForm" onsubmit="return validateOnSubmitTrainee()">
