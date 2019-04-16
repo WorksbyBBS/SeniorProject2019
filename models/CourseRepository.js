@@ -595,7 +595,7 @@ class CourseRepository {
     }
 
     async addUserSession(criteriaJson, trainee_id, course_id, skill_id, duration, type) {
-        console.log("---- INSIDE ADD USER SESSION REPO ---------");
+        //console.log("---- INSIDE ADD USER SESSION REPO ---------");
         let finalScore = 0; //assume pass
         // console.log(criteriaJson);
         if (!(criteriaJson instanceof Array)) {
