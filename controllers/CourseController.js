@@ -301,8 +301,8 @@ class CourseController {
         //let trainer_id = parseInt(req.body.trainers);
         let ctt_trainer_id = parseInt(req.body.ctt_trainer_id);
 
-        console.log("---------------------------" + ctt_trainer_id);
-        console.log("---------------------------" + course_id);
+        // console.log("---------------------------" + ctt_trainer_id);
+        // console.log("---------------------------" + course_id);
 
 
         let successCourseTrainer = await this.courseRepository.assignCourseTrainer(course_id, ctt_trainer_id)
@@ -339,11 +339,11 @@ class CourseController {
 
     async AssignCourseTrainee(req, res) {
         let course_id = parseInt(req.body.schedule_courses);
-        console.log(course_id);
+        //console.log(course_id);
         let selectedTraineesArray = req.body.selectedTraineesArray;
-        console.log(selectedTraineesArray);
+        //console.log(selectedTraineesArray);
         let selectedTraineesIDs = selectedTraineesArray.split(',');
-        console.log(selectedTraineesIDs);
+        //console.log(selectedTraineesIDs);
         let successCourseTrainer = await this.courseRepository.assignCourseTrainee(course_id, selectedTraineesIDs)
             .catch(e => {
                 req.session.error = 'Error in assigning the course to the student(s)';
