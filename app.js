@@ -25,7 +25,7 @@ app.engine('hbs', handlebars({
     defaultLayout: 'layout', extname: '.hbs', helpers: {
         ifUserIsAdmin: function (userS, userT, options) {
             if (userS === userT) {
-                console.log(userS + "===" + userT)
+                //console.log(userS + "===" + userT)
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -33,7 +33,7 @@ app.engine('hbs', handlebars({
         },
         ifUserIsManager: function (userS, userT, options) {
             if (userS === userT) {
-                console.log(userS + "===" + userT)
+                //console.log(userS + "===" + userT)
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -41,7 +41,7 @@ app.engine('hbs', handlebars({
         },
         ifUserIsTrainee: function (userS, userT, options) {
             if (userS === userT) {
-                console.log(userS + "===" + userT)
+                //console.log(userS + "===" + userT)
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -49,7 +49,7 @@ app.engine('hbs', handlebars({
         },
         ifUserIsTrainer: function (userS, userT, options) {
             if (userS === userT) {
-                console.log(userS + "===" + userT)
+                //console.log(userS + "===" + userT)
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -57,7 +57,7 @@ app.engine('hbs', handlebars({
         },
         ifScoreIsPass: function (val1, val2, options) {
             if (val1 === val2) {
-                console.log(val1 + "===" + val2)
+                //console.log(val1 + "===" + val2)
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -132,20 +132,20 @@ app.use(function (err, req, res, next) {
 //
 // connection.query('CREATE DATABASE IF NOT EXISTS ??', db_name, function (err) {
 //     if (err) {
-//         console.log('error in creating sp2019_db database');
+//         //console.log('error in creating sp2019_db database');
 //         return;
 //     }
-//     console.log('created a new database');
+//     //console.log('created a new database');
 //
 //     connection.changeUser({
 //         database: db_name
 //     }, function (err) {
 //         if (err) {
-//             console.log('error in changing database', err);
+//             //console.log('error in changing database', err);
 //             return;
 //         }
 //         connection.end();
-//         console.log('connection terminated successfully');
+//         //console.log('connection terminated successfully');
 //         // });
 //     });
 // });
@@ -153,10 +153,10 @@ app.use(function (err, req, res, next) {
 // const db = require('./config/db.config.js');
 //
 // db.sequelize.authenticate().then(() => {
-//     console.log('Sequelize Connection has been established successfully to the DB');
+//     //console.log('Sequelize Connection has been established successfully to the DB');
 // })
 //     .catch(err => {
-//         console.error('Sequelize Unable to connect to the DB:', err);
+//         //console.error('Sequelize Unable to connect to the DB:', err);
 //     });
 //
 // db.sequelize.sync({
@@ -166,13 +166,13 @@ app.use(function (err, req, res, next) {
 // });
 
 userRepository.connectAndCreateToDB('production').then(function () {
-    console.log("connection success");
+    //console.log("connection success");
 });
 
 const port = 8000;
 let server = app.listen(port, () => {
     const host = "localhost";
-    console.log(`App is running @http://${host}:${port}`);
+    //console.log(`App is running @http://${host}:${port}`);
 });
 
 function stop() {
