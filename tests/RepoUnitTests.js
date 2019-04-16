@@ -283,7 +283,7 @@ describe("Repository Methods Unit Tests", function () {
 
     ////////////////////////////////COURSE
     describe('[Course Repository]', function () {
-        it("1. The function addCourse() should successfully add a course [two courses])", async function () {
+        it("1. The function addCourse() should successfully add a course [two courses]", async function () {
             let courseObj1 = {
                 course_name: 'FireFighter I',
                 year: 2019,
@@ -316,7 +316,7 @@ describe("Repository Methods Unit Tests", function () {
             (JSON.stringify(parsedValue2)).should.eql(JSON.stringify(courseObj2));
         });
 
-        it("2. The function getAllCourses() should successfully get all courses)", async function () {
+        it("2. The function getAllCourses() should successfully get all courses", async function () {
             let courses = await courseRepository.getAllCourses();
 
             courses.forEach(function (course) {
@@ -331,7 +331,7 @@ describe("Repository Methods Unit Tests", function () {
 
         });
 
-        it("3. The function addSkill() should successfully add three skills)", async function () {
+        it("3. The function addSkill() should successfully add three skills", async function () {
             let skill1 = {skill_name: 'FF-1', course_id: 1};
             let skill2 = {skill_name: 'FF-2', course_id: 1};
             let skill3 = {skill_name: 'FF-3', course_id: 1};
@@ -362,7 +362,7 @@ describe("Repository Methods Unit Tests", function () {
             JSON.stringify(value3).should.eql(JSON.stringify(skill3));
         });
 
-        it("4. The function addCriteria() should successfully add criteria to the 3 skills added just before)", async function () {
+        it("4. The function addCriteria() should successfully add criteria to the 3 skills added just before", async function () {
             let criteria1 = {
                 skill_id: 1,
                 criteria1: 'Test Essential Criteria 1',
@@ -383,7 +383,7 @@ describe("Repository Methods Unit Tests", function () {
 
         });
 
-        it("5. The function assignCourseTrainer() should successfully assign course 1 to trainer 1)", async function () {
+        it("5. The function assignCourseTrainer() should successfully assign course 1 to trainer 1", async function () {
             let value = await courseRepository.assignCourseTrainer(1, 1);
             value = value.toJSON();
             delete value.createdAt;
@@ -392,7 +392,7 @@ describe("Repository Methods Unit Tests", function () {
             JSON.stringify(value).should.eql(JSON.stringify({course_id: 1, trainer_id: 1}));
         });
 
-        it("6. The function assignCourseTrainee() should successfully assign course 1 to trainee 1)", async function () {
+        it("6. The function assignCourseTrainee() should successfully assign course 1 to trainee 1", async function () {
             let value = await courseRepository.assignCourseTrainee(1, [1]);
             delete value.createdAt;
             delete value.updatedAt;
@@ -400,7 +400,7 @@ describe("Repository Methods Unit Tests", function () {
             expect(value.length).to.equal(1);
         });
 
-        it("7. The function addUserSession() should successfully add a session for trainee 1)", async function () {
+        it("7. The function addUserSession() should successfully add a session for trainee 1", async function () {
             let criteriaJson = [{
                 "criteria_id": 1,
                 "criteria_name": "Test Essential Criteria 1",
