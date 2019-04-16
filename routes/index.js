@@ -31,7 +31,16 @@ router.get('/profile',isLoggedIn, function(req, res, next) {
 });
 
 router.get('/dashboard',isLoggedIn,function (req,res,next) {
-    userController.adminDashboard(req, res);
+    if (req.session.user.admin_role === 1) {
+        userController.adminDashboard(req, res);
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
 });
 
 router.get('/logout',function (req,res,next) {
@@ -39,31 +48,101 @@ router.get('/logout',function (req,res,next) {
 });
 
 router.get('/registerUser',isLoggedIn, function(req, res, next) {
-  res.render('registerUser', { title: 'Register User' });
+    if (req.session.user.admin_role === 1) {
+        res.render('registerUser', {title: 'Register User'});
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 
 router.get('/courses',isLoggedIn, function(req, res, next) {
-    courseController.manageCourses(req, res);
+    if (req.session.user.manager_role === 1) {
+        courseController.manageCourses(req, res);
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 })
 
 router.get('/assign-schedule',isLoggedIn, function(req, res, next) {
-    courseController.assignSchedule(req, res);
+    if (req.session.user.manager_role === 1) {
+        courseController.assignSchedule(req, res);
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 
 router.get('/trainee-report', isLoggedIn, function (req, res, next) {
-    courseController.TraineeReport(req, res)
+    if (req.session.user.trainee_role === 1) {
+        courseController.TraineeReport(req, res)
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 
 router.get('/trainee-report/session/:sessionIdForm', isLoggedIn, function (req, res, next) {
-    courseController.TrainerToTrainee(req, res)
+    if (req.session.user.trainer_role === 1 || req.session.user.manager_role === 1) {
+        courseController.TrainerToTrainee(req, res)
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 
 router.get('/trainer-report', isLoggedIn, function (req, res, next) {
-    userController.TrainerReport(req, res)
+    if (req.session.user.trainer_role === 1) {
+        userController.TrainerReport(req, res)
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 
 router.get('/manager-report', isLoggedIn, function (req, res, next) {
-    userController.TrainerReport(req, res)
+    if (req.session.user.manager_role === 1) {
+        userController.TrainerReport(req, res)
+    } else {
+        res.render('error', {
+            errorCode: '403',
+            error: "Forbidden Access",
+            extraMessage: 'Not authorized to see this page',
+            layout: 'errorLayout.hbs'
+        });
+    }
+
 });
 /* POST LINKS */
 router.post('/login', (req, res) => userController.login(req, res));
