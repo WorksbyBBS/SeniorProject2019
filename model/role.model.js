@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Role = sequelize.define('Role', {
+    const Role = sequelize.define('role', {
         role_id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         admin_role: {type: Sequelize.BOOLEAN},
         manager_role: {type: Sequelize.BOOLEAN},
@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'Users',
+                model: 'users',
                 key: 'user_id'
             }
         }

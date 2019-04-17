@@ -1,11 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
-    const Trainee = sequelize.define('Trainee', {
+    const Trainee = sequelize.define('trainee', {
         trainee_id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         user_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'Users',
+                model: 'users',
                 key: 'user_id'
             }
         }

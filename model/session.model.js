@@ -1,24 +1,24 @@
 module.exports = (sequelize, Sequelize) => {
-    const Session = sequelize.define('Session', {
+    const Session = sequelize.define('session', {
         session_id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         trainer_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Course_Trainers',
+                model: 'course_Trainers',
                 key: 'trainer_id'
             }
         },
         trainee_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Course_Trainees',
+                model: 'course_Trainees',
                 key: 'trainee_id'
             }
         },
         course_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Courses',
+                model: 'courses',
                 key: 'course_id'
             }
         },
@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
         skill_id: {
             type: Sequelize.INTEGER, allowNull: false,
             references: {
-                model: 'Skills',
+                model: 'skills',
                 key: 'skill_id'
             }
         }
