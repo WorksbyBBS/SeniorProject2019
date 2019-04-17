@@ -173,7 +173,7 @@ describe("Integration Tests", function () {
 
     });
 
-    it("GET users/api/trainees, should return all trainees (length 2) because manager logged in", (done) => {
+    it("GET users/api/trainees, should return all trainees (length 3) because manager logged in", (done) => {
         agent.get('/users/api/trainees')
             .then(function (res) {
                 res.should.have.status(200);

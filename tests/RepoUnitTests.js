@@ -411,7 +411,7 @@ describe("Repository Methods Unit Tests", function () {
                     "criteria_id": 2,
                     "criteria_name": "Test Extra Criteria 1",
                     "criteria_score": -2,
-                    "criteria_type": "Essential"
+                    "criteria_type": "Extra"
                 }];
             let value = await courseRepository.addUserSession(criteriaJson, 1, 1, 1, '0215', 'Training')
             delete value.createdAt;

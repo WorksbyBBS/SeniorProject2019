@@ -536,7 +536,7 @@ class CourseRepository {
     }
 
     async getScoreBasedOnSessionId(sessionid) {
-        let query = 'select cs.*,skill_c.criteria_name from Criteria_Scores cs\n' +
+        let query = 'select cs.*,skill_c.criteria_name,skill_c.criteria_type from Criteria_Scores cs\n' +
             'inner join Skill_Criteria skill_c\n' +
             'on skill_c.criteria_id = cs.criteria_id\n' +
             'where cs.session_id=' + sessionid + ';';

@@ -305,18 +305,28 @@ async function getScoreBasedOnSessionID() {
     //console.log(session);
     let dataScore = await fetch(`users/api/${session_id}/score`, {credentials: 'include'});
     let scores = await dataScore.json();
-    //console.log(scores);
+    console.log(scores);
     let essentialCriteriaScores = [];
     let extraCriteriaScores = [];
     for (let i = 0; i < scores.length; i++) {
-        if (scores[i].score_value === -1) {
-            scores[i].score_value = "Pass";
-            essentialCriteriaScores.push(scores[i]);
-        } else if (scores[i].score_value === -2) {
-            scores[i].score_value = "Fail"
-            essentialCriteriaScores.push(scores[i]);
+        if (scores[i].criteria_type === 'Essential') {
+            if (scores[i].score_value === -1) {
+                scores[i].score_value = "Pass";
+                essentialCriteriaScores.push(scores[i]);
+            } else if (scores[i].score_value === -2) {
+                scores[i].score_value = "Fail";
+                essentialCriteriaScores.push(scores[i]);
+            }
         } else {
-            extraCriteriaScores.push(scores[i]);
+            if (scores[i].score_value === -1) {
+                scores[i].score_value = "Pass";
+                extraCriteriaScores.push(scores[i]);
+            } else if (scores[i].score_value === -2) {
+                scores[i].score_value = "Fail";
+                extraCriteriaScores.push(scores[i]);
+            } else {
+                extraCriteriaScores.push(scores[i]);
+            }
         }
     }
 
